@@ -355,7 +355,7 @@ export default async function DashboardPage(props: {
     // C. Misi 2: Suara Demokrasi (Vote RAT)
     const { rows: r2 } = await db.query(
       `SELECT COUNT(*)::int as count FROM ${p('rat_votes')} 
-       WHERE user_id = $1 AND voted_at >= DATE_TRUNC('week', CURRENT_DATE)`,
+       WHERE user_id = $1 AND created_at >= DATE_TRUNC('week', CURRENT_DATE)`,
       [session.userId]
     );
     const progress2 = Number(r2[0]?.count || 0);
