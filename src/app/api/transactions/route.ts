@@ -31,6 +31,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Nominal transaksi harus lebih besar dari 0.' }, { status: 400 });
     }
 
+    // Volatiles check: only simpanan_sukarela is withdrawable (represented as type = pengeluaran + kategori = simpanan_anggota)
+    const isSavingsWithdrawal = type === 'pengeluaran' && (kategori === 'simpanan_anggota' || kategori.endsWith('simpanan_anggota'));
+    if (isSavingsWithdrawal) {
+      if (!anggota_ref) {
+        return NextResponse.json({ error: 'Referensi anggota wajib ditentukan untuk penarikan simpanan.' }, { status: 400 });
+      }
+
+      const { rows: msRows } = await db.query(
+        `SELECT simpanan_sukarela FROM ${p('v_member_summary')} WHERE anggota_ref = $1`,
+        [anggota_ref]
+      );
+      
+      const availableSukarela = msRows[0] ? Number(msRows[0].simpanan_sukarela) : 0;
+      if (availableSukarela < Number(amount)) {
+        return NextResponse.json({ 
+          error: `Pencairan ditolak: Saldo Simpanan Sukarela tidak mencukupi. (Tersedia: Rp ${availableSukarela.toLocaleString('id-ID')})` 
+        }, { status: 400 });
+      }
+    }
+
     // Insert transaction using pg
     const { rows } = await db.query(
       `INSERT INTO ${p('transaksi_keuangan')} 

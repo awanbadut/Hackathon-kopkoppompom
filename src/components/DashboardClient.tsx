@@ -345,6 +345,22 @@ export default function DashboardClient({
       return;
     }
 
+    if (txType === 'pengeluaran' && txKategori === 'simpanan_anggota') {
+      if (!txAnggotaRef) {
+        setTxFormError('Referensi anggota wajib ditentukan untuk penarikan simpanan.');
+        return;
+      }
+      const m = memberSavings.find(member => member.anggota_ref === txAnggotaRef);
+      if (!m) {
+        setTxFormError('Referensi anggota tidak valid. Pastikan format MBR-XXX benar.');
+        return;
+      }
+      if (Number(txAmount) > Number(m.simpanan_sukarela)) {
+        setTxFormError(`Pencairan ditolak: Saldo Simpanan Sukarela tidak mencukupi. (Tersedia: Rp ${Number(m.simpanan_sukarela).toLocaleString('id-ID')})`);
+        return;
+      }
+    }
+
     const proceed = () => {
       startTransition(async () => {
         try {
@@ -1685,7 +1701,7 @@ export default function DashboardClient({
                     </div>
                   )}
 
-                  {['simpanan_pokok', 'simpanan_wajib', 'simpanan_sukarela', 'pinjaman'].includes(txType) && (
+                  {((['simpanan_pokok', 'simpanan_wajib', 'simpanan_sukarela', 'pinjaman'].includes(txType) || (txType === 'pengeluaran' && txKategori === 'simpanan_anggota'))) && (
                     <div>
                       <label className="block font-bold text-stone-500 mb-1">Referensi Anggota</label>
                       <input
@@ -1695,6 +1711,31 @@ export default function DashboardClient({
                         onChange={(e) => setTxAnggotaRef(e.target.value)}
                         className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
                       />
+                      {/* Real-time Voluntary Savings Balance Check */}
+                      {txType === 'pengeluaran' && txKategori === 'simpanan_anggota' && txAnggotaRef && (() => {
+                        const m = memberSavings.find(member => member.anggota_ref === txAnggotaRef);
+                        if (m) {
+                          const isOver = txAmount && Number(txAmount) > Number(m.simpanan_sukarela);
+                          return (
+                            <div className="mt-1 text-[11px] font-bold">
+                              <span className="text-emerald-700 dark:text-emerald-450">
+                                Saldo Sukarela: Rp {Number(m.simpanan_sukarela).toLocaleString('id-ID')}
+                              </span>
+                              {isOver && (
+                                <span className="text-red-650 block mt-0.5 animate-pulse">
+                                  ⚠ Penarikan melebihi saldo sukarela anggota!
+                                </span>
+                              )}
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div className="mt-1 text-[11px] font-bold text-stone-400">
+                              Anggota tidak ditemukan. Pastikan ref MBR-XXX valid.
+                            </div>
+                          );
+                        }
+                      })()}
                     </div>
                   )}
 
