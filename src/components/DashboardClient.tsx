@@ -135,7 +135,7 @@ export default function DashboardClient({
         isOpen: true,
         type: 'success',
         title: 'Misi Diklaim!',
-        message: `Selamat! Anda berhasil mengklaim ${pointsAwarded} Poin untuk misi mingguan ini. Kumpulkan lebih banyak poin untuk ditukarkan dengan kupon belanja di Gerai KUD.`
+        message: `Selamat! Anda berhasil mengklaim ${pointsAwarded} Poin untuk misi mingguan ini. Kumpulkan lebih banyak poin untuk ditukarkan dengan kupon belanja di Gerai Kopdes.`
       });
     } catch (err: any) {
       setDialog({
@@ -202,7 +202,7 @@ export default function DashboardClient({
 
   // AI Chat state
   const [aiMessages, setAiMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
-    { sender: 'ai', text: 'Halo! Saya adalah **Asisten AI Kepatuhan KUD**. Saya dapat menganalisis data kepatuhan koperasi Anda secara real-time dan memberikan saran regulasi PMK/UU Perkoperasian. Silakan tanyakan sesuatu kepada saya!' }
+    { sender: 'ai', text: 'Halo! Saya adalah **Asisten AI Kepatuhan Kopdes**. Saya dapat menganalisis data kepatuhan koperasi Anda secara real-time dan memberikan saran regulasi PMK/UU Perkoperasian. Silakan tanyakan sesuatu kepada saya!' }
   ]);
   const [aiInput, setAiInput] = useState('');
   const [aiPending, setAiPending] = useState(false);
@@ -816,7 +816,7 @@ export default function DashboardClient({
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ca8a04] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Keterlibatan Masyarakat</span>
               </div>
               <p className="text-[10px] text-stone-300 leading-none mt-1">
-                Koperasi Desa Kopkoppompom &bull; Pembukuan Aman & Transparan
+                Koperasi Desa Merah Putih &bull; Pembukuan Aman & Transparan
               </p>
             </div>
           </div>
@@ -1016,7 +1016,7 @@ export default function DashboardClient({
           >
             <span className="flex items-center gap-2.5">
               <Sparkles className="w-4 h-4 text-[#ca8a04]" />
-              Asisten AI KUD
+              Asisten AI Kopdes
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
           </button>
@@ -1031,7 +1031,7 @@ export default function DashboardClient({
           >
             <span className="flex items-center gap-2.5">
               <Globe className="w-4 h-4 text-[#ca8a04]" />
-              Microsite Publik KUD
+              Microsite Publik Kopdes
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
           </button>
@@ -2173,7 +2173,7 @@ export default function DashboardClient({
                   <div>
                     <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
                       <Sparkles className="w-5 h-5 text-[#ca8a04]" />
-                      Misi Mingguan Anggota KUD
+                      Misi Mingguan Anggota Kopdes
                     </h3>
                     <p className="text-[10px] text-stone-500 mt-1 font-medium">
                       Selesaikan misi mingguan koperasi di bawah ini untuk mendapatkan bonus poin belanja yang melimpah!
@@ -2207,8 +2207,8 @@ export default function DashboardClient({
                     },
                     {
                       code: 'misi3',
-                      title: 'Belanja Sembako KUD',
-                      desc: 'Berbelanja kebutuhan pangan harian di Gerai Toko KUD minimal Rp50.000 minggu ini.',
+                      title: 'Belanja Sembako Kopdes',
+                      desc: 'Berbelanja kebutuhan pangan harian di Gerai Toko Kopdes minimal Rp50.000 minggu ini.',
                       points: 30,
                       progressText: `${fmt(missionsState.misi3?.progress || 0)} / ${fmt(missionsState.misi3?.target || 50000)}`,
                       completed: missionsState.misi3?.completed,
@@ -2278,7 +2278,7 @@ export default function DashboardClient({
                 
                 <div className="md:col-span-2 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                   <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
-                    Katalog Hadiah Belanja Koperasi (Gerai KUD)
+                    Katalog Hadiah Belanja Koperasi (Gerai Kopdes)
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2360,7 +2360,7 @@ export default function DashboardClient({
                   <div>
                     <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
                       <Sparkles className="w-5 h-5 text-[#ca8a04]" />
-                      Asisten Audit AI Kepatuhan KUD
+                      Asisten Audit AI Kepatuhan Kopdes
                     </h3>
                     <p className="text-[10px] text-stone-500 mt-1">
                       Konsultan hukum virtual untuk kepatuhan PMK, SAK ETAP, dan UU Koperasian.
@@ -2478,9 +2478,9 @@ export default function DashboardClient({
                       <span className="badge badge-gold">SIMKOPDES PORTAL</span>
                       <span className="badge badge-success">TERVERIFIKASI</span>
                     </div>
-                    <h2 className="text-2xl font-black tracking-tight">{koperasi?.nama_koperasi || 'Koperasi Desa Kopkoppompom'}</h2>
+                    <h2 className="text-2xl font-black tracking-tight">{koperasi?.nama_koperasi || 'Koperasi Desa Merah Putih'}</h2>
                     <p className="text-xs text-stone-300 max-w-xl font-medium">
-                      Wajah digital resmi Koperasi Desa/Kelurahan Kopkoppompom (KDKMP) berdasarkan basis data terintegrasi Kementerian Koperasi RI.
+                      Wajah digital resmi Koperasi Desa/Kelurahan Merah Putih (KDKMP) berdasarkan basis data terintegrasi Kementerian Koperasi RI.
                     </p>
                   </div>
                   <div className="flex flex-col items-end z-10">
@@ -2556,9 +2556,9 @@ export default function DashboardClient({
                   <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider">Unit Usaha Utama KDKMP</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
-                      { title: 'Toko Retail Sembako KUD', desc: 'Gerai sembako penyedia bahan pokok pangan murah bagi warga desa secara luring.', badge: 'RITEL' },
+                      { title: 'Toko Retail Sembako Kopdes', desc: 'Gerai sembako penyedia bahan pokok pangan murah bagi warga desa secara luring.', badge: 'RITEL' },
                       { title: 'Lumbung Pangan Mandiri', desc: 'Gudang penyimpanan dan pengeringan padi/jagung dari petani anggota koperasi.', badge: 'AGRIBISNIS' },
-                      { title: 'Unit Pembiayaan Mikro KUD', desc: 'Layanan fasilitas simpanan wajib/sukarela dan penyaluran kredit produktif pedagang.', badge: 'FINANCIAL' }
+                      { title: 'Unit Pembiayaan Mikro Kopdes', desc: 'Layanan fasilitas simpanan wajib/sukarela dan penyaluran kredit produktif pedagang.', badge: 'FINANCIAL' }
                     ].map((unit, uidx) => (
                       <div key={uidx} className="card p-5 space-y-3">
                         <div className="flex justify-between items-center">
@@ -2582,7 +2582,7 @@ export default function DashboardClient({
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
                 <h3 className="text-sm font-black text-[#14532d] dark:text-white mb-4 flex items-center gap-2">
                   <Briefcase className="w-5 h-5 text-[#ca8a04]" />
-                  Pengajuan Pembiayaan & Kemitraan KUD (SIMKOPDES Portal)
+                  Pengajuan Pembiayaan & Kemitraan Kopdes (SIMKOPDES Portal)
                 </h3>
                 <p className="text-[11px] text-stone-500 mb-6 font-medium">
                   Salurkan proposal program pembiayaan, perluasan gerai, atau usaha agribisnis koperasi secara langsung ke Portal Pembiayaan Kementerian Koperasi RI.
@@ -2591,7 +2591,7 @@ export default function DashboardClient({
                 <form onSubmit={handleSubmitProposal} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="label">Nama Penanggung Jawab KUD</label>
+                      <label className="label">Nama Penanggung Jawab Kopdes</label>
                       <input
                         type="text"
                         value={proposalPj}
@@ -2643,7 +2643,7 @@ export default function DashboardClient({
                       <label className="label">Tujuan & Rencana Penggunaan Dana</label>
                       <textarea
                         rows={6}
-                        placeholder="Jelaskan secara rinci rencana alokasi dana (misal: perluasan kapasitas gudang lumbung padi KUD Desa Merah Putih untuk menampung panen petani)..."
+                        placeholder="Jelaskan secara rinci rencana alokasi dana (misal: perluasan kapasitas gudang lumbung padi Kopdes Desa Merah Putih untuk menampung panen petani)..."
                         value={proposalTujuan}
                         onChange={(e) => setProposalTujuan(e.target.value)}
                         className="input-field resize-none h-[184px]"
@@ -2663,7 +2663,7 @@ export default function DashboardClient({
 
               {/* Tabel history pengajuan */}
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider mb-4">Daftar Pengajuan Pembiayaan KUD</h3>
+                <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider mb-4">Daftar Pengajuan Pembiayaan Kopdes</h3>
                 <div className="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-800">
                   <table className="premium-table">
                     <thead>
