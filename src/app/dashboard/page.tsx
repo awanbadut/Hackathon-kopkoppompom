@@ -294,6 +294,18 @@ export default async function DashboardPage(props: {
     };
   }
 
+  // 21. Load funding proposals (for cooperative)
+  let proposals: any[] = [];
+  if (session.koperasiRef) {
+    const { rows } = await db.query(
+      `SELECT * FROM ${p('pengajuan_pembiayaan')} 
+       WHERE koperasi_ref = $1 
+       ORDER BY dibuat_pada DESC`,
+      [session.koperasiRef]
+    );
+    proposals = rows;
+  }
+
   const propsToClient = serializeDates({
     session,
     currentTab,
@@ -316,7 +328,8 @@ export default async function DashboardPage(props: {
     myRedeemedVouchers,
     voteAggregates,
     villageEcoSummary,
-    financialSummary
+    financialSummary,
+    proposals
   });
 
   return <DashboardClient {...propsToClient} />;

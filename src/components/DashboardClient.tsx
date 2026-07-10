@@ -8,7 +8,8 @@ import {
   FileText, Award, BookOpen, Users, LogOut, CheckCircle2, 
   XCircle, Clock, AlertTriangle, HelpCircle, FileCheck, Send, Check, X, ShieldAlert,
   ChevronRight, Bookmark, Vote, MessageSquare, ThumbsUp, Tag, Plus, MessageCircle,
-  ArrowRightLeft, Landmark, BarChart3, Scale, ChevronDown, CheckCircle, Sparkles
+  ArrowRightLeft, Landmark, BarChart3, Scale, ChevronDown, CheckCircle, Sparkles,
+  Globe, Briefcase
 } from 'lucide-react';
 
 interface DashboardClientProps {
@@ -34,6 +35,7 @@ interface DashboardClientProps {
   voteAggregates: any[];
   villageEcoSummary: any;
   financialSummary: any;
+  proposals: any[];
 }
 
 export default function DashboardClient({
@@ -58,7 +60,8 @@ export default function DashboardClient({
   myRedeemedVouchers,
   voteAggregates,
   villageEcoSummary,
-  financialSummary
+  financialSummary,
+  proposals
 }: DashboardClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -151,6 +154,66 @@ export default function DashboardClient({
   ]);
   const [aiInput, setAiInput] = useState('');
   const [aiPending, setAiPending] = useState(false);
+
+  // Proposal Form state
+  const [proposalPj, setProposalPj] = useState(session.fullName || '');
+  const [proposalPhone, setProposalPhone] = useState(session.phoneNumber || '');
+  const [proposalNominal, setProposalNominal] = useState('');
+  const [proposalTenor, setProposalTenor] = useState('12');
+  const [proposalTujuan, setProposalTujuan] = useState('');
+  const [proposalPending, setProposalPending] = useState(false);
+  const [proposalsList, setProposalsList] = useState<any[]>(proposals || []);
+
+  const handleSubmitProposal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!proposalNominal || !proposalTujuan) {
+      setDialog({
+        isOpen: true,
+        type: 'error',
+        title: 'Formulir Tidak Lengkap',
+        message: 'Mohon isi nominal permohonan dan tujuan permohonan pembiayaan.'
+      });
+      return;
+    }
+
+    setProposalPending(true);
+    try {
+      const res = await fetch('/api/proposals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          penanggung_jawab: proposalPj,
+          nomor_penanggung_jawab: proposalPhone,
+          nominal_permohonan: proposalNominal,
+          tenor: proposalTenor,
+          tujuan_permohonan: proposalTujuan
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Gagal mengajukan pembiayaan.');
+      }
+
+      setProposalsList([data.proposal, ...proposalsList]);
+      setProposalNominal('');
+      setProposalTujuan('');
+      setDialog({
+        isOpen: true,
+        type: 'success',
+        title: 'Pengajuan Terkirim',
+        message: `Permohonan pembiayaan Anda (${data.proposal.pengajuan_pembiayaan_ref}) telah berhasil dikirim ke portal Kementerian Koperasi (SIMKOPDES) untuk direview.`
+      });
+    } catch (err: any) {
+      setDialog({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Pengajuan',
+        message: err.message
+      });
+    } finally {
+      setProposalPending(false);
+    }
+  };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -901,6 +964,38 @@ export default function DashboardClient({
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
           </button>
+
+          <button
+            onClick={() => handleTabChange('microsite')}
+            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
+              activeTab === 'microsite'
+                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
+            }`}
+          >
+            <span className="flex items-center gap-2.5">
+              <Globe className="w-4 h-4 text-[#ca8a04]" />
+              Microsite Publik KUD
+            </span>
+            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+          </button>
+
+          {['pengurus', 'ketua'].includes(session.role) && (
+            <button
+              onClick={() => handleTabChange('proposals')}
+              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
+                activeTab === 'proposals'
+                  ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                  : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Briefcase className="w-4 h-4 text-[#ca8a04]" />
+                Kemitraan & Pembiayaan
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+            </button>
+          )}
         </aside>
 
         {/* Tab Content Panel */}
@@ -2206,6 +2301,248 @@ export default function DashboardClient({
                 </form>
 
               </div>
+            </div>
+          )}
+
+          {activeTab === 'microsite' && (
+            <div className="space-y-6 animate-scale-in">
+              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-8 rounded-3xl shadow-sm space-y-8">
+                {/* Hero Header */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#14532d] to-[#0d341c] p-8 text-white border border-[#ca8a04]/20 shadow-inner flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div className="absolute right-0 top-0 w-64 h-64 bg-[#ca8a04]/10 rounded-full blur-3xl pointer-events-none" />
+                  <div className="space-y-3 z-10">
+                    <div className="flex items-center gap-3">
+                      <span className="badge badge-gold">SIMKOPDES PORTAL</span>
+                      <span className="badge badge-success">TERVERIFIKASI</span>
+                    </div>
+                    <h2 className="text-2xl font-black tracking-tight">{koperasi?.nama_koperasi || 'Koperasi Desa Merah Putih'}</h2>
+                    <p className="text-xs text-stone-300 max-w-xl font-medium">
+                      Wajah digital resmi Koperasi Desa/Kelurahan Merah Putih (KDKMP) berdasarkan basis data terintegrasi Kementerian Koperasi RI.
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end z-10">
+                    <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">NIK KOPERASI</span>
+                    <span className="text-sm font-mono font-black text-amber-400 tracking-widest">{koperasi?.nik_koperasi || '3201010000000001'}</span>
+                  </div>
+                </div>
+
+                {/* Grid Legalitas & Informasi */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/30">
+                    <h4 className="text-[10px] font-black text-stone-450 uppercase tracking-widest mb-3">Identitas Hukum</h4>
+                    <dl className="space-y-2.5 text-xs">
+                      <div>
+                        <dt className="text-stone-400 font-medium">Bentuk Koperasi</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">{koperasi?.bentuk_koperasi || 'Produsen'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Kategori Usaha</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">{koperasi?.kategori_usaha || 'Sektor Riil'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Modal Awal Pendirian</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">{fmt(koperasi?.modal_awal || 250000000)}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/30">
+                    <h4 className="text-[10px] font-black text-stone-450 uppercase tracking-widest mb-3">Lokasi & Wilayah Kerja</h4>
+                    <dl className="space-y-2.5 text-xs">
+                      <div>
+                        <dt className="text-stone-400 font-medium">Alamat Lengkap Kantor</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5 leading-relaxed">{koperasi?.alamat_lengkap || 'Jalan Raya Puncak No. 100'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Provinsi / Kabupaten / Kecamatan</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">Jawa Barat / Kab. Bogor / Ciawi</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Kode Pos</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">{koperasi?.kode_pos || '16720'}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/30">
+                    <h4 className="text-[10px] font-black text-stone-450 uppercase tracking-widest mb-3">Statistik Transparansi</h4>
+                    <dl className="space-y-2.5 text-xs">
+                      <div>
+                        <dt className="text-stone-400 font-medium">Anggota Terdaftar Aktif</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5">{villageEcoSummary?.member_count || 1} Anggota</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Sisa Hasil Usaha (SHU) Berjalan</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5 text-green-600 dark:text-green-400">
+                          {fmt((financialSummary?.pemasukan_kas || 0) - (financialSummary?.pengeluaran_kas || 0))}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Skor Kepatuhan Audit Kemenkop</dt>
+                        <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5 flex items-center gap-1.5">
+                          <Activity className="w-3.5 h-3.5 text-[#ca8a04]" />
+                          <span>{complianceSummary?.health_score || 100} / 100</span>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+
+                {/* Unit Usaha KDKMP */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider">Unit Usaha Utama KDKMP</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[
+                      { title: 'Toko Retail Sembako KUD', desc: 'Gerai sembako penyedia bahan pokok pangan murah bagi warga desa secara luring.', badge: 'RITEL' },
+                      { title: 'Lumbung Pangan Mandiri', desc: 'Gudang penyimpanan dan pengeringan padi/jagung dari petani anggota koperasi.', badge: 'AGRIBISNIS' },
+                      { title: 'Unit Pembiayaan Mikro KUD', desc: 'Layanan fasilitas simpanan wajib/sukarela dan penyaluran kredit produktif pedagang.', badge: 'FINANCIAL' }
+                    ].map((unit, uidx) => (
+                      <div key={uidx} className="card p-5 space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="badge badge-gold">{unit.badge}</span>
+                          <span className="text-[10px] text-green-600 font-bold uppercase">AKTIF</span>
+                        </div>
+                        <h4 className="text-xs font-black text-stone-800 dark:text-white">{unit.title}</h4>
+                        <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-relaxed font-medium">{unit.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'proposals' && ['pengurus', 'ketua'].includes(session.role) && (
+            <div className="space-y-6 animate-scale-in">
+              
+              {/* Form pengajuan */}
+              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+                <h3 className="text-sm font-black text-[#14532d] dark:text-white mb-4 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[#ca8a04]" />
+                  Pengajuan Pembiayaan & Kemitraan KUD (SIMKOPDES Portal)
+                </h3>
+                <p className="text-[11px] text-stone-500 mb-6 font-medium">
+                  Salurkan proposal program pembiayaan, perluasan gerai, atau usaha agribisnis koperasi secara langsung ke Portal Pembiayaan Kementerian Koperasi RI.
+                </p>
+
+                <form onSubmit={handleSubmitProposal} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="label">Nama Penanggung Jawab KUD</label>
+                      <input
+                        type="text"
+                        value={proposalPj}
+                        onChange={(e) => setProposalPj(e.target.value)}
+                        className="input-field"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="label">Nomor WhatsApp Penanggung Jawab</label>
+                      <input
+                        type="text"
+                        value={proposalPhone}
+                        onChange={(e) => setProposalPhone(e.target.value)}
+                        className="input-field"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="label">Nominal Permohonan (Rupiah)</label>
+                      <input
+                        type="number"
+                        placeholder="Contoh: 150000000"
+                        value={proposalNominal}
+                        onChange={(e) => setProposalNominal(e.target.value)}
+                        className="input-field"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="label">Tenor Pengembalian (Bulan)</label>
+                      <select
+                        value={proposalTenor}
+                        onChange={(e) => setProposalTenor(e.target.value)}
+                        className="select-field"
+                      >
+                        <option value="12">12 Bulan (1 Tahun)</option>
+                        <option value="24">24 Bulan (2 Tahun)</option>
+                        <option value="36">36 Bulan (3 Tahun)</option>
+                        <option value="48">48 Bulan (4 Tahun)</option>
+                        <option value="60">60 Bulan (5 Tahun)</option>
+                        <option value="72">72 Bulan (6 Tahun - Batas PMK)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 flex flex-col justify-between">
+                    <div>
+                      <label className="label">Tujuan & Rencana Penggunaan Dana</label>
+                      <textarea
+                        rows={6}
+                        placeholder="Jelaskan secara rinci rencana alokasi dana (misal: perluasan kapasitas gudang lumbung padi KUD Desa Merah Putih untuk menampung panen petani)..."
+                        value={proposalTujuan}
+                        onChange={(e) => setProposalTujuan(e.target.value)}
+                        className="input-field resize-none h-[184px]"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={proposalPending}
+                      className="w-full py-3.5 px-6 bg-[#14532d] hover:bg-[#1e5a32] text-white rounded-xl text-xs font-black uppercase tracking-wider border border-[#ca8a04]/20 transition-all cursor-pointer disabled:opacity-40"
+                    >
+                      {proposalPending ? 'Mengirim Proposal...' : 'Kirim Permohonan ke Kemenkop'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Tabel history pengajuan */}
+              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+                <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider mb-4">Daftar Pengajuan Pembiayaan KUD</h3>
+                <div className="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-800">
+                  <table className="premium-table">
+                    <thead>
+                      <tr>
+                        <th>Ref Code</th>
+                        <th>Penanggung Jawab</th>
+                        <th>Nominal Permohonan</th>
+                        <th>Tenor</th>
+                        <th>Tujuan Permohonan</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th>Status Review</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {proposalsList.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-8 text-stone-400 font-medium">
+                            Belum ada riwayat pengajuan pembiayaan aktif.
+                          </td>
+                        </tr>
+                      ) : (
+                        proposalsList.map((prop) => (
+                          <tr key={prop.pengajuan_pembiayaan_ref}>
+                            <td className="font-mono font-bold text-[#ca8a04]">{prop.pengajuan_pembiayaan_ref}</td>
+                            <td className="font-bold">{prop.penanggung_jawab}</td>
+                            <td className="font-bold text-[#14532d] dark:text-green-400">{fmt(prop.nominal_permohonan)}</td>
+                            <td className="font-medium">{prop.tenor} Bulan</td>
+                            <td className="max-w-[200px] truncate text-stone-500 font-medium" title={prop.tujuan_permohonan}>
+                              {prop.tujuan_permohonan}
+                            </td>
+                            <td className="text-stone-400 font-semibold">{new Date(prop.dibuat_pada).toLocaleDateString('id-ID')}</td>
+                            <td>
+                              <span className="badge badge-gold">{prop.status_permohonan}</span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
             </div>
           )}
 
