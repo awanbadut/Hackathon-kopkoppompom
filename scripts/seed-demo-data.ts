@@ -41,6 +41,30 @@ const client = new Client({
   ssl: isSslEnabled ? { rejectUnauthorized: false } : undefined,
 });
 
+const firstNames = [
+  'Joko', 'Ani', 'Slamet', 'Sri', 'Eko', 'Kartini', 'Yusuf', 'Bambang', 'Wahyu', 'Ahmad',
+  'Siti', 'Agus', 'Eka', 'Rian', 'Adi', 'Doni', 'Edi', 'Hadi', 'Hendra', 'Indah',
+  'Kusuma', 'Lestari', 'Mega', 'Nur', 'Rina', 'Rudi', 'Saputra', 'Taufik', 'Utami',
+  'Wawan', 'Yanto', 'Zulkifli', 'Aris', 'Dewi', 'Fitri', 'Guntur', 'Hani', 'Iwan'
+];
+
+const lastNames = [
+  'Pratama', 'Wijaya', 'Hidayat', 'Setiawan', 'Nugroho', 'Saputra', 'Kusuma', 'Lestari',
+  'Rahmawati', 'Utami', 'Wulandari', 'Fitriani', 'Kartika', 'Indah', 'Astuti', 'Suryadi',
+  'Gunawan', 'Budiman', 'Hartono', 'Siregar', 'Nasution', 'Harahap', 'Lubis', 'Pohan'
+];
+
+const jobs = [
+  'Petani', 'Pekebun', 'Pedagang Sembako', 'Nelayan', 'Wiraswasta', 'Guru Honorer',
+  'Buruh Harian', 'Peternak Sapi', 'Ibu Rumah Tangga', 'Pengrajin Kayu'
+];
+
+function generateName(index: number): string {
+  const f = firstNames[index % firstNames.length];
+  const l = lastNames[(index * 3) % lastNames.length];
+  return `${f} ${l}`;
+}
+
 async function main() {
   console.log(`Connecting to database at ${process.env.DB_HOST}...`);
   await client.connect();
@@ -125,39 +149,67 @@ async function main() {
   ]);
   console.log('✓ Seeded pengurus_koperasi');
 
-  // 6. anggota_koperasi
+  // 6. Seed 100 Members (anggota_koperasi) & App Users
+  console.log('Generating and seeding 100 members and linking to app_users...');
+  
+  // Standard manager and pendamping users
   await client.query(`
-    INSERT INTO ${p('anggota_koperasi')} (anggota_ref, koperasi_ref, nama, nik, kode_wilayah, jenis_kelamin, status_keanggotaan, status_akun, pekerjaan)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    ON CONFLICT (anggota_ref) DO UPDATE 
-    SET koperasi_ref = EXCLUDED.koperasi_ref, nama = EXCLUDED.nama, nik = EXCLUDED.nik,
-        kode_wilayah = EXCLUDED.kode_wilayah, jenis_kelamin = EXCLUDED.jenis_kelamin,
-        status_keanggotaan = EXCLUDED.status_keanggotaan, status_akun = EXCLUDED.status_akun,
-        pekerjaan = EXCLUDED.pekerjaan
-  `, ['MBR-001', 'KOP-539EF09CDAAD', 'Budi Santoso', '3201010101010003', '32.01.01.2001', 'LAKI-LAKI', 'Approved', 'Punya Akun', 'Petani']);
-  console.log('✓ Seeded anggota_koperasi');
-
-  // 7. app_users
-  await client.query(`
-    INSERT INTO ${p('app_users')} (id, full_name, phone_number, ktp_number, role, koperasi_ref, pengurus_ref, anggota_ref, status)
+    INSERT INTO ${p('app_users')} (id, full_name, phone_number, ktp_number, role, koperasi_ref, pengurus_ref, status)
     VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, NULL, $8),
-    ($9, $10, $11, $12, $13, $14, $15, NULL, $16),
-    ($17, $18, $19, $20, $21, $22, NULL, $23, $24),
-    ($25, $26, $27, $28, $29, $30, NULL, NULL, $31)
+    ($1, $2, $3, $4, $5, $6, $7, $8),
+    ($9, $10, $11, $12, $13, $14, $15, $16),
+    ($17, $18, $19, $20, $21, $22, NULL, $23)
     ON CONFLICT (phone_number) DO UPDATE 
     SET full_name = EXCLUDED.full_name, ktp_number = EXCLUDED.ktp_number, role = EXCLUDED.role,
-        koperasi_ref = EXCLUDED.koperasi_ref, pengurus_ref = EXCLUDED.pengurus_ref,
-        anggota_ref = EXCLUDED.anggota_ref, status = EXCLUDED.status
+        koperasi_ref = EXCLUDED.koperasi_ref, pengurus_ref = EXCLUDED.pengurus_ref, status = EXCLUDED.status
   `, [
     'd142d765-bcf7-4f0e-b7d1-127e7d69e801', 'H. Ahmad Syarif', '081200000001', '3201010101010001', 'ketua', 'KOP-539EF09CDAAD', 'MGR-KETUA-001', 'active',
     'd142d765-bcf7-4f0e-b7d1-127e7d69e802', 'Siti Rahma', '081200000002', '3201010101010002', 'pengurus', 'KOP-539EF09CDAAD', 'MGR-BEND-001', 'active',
-    'd142d765-bcf7-4f0e-b7d1-127e7d69e803', 'Budi Santoso', '081200000003', '3201010101010003', 'anggota', 'KOP-539EF09CDAAD', 'MBR-001', 'active',
     'd142d765-bcf7-4f0e-b7d1-127e7d69e899', 'Drs. Bambang Wijaya', '081200000099', '3201010101010099', 'pendamping', 'KOP-539EF09CDAAD', 'active'
   ]);
-  console.log('✓ Seeded app_users');
 
-  // 8. learning_modules
+  for (let i = 1; i <= 100; i++) {
+    const memberRef = `MBR-${String(i).padStart(3, '0')}`;
+    
+    // For MBR-001 (Budi Santoso), reuse the exact standard demo credentials to avoid breaking any tests
+    const userId = i === 1 ? 'd142d765-bcf7-4f0e-b7d1-127e7d69e803' : `d142d765-bcf7-4f0e-b7d1-127e7d69e${String(i + 100).padStart(3, '0')}`;
+    const name = i === 1 ? 'Budi Santoso' : generateName(i);
+    const nik = i === 1 ? '3201010101010003' : `320101010101${String(i + 100).padStart(4, '0')}`;
+    const phone = i === 1 ? '081200000003' : `0812${String(i + 100).padStart(8, '0')}`;
+    
+    const job = jobs[i % jobs.length];
+
+    // Seed anggota_koperasi
+    await client.query(`
+      INSERT INTO ${p('anggota_koperasi')} (anggota_ref, koperasi_ref, nama, nik, kode_wilayah, jenis_kelamin, status_keanggotaan, status_akun, pekerjaan)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (anggota_ref) DO UPDATE 
+      SET koperasi_ref = EXCLUDED.koperasi_ref, nama = EXCLUDED.nama, nik = EXCLUDED.nik,
+          kode_wilayah = EXCLUDED.kode_wilayah, jenis_kelamin = EXCLUDED.jenis_kelamin,
+          status_keanggotaan = EXCLUDED.status_keanggotaan, status_akun = EXCLUDED.status_akun,
+          pekerjaan = EXCLUDED.pekerjaan
+    `, [memberRef, 'KOP-539EF09CDAAD', name, nik, '32.01.01.2001', i % 2 === 0 ? 'PEREMPUAN' : 'LAKI-LAKI', 'Approved', 'Punya Akun', job]);
+
+    // Seed app_users for this member
+    await client.query(`
+      INSERT INTO ${p('app_users')} (id, full_name, phone_number, ktp_number, role, koperasi_ref, anggota_ref, status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (phone_number) DO UPDATE 
+      SET full_name = EXCLUDED.full_name, ktp_number = EXCLUDED.ktp_number, role = EXCLUDED.role,
+          koperasi_ref = EXCLUDED.koperasi_ref, anggota_ref = EXCLUDED.anggota_ref, status = EXCLUDED.status
+    `, [userId, name, phone, nik, 'anggota', 'KOP-539EF09CDAAD', memberRef, 'active']);
+
+    // Seed User Points
+    const points = 10 + (i * 3) % 90; // Between 10 and 100 points
+    await client.query(`
+      INSERT INTO ${p('user_points')} (user_id, total_points)
+      VALUES ($1, $2)
+      ON CONFLICT (user_id) DO UPDATE SET total_points = EXCLUDED.total_points
+    `, [userId, points]);
+  }
+  console.log('✓ Seeded 100 members, app_users, and user_points');
+
+  // 7. learning_modules
   const module1Quiz = JSON.stringify({
     questions: [
       {
@@ -228,7 +280,7 @@ Untuk mencegah terjadinya penyalahgunaan wewenang dan kesalahan pencatatan keuan
   ]);
   console.log('✓ Seeded learning_modules');
 
-  // 9. rat_voting_agenda
+  // 8. rat_voting_agenda
   await client.query(`
     INSERT INTO ${p('rat_voting_agenda')} (id, koperasi_ref, title, description, options, status)
     VALUES 
@@ -249,6 +301,27 @@ Untuk mencegah terjadinya penyalahgunaan wewenang dan kesalahan pencatatan keuan
     ['Calon 1: H. Ahmad Syarif (Incumbent)', 'Calon 2: Siti Rahma'], 'aktif'
   ]);
   console.log('✓ Seeded rat_voting_agenda');
+
+  // 9. Seed Votes for the 100 Members in both agendas
+  console.log('Seeding votes for 100 members...');
+  for (let i = 1; i <= 100; i++) {
+    const userId = i === 1 ? 'd142d765-bcf7-4f0e-b7d1-127e7d69e803' : `d142d765-bcf7-4f0e-b7d1-127e7d69e${String(i + 100).padStart(3, '0')}`;
+    const vote1 = ['Setuju', 'Tolak', 'Abstain'][i % 3];
+    const vote2 = ['Calon 1: H. Ahmad Syarif (Incumbent)', 'Calon 2: Siti Rahma'][i % 2];
+
+    await client.query(`
+      INSERT INTO ${p('rat_votes')} (agenda_id, user_id, voted_option)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (agenda_id, user_id) DO UPDATE SET voted_option = EXCLUDED.voted_option
+    `, ['c142d765-bcf7-4f0e-b7d1-127e7d69e881', userId, vote1]);
+
+    await client.query(`
+      INSERT INTO ${p('rat_votes')} (agenda_id, user_id, voted_option)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (agenda_id, user_id) DO UPDATE SET voted_option = EXCLUDED.voted_option
+    `, ['c142d765-bcf7-4f0e-b7d1-127e7d69e882', userId, vote2]);
+  }
+  console.log('✓ Seeded 200 votes (e-RAT)');
 
   // 10. community_aspirations
   await client.query(`
@@ -273,7 +346,74 @@ Untuk mencegah terjadinya penyalahgunaan wewenang dan kesalahan pencatatan keuan
   ]);
   console.log('✓ Seeded community_aspirations');
 
-  // 11. reward_vouchers
+  // 11. Seed random upvotes to aspirations to represent community engagement
+  console.log('Seeding upvotes on aspirations...');
+  for (let i = 1; i <= 40; i++) {
+    const userId = i === 1 ? 'd142d765-bcf7-4f0e-b7d1-127e7d69e803' : `d142d765-bcf7-4f0e-b7d1-127e7d69e${String(i + 100).padStart(3, '0')}`;
+    
+    if (i <= 25) {
+      await client.query(`
+        INSERT INTO ${p('aspiration_upvotes')} (aspiration_id, user_id)
+        VALUES ($1, $2)
+        ON CONFLICT (aspiration_id, user_id) DO NOTHING
+      `, ['a142d765-bcf7-4f0e-b7d1-127e7d69e891', userId]);
+    }
+
+    await client.query(`
+      INSERT INTO ${p('aspiration_upvotes')} (aspiration_id, user_id)
+      VALUES ($1, $2)
+      ON CONFLICT (aspiration_id, user_id) DO NOTHING
+    `, ['a142d765-bcf7-4f0e-b7d1-127e7d69e892', userId]);
+  }
+  console.log('✓ Seeded aspiration upvotes');
+
+  // 12. Seed financial transactions (Savings Pokok, Wajib, Sukarela & Withdrawals) for all 100 members!
+  console.log('Seeding financial transactions for all 100 members...');
+  
+  const simpananKategori = prefix + 'simpanan_anggota';
+
+  // Clean old savings/financial transactions first to avoid duplicates or overflow
+  await client.query(`
+    DELETE FROM ${p('transaksi_keuangan')} 
+    WHERE type IN ('simpanan_pokok', 'simpanan_wajib', 'simpanan_sukarela')
+       OR (type = 'pengeluaran' AND kategori = $1)
+  `, [simpananKategori]);
+
+  for (let i = 1; i <= 100; i++) {
+    const memberRef = `MBR-${String(i).padStart(3, '0')}`;
+    const name = i === 1 ? 'Budi Santoso' : generateName(i);
+    
+    // Deposit Pokok (Rp100.000)
+    await client.query(`
+      INSERT INTO ${p('transaksi_keuangan')} (id, koperasi_ref, type, sumber_dana, kategori, amount, description, status, input_by, anggota_ref, created_at)
+      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, now() - interval '30 days')
+    `, ['KOP-539EF09CDAAD', 'simpanan_pokok', 'non_dana_desa', simpananKategori, 100000, `Setoran Simpanan Pokok Awal - ${name}`, 'disetujui', 'd142d765-bcf7-4f0e-b7d1-127e7d69e802', memberRef]);
+
+    // Deposit Wajib (Rp50.000)
+    await client.query(`
+      INSERT INTO ${p('transaksi_keuangan')} (id, koperasi_ref, type, sumber_dana, kategori, amount, description, status, input_by, anggota_ref, created_at)
+      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, now() - interval '15 days')
+    `, ['KOP-539EF09CDAAD', 'simpanan_wajib', 'non_dana_desa', simpananKategori, 50000, `Setoran Simpanan Wajib Bulanan - ${name}`, 'disetujui', 'd142d765-bcf7-4f0e-b7d1-127e7d69e802', memberRef]);
+
+    // Deposit Sukarela (Random Rp50.000 to Rp300.000)
+    const sukarelaAmount = 50000 + (i * 7000) % 250000;
+    await client.query(`
+      INSERT INTO ${p('transaksi_keuangan')} (id, koperasi_ref, type, sumber_dana, kategori, amount, description, status, input_by, anggota_ref, created_at)
+      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, now() - interval '5 days')
+    `, ['KOP-539EF09CDAAD', 'simpanan_sukarela', 'non_dana_desa', simpananKategori, sukarelaAmount, `Setoran Tabungan Sukarela - ${name}`, 'disetujui', 'd142d765-bcf7-4f0e-b7d1-127e7d69e802', memberRef]);
+
+    // Withdraw Sukarela for some members (e.g. index divisible by 5)
+    if (i % 5 === 0) {
+      const withdrawAmount = 20000 + (i * 1000) % 30000;
+      await client.query(`
+        INSERT INTO ${p('transaksi_keuangan')} (id, koperasi_ref, type, sumber_dana, kategori, amount, description, status, input_by, anggota_ref, created_at)
+        VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, now() - interval '1 day')
+      `, ['KOP-539EF09CDAAD', 'pengeluaran', 'non_dana_desa', simpananKategori, withdrawAmount, `Penarikan Simpanan Sukarela - ${name}`, 'disetujui', 'd142d765-bcf7-4f0e-b7d1-127e7d69e802', memberRef]);
+    }
+  }
+  console.log('✓ Seeded approved savings deposit & withdrawal transactions for all 100 members');
+
+  // 13. reward_vouchers
   await client.query(`
     INSERT INTO ${p('reward_vouchers')} (id, title, points_cost, description, stock)
     VALUES 
