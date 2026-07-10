@@ -749,6 +749,37 @@ export default function DashboardClient({
     );
   };
 
+  // Distribute SHU based on member points
+  const handleDistributeShu = async () => {
+    showConfirm(
+      'Bagikan SHU Koperasi',
+      `Apakah Anda yakin ingin membagikan sisa hasil usaha (SHU) berjalan sebesar ${fmt(sisaHasilUsaha)} kepada seluruh anggota terdaftar secara proporsional sesuai poin partisipasi mereka?`,
+      async () => {
+        startTransition(async () => {
+          try {
+            const res = await fetch('/api/financials/distribute-shu', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.error) {
+              showDialog('error', 'Pembagian Gagal', data.error);
+            } else {
+              showDialog(
+                'success',
+                'SHU Didistribusikan!',
+                `Sukses membagikan SHU sebesar ${fmt(data.distributedAmount)} kepada ${data.membersCount} anggota yang berpartisipasi aktif.`
+              );
+              router.refresh();
+            }
+          } catch (err) {
+            showDialog('error', 'Kesalahan', 'Gagal memproses pembagian SHU.');
+          }
+        });
+      }
+    );
+  };
+
   // Format currency
   const fmt = (num: any) => {
     if (num === undefined || num === null) return 'Rp0';
@@ -1782,6 +1813,20 @@ export default function DashboardClient({
                       </span>
                     </div>
                   </div>
+
+                  {/* Tombol Bagi SHU untuk Ketua */}
+                  {session.role === 'ketua' && sisaHasilUsaha > 0 && (
+                    <div className="mt-4 pt-4 border-t border-stone-200 dark:border-stone-850 flex justify-end">
+                      <button
+                        onClick={handleDistributeShu}
+                        disabled={isPending}
+                        className="py-2.5 px-6 bg-[#ca8a04] hover:bg-[#b07803] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-amber-600/20 transition-all cursor-pointer flex items-center gap-2"
+                      >
+                        <Coins className="w-4 h-4" />
+                        Bagikan SHU Digital Berbasis Poin
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

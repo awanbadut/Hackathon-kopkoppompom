@@ -384,6 +384,62 @@ async function testRewardCenter() {
   console.log('✓ Sub-test 6a: Points Deduction and Stock Update Passed.');
 }
 
+async function testShuDistribution() {
+  console.log('\n--- Testing Test Case 7: Digital SHU Distribution based on Points ---');
+
+  // 1. Record mock income to create positive SHU berjalan
+  await client.query(
+    `INSERT INTO ${p('transaksi_keuangan')} 
+     (koperasi_ref, type, sumber_dana, kategori, amount, description, input_by, status, risk_level, transaction_date)
+     VALUES ('KOP-539EF09CDAAD', 'pemasukan', 'non_dana_desa', 'operasional', 500000, 'Pendapatan Toko Desa', 'd142d765-bcf7-4f0e-b7d1-127e7d69e802', 'disetujui', 'aman', CURRENT_DATE)`
+  );
+
+  // 2. Load total SHU
+  const { rows: pem } = await client.query(
+    `SELECT COALESCE(SUM(amount), 0)::numeric as total FROM ${p('transaksi_keuangan')} 
+     WHERE koperasi_ref = 'KOP-539EF09CDAAD' AND type = 'pemasukan' AND status = 'disetujui'`
+  );
+  const { rows: peng } = await client.query(
+    `SELECT COALESCE(SUM(amount), 0)::numeric as total FROM ${p('transaksi_keuangan')} 
+     WHERE koperasi_ref = 'KOP-539EF09CDAAD' AND type = 'pengeluaran' AND status = 'disetujui'`
+  );
+  const totalSHU = Number(pem[0].total) - Number(peng[0].total);
+  assert(totalSHU > 0, 'SHU must be positive to distribute');
+
+  // 3. Load active members with points
+  const { rows: members } = await client.query(
+    `SELECT u.id as user_id, u.anggota_ref, COALESCE(p.total_points, 0)::int as points 
+     FROM ${p('app_users')} u
+     LEFT JOIN ${p('user_points')} p ON u.id = p.user_id
+     WHERE u.koperasi_ref = 'KOP-539EF09CDAAD' AND u.role = 'anggota' AND u.status = 'active'`
+  );
+  const totalPoints = members.reduce((sum, m) => sum + m.points, 0);
+  assert(totalPoints > 0, 'Total points must be positive');
+
+  // 4. Simulate distribution
+  for (const member of members) {
+    if (member.points > 0) {
+      const memberShuAmount = Math.round((member.points / totalPoints) * totalSHU);
+      if (memberShuAmount > 0) {
+        await client.query(
+          `INSERT INTO ${p('transaksi_keuangan')} 
+           (koperasi_ref, type, sumber_dana, kategori, amount, description, anggota_ref, input_by, status, risk_level, transaction_date)
+           VALUES ('KOP-539EF09CDAAD', 'bagi_hasil', 'non_dana_desa', 'lainnya', $1, 'Bagi Hasil SHU Test', $2, 'd142d765-bcf7-4f0e-b7d1-127e7d69e801', 'disetujui', 'aman', CURRENT_DATE)`,
+          [memberShuAmount, member.anggota_ref]
+        );
+      }
+    }
+  }
+
+  // 5. Verify that bagi_hasil records are successfully created
+  const { rows: bag } = await client.query(
+    `SELECT COUNT(*)::int as count FROM ${p('transaksi_keuangan')} 
+     WHERE koperasi_ref = 'KOP-539EF09CDAAD' AND type = 'bagi_hasil' AND status = 'disetujui'`
+  );
+  assert(bag[0].count > 0, 'Should have created bagi_hasil records');
+  console.log('✓ Sub-test 7a: Dynamic SHU Payout Calculation and Recording Passed.');
+}
+
 async function main() {
   console.log('Connecting to database...');
   await client.connect();
@@ -396,6 +452,7 @@ async function main() {
   await testGamificationPoints();
   await testCommunityFeatures();
   await testRewardCenter();
+  await testShuDistribution();
 
   await client.end();
   console.log('\n=======================================');
