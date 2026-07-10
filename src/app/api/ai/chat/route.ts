@@ -2,6 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { db, p } from '@/lib/db';
 
+let currentIndex = 0;
+
+function getNextApiKey(): string {
+  const poolStr = process.env.GEMINI_API_KEY_POOL;
+  if (poolStr && poolStr.trim()) {
+    const keys = poolStr.split(',').map(k => k.trim()).filter(Boolean);
+    if (keys.length > 0) {
+      const key = keys[currentIndex % keys.length];
+      console.log(`[Gemini Round-Robin Pool]: Rotating API Key to index ${currentIndex % keys.length} from pool`);
+      currentIndex = (currentIndex + 1) % keys.length;
+      return key;
+    }
+  }
+  return process.env.GEMINI_API_KEY || '';
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getSession();
@@ -32,7 +48,7 @@ export async function POST(req: NextRequest) {
       [session.koperasiRef]
     );
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = getNextApiKey();
 
     // 2. If Gemini API Key is configured, use real live Gemini 2.5 model!
     if (apiKey) {
@@ -81,14 +97,21 @@ Tugas Anda:
         if (reply) {
           return NextResponse.json({ reply });
         }
+      } else {
+        console.error('[Gemini Pool Error]: API call failed, falling back to local fallback. Status:', response.status);
       }
     }
 
     // 3. Graceful Fallback if API key is missing or API call fails
     let reply = '';
+    const poolStr = process.env.GEMINI_API_KEY_POOL;
+    const poolLength = poolStr ? poolStr.split(',').filter(Boolean).length : 0;
     const missingKeyNotice = !apiKey 
-      ? `\n\n*(Catatan Dev: Kunci API \`GEMINI_API_KEY\` belum disetel di \`.env.local\`. Menampilkan respon otomatis terstruktur lokal)*` 
-      : '';
+      ? `\n\n*(Catatan Dev: Kunci API Gemini belum disetel. Menampilkan respon otomatis terstruktur lokal)*` 
+      : (poolLength > 0 
+          ? `\n\n*(Catatan Dev: Menggunakan Gemini API Pool Round Robin - Indeks Ke-${(currentIndex - 1 + poolLength) % poolLength})*`
+          : `\n\n*(Catatan Dev: Menggunakan Kunci API Tunggal)*`
+        );
 
     if (query.includes('skor') || query.includes('kesehatan') || query.includes('audit') || query.includes('status')) {
       reply = `### 📊 Laporan Audit AI Kepatuhan Koperasi Anda:
