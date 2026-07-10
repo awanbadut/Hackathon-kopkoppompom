@@ -368,7 +368,7 @@ export default async function DashboardPage(props: {
 
     // D. Misi 3: Belanja Sembako KUD
     const { rows: memberRows } = await db.query(
-      `SELECT anggota_ref FROM ${p('anggota_koperasi')} WHERE ktp_number = $1`,
+      `SELECT anggota_ref FROM ${p('anggota_koperasi')} WHERE nik = $1`,
       [session.ktpNumber]
     );
     const memberRef = memberRows[0]?.anggota_ref;
