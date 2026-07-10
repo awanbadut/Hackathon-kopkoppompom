@@ -320,6 +320,29 @@ export default async function DashboardPage(props: {
     proposals = rows;
   }
 
+  // Load Member Savings Summary for all or single member
+  let memberSavings: any[] = [];
+  if (['pengurus', 'ketua'].includes(session.role) && session.koperasiRef) {
+    const { rows } = await db.query(
+      `SELECT ms.*, u.phone_number, u.status as user_status
+       FROM ${p('v_member_summary')} ms
+       JOIN ${p('app_users')} u ON u.anggota_ref = ms.anggota_ref
+       WHERE ms.koperasi_ref = $1
+       ORDER BY ms.nama ASC`,
+      [session.koperasiRef]
+    );
+    memberSavings = rows;
+  } else if (session.role === 'anggota') {
+    const { rows } = await db.query(
+      `SELECT ms.*, u.phone_number
+       FROM ${p('v_member_summary')} ms
+       JOIN ${p('app_users')} u ON u.anggota_ref = ms.anggota_ref
+       WHERE u.id = $1`,
+      [session.userId]
+    );
+    memberSavings = rows;
+  }
+
   // 22. Load user's weekly mission progress
   let weeklyMissionsProgress = {
     misi1: { progress: 0, target: 10000, completed: false, claimed: false }, // Simpanan Sukarela Rutin
@@ -433,7 +456,8 @@ export default async function DashboardPage(props: {
     villageEcoSummary,
     financialSummary,
     proposals,
-    weeklyMissionsProgress
+    weeklyMissionsProgress,
+    memberSavings
   });
 
   return <DashboardClient {...propsToClient} />;
