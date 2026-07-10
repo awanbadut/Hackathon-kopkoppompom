@@ -1890,46 +1890,48 @@ export default function DashboardClient({
           {activeTab === 'aspirations' && (
             <div className="space-y-6">
               
-              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 flex items-center gap-2">
-                  <Plus className="w-4 h-4 text-[#ca8a04]" /> Sampaikan Aspirasi & Program Desa
-                </h3>
+              {session.role === 'anggota' && (
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
+                  <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[#ca8a04]" /> Sampaikan Aspirasi &amp; Program Desa
+                  </h3>
 
-                <form onSubmit={handleCreateAspiration} className="space-y-4 text-xs">
-                  <div className="grid grid-cols-1 gap-3">
-                    <div>
-                      <label className="block font-bold text-stone-500 mb-1">Judul Usulan Program</label>
-                      <input
-                        type="text"
-                        placeholder="Contoh: Pengadaan Mesin Pengering Padi Kelompok Tani"
-                        value={aspTitle}
-                        onChange={(e) => setAspTitle(e.target.value)}
-                        className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
-                        required
-                      />
+                  <form onSubmit={handleCreateAspiration} className="space-y-4 text-xs">
+                    <div className="grid grid-cols-1 gap-3">
+                      <div>
+                        <label className="block font-bold text-stone-500 mb-1">Judul Usulan Program</label>
+                        <input
+                          type="text"
+                          placeholder="Contoh: Pengadaan Mesin Pengering Padi Kelompok Tani"
+                          value={aspTitle}
+                          onChange={(e) => setAspTitle(e.target.value)}
+                          className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-stone-500 mb-1">Penjelasan Detail &amp; Latar Belakang</label>
+                        <textarea
+                          placeholder="Jelaskan kebutuhan warga, perkiraan lokasi, dan urgensi fisik program..."
+                          value={aspDesc}
+                          onChange={(e) => setAspDesc(e.target.value)}
+                          className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none h-20 resize-none"
+                          required
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block font-bold text-stone-500 mb-1">Penjelasan Detail & Latar Belakang</label>
-                      <textarea
-                        placeholder="Jelaskan kebutuhan warga, perkiraan lokasi, dan urgensi fisik program..."
-                        value={aspDesc}
-                        onChange={(e) => setAspDesc(e.target.value)}
-                        className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none h-20 resize-none"
-                        required
-                      />
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={isPending}
+                        className="py-2.5 px-6 bg-[#14532d] hover:bg-[#1d5c36] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/25 transition-all cursor-pointer"
+                      >
+                        Kirim Usulan Warga
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex justify-end">
-                    <button
-                      type="submit"
-                      disabled={isPending}
-                      className="py-2.5 px-6 bg-[#14532d] hover:bg-[#1d5c36] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/25 transition-all cursor-pointer"
-                    >
-                      Kirim Usulan Warga
-                    </button>
-                  </div>
-                </form>
-              </div>
+                  </form>
+                </div>
+              )}
 
               {/* Feed Aspirasi */}
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-6">

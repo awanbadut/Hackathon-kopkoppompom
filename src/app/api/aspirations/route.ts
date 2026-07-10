@@ -13,6 +13,10 @@ export async function POST(req: Request) {
     }
 
     if (action === 'create') {
+      if (session.role !== 'anggota') {
+        return NextResponse.json({ error: 'Hanya Anggota Koperasi yang dapat menyampaikan aspirasi.' }, { status: 403 });
+      }
+
       if (!title || !description) {
         return NextResponse.json({ error: 'Judul dan keterangan aspirasi wajib diisi.' }, { status: 400 });
       }
