@@ -36,6 +36,7 @@ interface DashboardClientProps {
   villageEcoSummary: any;
   financialSummary: any;
   proposals: any[];
+  weeklyMissionsProgress: any;
 }
 
 export default function DashboardClient({
@@ -61,7 +62,8 @@ export default function DashboardClient({
   voteAggregates,
   villageEcoSummary,
   financialSummary,
-  proposals
+  proposals,
+  weeklyMissionsProgress
 }: DashboardClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -96,6 +98,56 @@ export default function DashboardClient({
     title: '',
     message: '',
   });
+
+  // Points and weekly missions state
+  const [pointsBalance, setPointsBalance] = useState(userPoints?.total_points ? Number(userPoints.total_points) : 0);
+  const [missionsState, setMissionsState] = useState(weeklyMissionsProgress || {});
+  const [missionClaimPending, setMissionClaimPending] = useState<string | null>(null);
+
+  const handleClaimMission = async (missionCode: string, pointsAwarded: number) => {
+    if (missionClaimPending) return;
+    setMissionClaimPending(missionCode);
+
+    try {
+      const res = await fetch('/api/missions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mission_code: missionCode,
+          points_awarded: pointsAwarded
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Gagal mengklaim poin misi.');
+      }
+
+      setPointsBalance(prev => prev + pointsAwarded);
+      setMissionsState((prev: any) => ({
+        ...prev,
+        [missionCode]: {
+          ...prev[missionCode],
+          claimed: true
+        }
+      }));
+
+      setDialog({
+        isOpen: true,
+        type: 'success',
+        title: 'Misi Diklaim!',
+        message: `Selamat! Anda berhasil mengklaim ${pointsAwarded} Poin untuk misi mingguan ini. Kumpulkan lebih banyak poin untuk ditukarkan dengan kupon belanja di Gerai KUD.`
+      });
+    } catch (err: any) {
+      setDialog({
+        isOpen: true,
+        type: 'error',
+        title: 'Klaim Gagal',
+        message: err.message
+      });
+    } finally {
+      setMissionClaimPending(null);
+    }
+  };
 
   const showDialog = (type: 'success' | 'error' | 'warning' | 'info', title: string, message: string) => {
     setDialog({ isOpen: true, type, title, message });
@@ -667,6 +719,9 @@ export default function DashboardClient({
       async () => {
         startTransition(async () => {
           try {
+            const voucher = vouchers.find(v => v.id === voucherId);
+            const cost = voucher ? Number(voucher.points_cost) : 0;
+
             const res = await fetch('/api/rewards/redeem', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -676,6 +731,7 @@ export default function DashboardClient({
             if (data.error) {
               showDialog('error', 'Klaim Gagal', data.error);
             } else {
+              setPointsBalance(prev => prev - cost);
               showDialog(
                 'success', 
                 'Penukaran Berhasil!', 
@@ -1023,7 +1079,7 @@ export default function DashboardClient({
                     <Award className="w-6 h-6 text-[#ca8a04]" />
                     <div>
                       <div className="text-[9px] uppercase font-black tracking-wider text-stone-400">Poin Belanja</div>
-                      <div className="text-base font-black text-[#14532d] dark:text-white font-mono">{userPoints.total_points} PTS</div>
+                      <div className="text-base font-black text-[#14532d] dark:text-white font-mono">{pointsBalance} PTS</div>
                     </div>
                   </div>
                 )}
@@ -2042,8 +2098,8 @@ export default function DashboardClient({
                   <div>
                     <h3 className="text-base font-black text-[#14532d] dark:text-white">
                       Peringkat Anggota: <span className="text-[#ca8a04] uppercase">
-                        {(userPoints?.total_points || 0) >= 150 ? 'Ahli Perkoperasian' : 
-                         (userPoints?.total_points || 0) >= 50 ? 'Cakap Koperasi' : 'Pemula'}
+                        {pointsBalance >= 150 ? 'Ahli Perkoperasian' : 
+                         pointsBalance >= 50 ? 'Cakap Koperasi' : 'Pemula'}
                       </span>
                     </h3>
                     <p className="mt-1 text-xs text-stone-450 leading-relaxed">
@@ -2054,7 +2110,7 @@ export default function DashboardClient({
 
                 <div className="text-center sm:text-right bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-6 py-3.5 rounded-2xl min-w-[130px]">
                   <span className="text-[10px] font-black text-stone-450 block uppercase tracking-wider">Tabungan Poin</span>
-                  <span className="text-2xl font-black text-[#14532d] dark:text-white font-mono">{userPoints?.total_points || 0} PTS</span>
+                  <span className="text-2xl font-black text-[#14532d] dark:text-white font-mono">{pointsBalance} PTS</span>
                 </div>
               </div>
 
@@ -2110,6 +2166,113 @@ export default function DashboardClient({
           {/* ======================================= */}
           {activeTab === 'rewards' && (
             <div className="space-y-6">
+
+              {/* Misi Mingguan Anggota Koperasi Section */}
+              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-3">
+                  <div>
+                    <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[#ca8a04]" />
+                      Misi Mingguan Anggota KUD
+                    </h3>
+                    <p className="text-[10px] text-stone-500 mt-1 font-medium">
+                      Selesaikan misi mingguan koperasi di bawah ini untuk mendapatkan bonus poin belanja yang melimpah!
+                    </p>
+                  </div>
+                  <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2 shrink-0">
+                    <Coins className="w-4 h-4 text-[#ca8a04]" />
+                    <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Poin Anda: {pointsBalance} PTS</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[
+                    {
+                      code: 'misi1',
+                      title: 'Tabungan Sukarela Rutin',
+                      desc: 'Menabung simpanan sukarela koperasi desa minimal Rp10.000 minggu ini.',
+                      points: 15,
+                      progressText: `${fmt(missionsState.misi1?.progress || 0)} / ${fmt(missionsState.misi1?.target || 10000)}`,
+                      completed: missionsState.misi1?.completed,
+                      claimed: missionsState.misi1?.claimed,
+                    },
+                    {
+                      code: 'misi2',
+                      title: 'Hak Suara Demokrasi',
+                      desc: 'Ikut serta memberikan hak suara pada agenda voting e-RAT koperasi minggu ini.',
+                      points: 20,
+                      progressText: `${missionsState.misi2?.progress || 0} / ${missionsState.misi2?.target || 1} Vote`,
+                      completed: missionsState.misi2?.completed,
+                      claimed: missionsState.misi2?.claimed,
+                    },
+                    {
+                      code: 'misi3',
+                      title: 'Belanja Sembako KUD',
+                      desc: 'Berbelanja kebutuhan pangan harian di Gerai Toko KUD minimal Rp50.000 minggu ini.',
+                      points: 30,
+                      progressText: `${fmt(missionsState.misi3?.progress || 0)} / ${fmt(missionsState.misi3?.target || 50000)}`,
+                      completed: missionsState.misi3?.completed,
+                      claimed: missionsState.misi3?.claimed,
+                    },
+                    {
+                      code: 'misi4',
+                      title: 'Cerdas Literasi Koperasi',
+                      desc: 'Menyelesaikan minimal 1 modul kuis kelas literasi tata kelola koperasi minggu ini.',
+                      points: 10,
+                      progressText: `${missionsState.misi4?.progress || 0} / ${missionsState.misi4?.target || 1} Modul`,
+                      completed: missionsState.misi4?.completed,
+                      claimed: missionsState.misi4?.claimed,
+                    }
+                  ].map((misi) => (
+                    <div key={misi.code} className="p-4 border border-stone-205 dark:border-stone-850 rounded-2xl flex flex-col justify-between gap-4 bg-stone-50/50 dark:bg-stone-900/10">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="badge badge-gold">+{misi.points} PTS</span>
+                          <span className="text-[10px] text-stone-400 font-mono font-bold">{misi.progressText}</span>
+                        </div>
+                        <h4 className="text-xs font-black text-stone-800 dark:text-white">{misi.title}</h4>
+                        <p className="text-[10px] text-stone-550 dark:text-stone-400 leading-relaxed font-medium">{misi.desc}</p>
+                      </div>
+
+                      <div className="pt-3 border-t border-dashed border-stone-200 dark:border-stone-800 flex items-center justify-between">
+                        <span className="text-[10px] font-bold">
+                          {misi.claimed ? (
+                            <span className="text-green-600 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" /> Poin Diklaim</span>
+                          ) : misi.completed ? (
+                            <span className="text-amber-600 font-black animate-pulse">Selesai • Siap Klaim</span>
+                          ) : (
+                            <span className="text-stone-400 font-semibold">Sedang berjalan</span>
+                          )}
+                        </span>
+
+                        {misi.claimed ? (
+                          <button
+                            disabled
+                            className="py-1 px-3 bg-stone-100 dark:bg-stone-800 text-stone-400 text-[10px] font-bold rounded-lg cursor-not-allowed"
+                          >
+                            Claimed
+                          </button>
+                        ) : misi.completed ? (
+                          <button
+                            onClick={() => handleClaimMission(misi.code, misi.points)}
+                            disabled={missionClaimPending === misi.code}
+                            className="py-1.5 px-4 bg-[#14532d] hover:bg-[#1c5531] text-white text-[10px] font-black uppercase tracking-wider border border-[#ca8a04]/20 rounded-lg cursor-pointer transition-all shadow-sm"
+                          >
+                            {missionClaimPending === misi.code ? 'Klaim...' : 'Klaim Poin'}
+                          </button>
+                        ) : (
+                          <button
+                            disabled
+                            className="py-1 px-3 bg-stone-100 dark:bg-stone-800 text-stone-400 text-[10px] font-bold rounded-lg cursor-not-allowed border border-stone-200 dark:border-stone-700"
+                          >
+                            Belum Selesai
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 

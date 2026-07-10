@@ -44,7 +44,8 @@ async function main() {
     'supabase/migrations/0001_reference_schema.sql',
     'supabase/migrations/0002_amandes_additive.sql',
     'supabase/migrations/0003_rls_and_triggers.sql',
-    'supabase/migrations/0004_amandes_community.sql'
+    'supabase/migrations/0004_amandes_community.sql',
+    'supabase/migrations/0005_weekly_missions.sql'
   ];
 
   for (const file of migrationFiles) {
@@ -56,6 +57,10 @@ async function main() {
       await client.query(sql);
       console.log(`✓ Migration ${file} completed successfully.`);
     } catch (err: any) {
+      if (err.code === '42P07' || err.message.includes('already exists')) {
+        console.log(`⚠ Migration ${file} warning: relation already exists, continuing.`);
+        continue;
+      }
       console.error(`✗ Error in migration ${file}:`, err.message);
       await client.end();
       process.exit(1);

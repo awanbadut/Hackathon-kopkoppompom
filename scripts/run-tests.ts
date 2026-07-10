@@ -56,12 +56,13 @@ async function runMigrationsAndSeed() {
     'supabase/migrations/0001_reference_schema.sql',
     'supabase/migrations/0002_amandes_additive.sql',
     'supabase/migrations/0003_rls_and_triggers.sql',
-    'supabase/migrations/0004_amandes_community.sql'
+    'supabase/migrations/0004_amandes_community.sql',
+    'supabase/migrations/0005_weekly_missions.sql'
   ];
 
   // We need to drop our prefixed tables first to ensure clean state
   const tablesToDrop = [
-    'user_vouchers', 'reward_vouchers', 'aspiration_upvotes', 'community_aspirations', 
+    'weekly_missions_claim', 'user_vouchers', 'reward_vouchers', 'aspiration_upvotes', 'community_aspirations', 
     'rat_votes', 'rat_voting_agenda', 'whatsapp_mock_log', 'user_devices', 
     'notifications', 'approvals', 'koperasi_health_score', 'risk_logs', 
     'transaksi_keuangan', 'user_progress', 'user_points', 'learning_modules', 'app_users',

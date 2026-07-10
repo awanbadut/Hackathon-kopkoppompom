@@ -306,6 +306,93 @@ export default async function DashboardPage(props: {
     proposals = rows;
   }
 
+  // 22. Load user's weekly mission progress
+  let weeklyMissionsProgress = {
+    misi1: { progress: 0, target: 10000, completed: false, claimed: false }, // Simpanan Sukarela Rutin
+    misi2: { progress: 0, target: 1, completed: false, claimed: false },     // Suara Demokrasi (Vote RAT)
+    misi3: { progress: 0, target: 50000, completed: false, claimed: false }, // Belanja Warung KUD
+    misi4: { progress: 0, target: 1, completed: false, claimed: false },     // Cerdas Koperasi
+  };
+
+  try {
+    // A. Query claimed missions for this week
+    const { rows: claims } = await db.query(
+      `SELECT mission_code FROM ${p('weekly_missions_claim')} 
+       WHERE user_id = $1 AND week_start = DATE_TRUNC('week', CURRENT_DATE)`,
+      [session.userId]
+    );
+    const claimedCodes = claims.map(c => c.mission_code);
+
+    // B. Misi 1: Simpanan Sukarela Rutin
+    const { rows: r1 } = await db.query(
+      `SELECT COALESCE(SUM(amount), 0)::int as total FROM ${p('transaksi_keuangan')} 
+       WHERE input_by = $1 AND type = 'simpanan_sukarela' AND status = 'disetujui'
+       AND created_at >= DATE_TRUNC('week', CURRENT_DATE)`,
+      [session.userId]
+    );
+    const progress1 = Number(r1[0]?.total || 0);
+    weeklyMissionsProgress.misi1 = {
+      progress: progress1,
+      target: 10000,
+      completed: progress1 >= 10000,
+      claimed: claimedCodes.includes('misi1')
+    };
+
+    // C. Misi 2: Suara Demokrasi (Vote RAT)
+    const { rows: r2 } = await db.query(
+      `SELECT COUNT(*)::int as count FROM ${p('rat_votes')} 
+       WHERE user_id = $1 AND voted_at >= DATE_TRUNC('week', CURRENT_DATE)`,
+      [session.userId]
+    );
+    const progress2 = Number(r2[0]?.count || 0);
+    weeklyMissionsProgress.misi2 = {
+      progress: progress2,
+      target: 1,
+      completed: progress2 >= 1,
+      claimed: claimedCodes.includes('misi2')
+    };
+
+    // D. Misi 3: Belanja Sembako KUD
+    const { rows: memberRows } = await db.query(
+      `SELECT anggota_ref FROM ${p('anggota_koperasi')} WHERE ktp_number = $1`,
+      [session.ktpNumber]
+    );
+    const memberRef = memberRows[0]?.anggota_ref;
+    let progress3 = 0;
+    if (memberRef) {
+      const { rows: r3 } = await db.query(
+        `SELECT COALESCE(SUM(amount), 0)::int as total FROM ${p('transaksi_keuangan')} 
+         WHERE anggota_ref = $1 AND type = 'pemasukan' AND kategori = 'distribusi_pangan' AND status = 'disetujui'
+         AND created_at >= DATE_TRUNC('week', CURRENT_DATE)`,
+        [memberRef]
+      );
+      progress3 = Number(r3[0]?.total || 0);
+    }
+    weeklyMissionsProgress.misi3 = {
+      progress: progress3,
+      target: 50000,
+      completed: progress3 >= 50000,
+      claimed: claimedCodes.includes('misi3')
+    };
+
+    // E. Misi 4: Cerdas Koperasi (Literasi)
+    const { rows: r4 } = await db.query(
+      `SELECT COUNT(*)::int as count FROM ${p('user_progress')} 
+       WHERE user_id = $1 AND status = 'selesai' 
+       AND completed_at >= DATE_TRUNC('week', CURRENT_DATE)`,
+      [session.userId]
+    );
+    const progress4 = Number(r4[0]?.count || 0);
+    weeklyMissionsProgress.misi4 = {
+      progress: progress4,
+      target: 1,
+      completed: progress4 >= 1,
+      claimed: claimedCodes.includes('misi4')
+    };
+  } catch (err) {
+    console.error('Error loading weekly missions progress:', err);
+  }
+
   const propsToClient = serializeDates({
     session,
     currentTab,
@@ -329,7 +416,8 @@ export default async function DashboardPage(props: {
     voteAggregates,
     villageEcoSummary,
     financialSummary,
-    proposals
+    proposals,
+    weeklyMissionsProgress
   });
 
   return <DashboardClient {...propsToClient} />;
