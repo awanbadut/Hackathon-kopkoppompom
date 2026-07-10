@@ -45,7 +45,8 @@ async function main() {
     'supabase/migrations/0002_amandes_additive.sql',
     'supabase/migrations/0003_rls_and_triggers.sql',
     'supabase/migrations/0004_amandes_community.sql',
-    'supabase/migrations/0005_weekly_missions.sql'
+    'supabase/migrations/0005_weekly_missions.sql',
+    'supabase/migrations/0006_savings_points_trigger.sql'
   ];
 
   for (const file of migrationFiles) {
