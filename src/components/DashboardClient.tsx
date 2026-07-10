@@ -19,6 +19,7 @@ interface DashboardClientProps {
   kasSummary: any;
   complianceSummary: any;
   userPoints: any;
+  totalKoperasiPoints: number;
   transactions: any[];
   myApprovals: any[];
   pendingMembers: any[];
@@ -46,6 +47,7 @@ export default function DashboardClient({
   kasSummary,
   complianceSummary,
   userPoints,
+  totalKoperasiPoints,
   transactions,
   myApprovals,
   pendingMembers,
@@ -1755,11 +1757,30 @@ export default function DashboardClient({
                     <span className="text-stone-600">Total Beban Operasional (Kas Keluar)</span>
                     <span className="font-mono font-extrabold text-red-750">-{fmt(totalBeban)}</span>
                   </div>
-                  <div className="pt-3 flex justify-between font-black text-sm text-[#14532d] dark:text-white">
+                  <div className="pt-3 flex justify-between font-black text-sm text-[#14532d] dark:text-white pb-3 border-b border-stone-200 dark:border-stone-850">
                     <span>SISA HASIL USAHA (SHU) BERJALAN</span>
                     <span className={`font-mono ${sisaHasilUsaha >= 0 ? 'text-green-700' : 'text-red-750'}`}>
                       {fmt(sisaHasilUsaha)}
                     </span>
+                  </div>
+
+                  {/* Estimasi SHU Anggota */}
+                  <div className="mt-4 bg-stone-50 dark:bg-stone-900/40 p-4 rounded-2xl space-y-2 border border-stone-100 dark:border-stone-800">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-bold text-[#14532d] dark:text-[#ca8a04]">Estimasi Porsi SHU Warga</span>
+                      <span className="font-mono font-black text-xs text-stone-800 dark:text-stone-200">
+                        {totalKoperasiPoints > 0 ? ((pointsBalance / totalKoperasiPoints) * 100).toFixed(2) : '0.00'}%
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-stone-500 leading-normal font-medium">
+                      Porsi dihitung dari total partisipasi aktif Anda ({pointsBalance} PTS) dibagi total partisipasi seluruh anggota ({totalKoperasiPoints} PTS) dalam ekosistem Koperasi Desa Merah Putih.
+                    </p>
+                    <div className="flex justify-between items-center text-xs pt-1">
+                      <span className="font-medium text-stone-600">Estimasi Nilai SHU Diterima:</span>
+                      <span className="font-mono font-black text-xs text-green-700">
+                        {fmt(Math.max(0, totalKoperasiPoints > 0 ? (pointsBalance / totalKoperasiPoints) * sisaHasilUsaha : 0))}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2181,9 +2202,15 @@ export default function DashboardClient({
                       Selesaikan misi mingguan koperasi di bawah ini untuk mendapatkan bonus poin belanja yang melimpah!
                     </p>
                   </div>
-                  <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2 shrink-0">
-                    <Coins className="w-4 h-4 text-[#ca8a04]" />
-                    <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Poin Anda: {pointsBalance} PTS</span>
+                  <div className="flex flex-wrap items-center gap-3 shrink-0">
+                    <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2">
+                      <Coins className="w-4 h-4 text-[#ca8a04]" />
+                      <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Poin Anda: {pointsBalance} PTS</span>
+                    </div>
+                    <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-[#14532d] dark:text-[#ca8a04]" />
+                      <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Estimasi SHU: {totalKoperasiPoints > 0 ? ((pointsBalance / totalKoperasiPoints) * 100).toFixed(2) : '0.00'}%</span>
+                    </div>
                   </div>
                 </div>
 

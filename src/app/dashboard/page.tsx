@@ -78,6 +78,17 @@ export default async function DashboardPage(props: {
   );
   const userPoints = ptRows[0] || null;
 
+  // Load Cooperative Total Points Pool
+  let totalKoperasiPoints = 0;
+  if (session.koperasiRef) {
+    const { rows: totalPtRows } = await db.query(
+      `SELECT COALESCE(SUM(total_points), 0)::int as total FROM ${p('user_points')} 
+       WHERE user_id IN (SELECT id FROM ${p('app_users')} WHERE koperasi_ref = $1)`,
+      [session.koperasiRef]
+    );
+    totalKoperasiPoints = totalPtRows[0]?.total || 0;
+  }
+
   // 5. Load Transactions
   let transactions: any[] = [];
   if (session.koperasiRef) {
@@ -400,6 +411,7 @@ export default async function DashboardPage(props: {
     kasSummary,
     complianceSummary,
     userPoints,
+    totalKoperasiPoints,
     transactions,
     myApprovals,
     pendingMembers,
