@@ -9,7 +9,7 @@ import {
   XCircle, Clock, AlertTriangle, HelpCircle, FileCheck, Send, Check, X, ShieldAlert,
   ChevronRight, Bookmark, Vote, MessageSquare, ThumbsUp, Tag, Plus, MessageCircle,
   ArrowRightLeft, Landmark, BarChart3, Scale, ChevronDown, CheckCircle, Sparkles,
-  Globe, Briefcase
+  Globe, Briefcase, Menu
 } from 'lucide-react';
 
 interface DashboardClientProps {
@@ -74,6 +74,7 @@ export default function DashboardClient({
 
   // Tabs state
   const [activeTab, setActiveTab] = useState(currentTab);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Transaction Form state
   const [txType, setTxType] = useState<'pemasukan' | 'pengeluaran' | 'simpanan_pokok' | 'simpanan_wajib' | 'simpanan_sukarela' | 'pinjaman' | 'bagi_hasil'>('pemasukan');
@@ -860,262 +861,356 @@ export default function DashboardClient({
   const totalAspPages = Math.ceil(filteredAspirations.length / aspPerPage);
   const paginatedAspirations = filteredAspirations.slice((aspPage - 1) * aspPerPage, aspPage * aspPerPage);
 
+  // Render sidebar navigation links dryly
+  const renderNavLinks = () => {
+    return (
+      <div className="space-y-1.5">
+        <button
+          onClick={() => { handleTabChange('overview'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'overview'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <Activity className="w-4 h-4 text-[#F9A620]" />
+            Ringkasan Utama
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        {['pengurus', 'ketua'].includes(session.role) && (
+          <button
+            onClick={() => { handleTabChange('transactions'); setIsMobileMenuOpen(false); }}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+              activeTab === 'transactions'
+                ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+                : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+            }`}
+          >
+            <span className="flex items-center gap-2.5">
+              <FileText className="w-4 h-4 text-[#F9A620]" />
+              Buku Kas (Ledger)
+            </span>
+            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+          </button>
+        )}
+
+        {['pengurus', 'ketua'].includes(session.role) && (
+          <button
+            onClick={() => { handleTabChange('approvals'); setIsMobileMenuOpen(false); }}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+              activeTab === 'approvals'
+                ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+                : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+            }`}
+          >
+            <span className="flex items-center gap-2.5">
+              <FileCheck className="w-4 h-4 text-[#F9A620]" />
+              Kotak Otorisasi
+            </span>
+            {myApprovals.filter(a => a.status === 'menunggu').length > 0 ? (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-red-650 text-white animate-pulse">
+                {myApprovals.filter(a => a.status === 'menunggu').length}
+              </span>
+            ) : (
+              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+            )}
+          </button>
+        )}
+
+        {['pengurus', 'ketua', 'pendamping'].includes(session.role) && (
+          <button
+            onClick={() => { handleTabChange('compliance'); setIsMobileMenuOpen(false); }}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+              activeTab === 'compliance'
+                ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+                : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+            }`}
+          >
+            <span className="flex items-center gap-2.5">
+              <ShieldAlert className="w-4 h-4 text-[#F9A620]" />
+              Kepatuhan PMK
+            </span>
+            {riskLogs.length > 0 ? (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-[#F9A620] text-white">
+                {riskLogs.length}
+              </span>
+            ) : (
+              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+            )}
+          </button>
+        )}
+
+        <button
+          onClick={() => { handleTabChange('financials'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'financials'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <BarChart3 className="w-4 h-4 text-[#F9A620]" />
+            Laporan Keuangan
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('e_rat'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'e_rat'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <Vote className="w-4 h-4 text-[#F9A620]" />
+            E-RAT (Rapat Anggota)
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('aspirations'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'aspirations'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <MessageSquare className="w-4 h-4 text-[#F9A620]" />
+            Musrenbang Warga
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('learning'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'learning'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <BookOpen className="w-4 h-4 text-[#F9A620]" />
+            Kelas Literasi
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('rewards'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'rewards'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <Tag className="w-4 h-4 text-[#F9A620]" />
+            Hadiah Belanja
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('ai_assistant'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'ai_assistant'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-[#F9A620]" />
+            Asisten AI Kopdes
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        <button
+          onClick={() => { handleTabChange('microsite'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            activeTab === 'microsite'
+              ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+              : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+          }`}
+        >
+          <span className="flex items-center gap-2.5">
+            <Globe className="w-4 h-4 text-[#F9A620]" />
+            Microsite Publik
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+        </button>
+
+        {['pengurus', 'ketua'].includes(session.role) && (
+          <button
+            onClick={() => { handleTabChange('proposals'); setIsMobileMenuOpen(false); }}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+              activeTab === 'proposals'
+                ? 'bg-[#548C2F] text-white border-[#F9A620]/30 shadow-md'
+                : 'bg-transparent text-stone-300 hover:text-white hover:bg-white/5 border-transparent'
+            }`}
+          >
+            <span className="flex items-center gap-2.5">
+              <Briefcase className="w-4 h-4 text-[#F9A620]" />
+              Kemitraan & Pembiayaan
+            </span>
+            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FBF8F1] dark:bg-[#12110e] text-[#1c1917] font-sans transition-colors duration-300">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#FBF8F1] dark:bg-[#12110e] text-[#1c1917] font-sans transition-colors duration-300">
       
-      {/* Koperasi Desa Header Banner */}
-      <header className="w-full bg-[#104911] text-[#f4f3ef] border-b border-[#F9A620]/30 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#F9A620] text-white rounded-xl shadow-inner flex items-center justify-center">
-              <Landmark className="w-6 h-6" />
+      {/* 1. DESKTOP NAVIGATION SIDEBAR (LEFT) */}
+      <aside className="hidden lg:flex w-64 h-full bg-[#104911] text-[#f4f3ef] border-r border-[#F9A620]/25 flex-col justify-between shrink-0 z-30">
+        <div className="flex flex-col flex-1 overflow-y-auto">
+          {/* Logo Brand */}
+          <div className="p-5 border-b border-[#F9A620]/20 flex items-center gap-3">
+            <div className="p-2 bg-[#F9A620] text-white rounded-xl shadow-inner flex items-center justify-center shrink-0">
+              <Landmark className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-black text-lg tracking-tight uppercase text-white">AmanDes</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#F9A620] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Keterlibatan Masyarakat</span>
-              </div>
-              <p className="text-[10px] text-stone-300 leading-none mt-1">
-                Koperasi Desa Merah Putih &bull; Pembukuan Aman & Transparan
-              </p>
+              <span className="font-black text-sm tracking-tight uppercase text-white block">AmanDes</span>
+              <span className="text-[9px] text-emerald-300/70 block">Koperasi Merah Putih</span>
             </div>
           </div>
+          
+          {/* Navigation Links */}
+          <nav className="p-4 flex-1">
+            {renderNavLinks()}
+          </nav>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col text-right hidden sm:flex">
-              <span className="text-xs text-stone-300 font-bold uppercase tracking-wider">PENGGUNA AKTIF</span>
-              <span className="text-sm font-black text-white">{session.fullName}</span>
+        {/* User Info bottom panel */}
+        <div className="p-4 border-t border-[#F9A620]/20 bg-[#0c360c] flex items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 overflow-hidden">
+            <div className="w-8 h-8 rounded-xl bg-[#F9A620] text-white flex items-center justify-center font-black text-xs shrink-0 shadow">
+              {session.fullName.substring(0, 2).toUpperCase()}
             </div>
+            <div className="overflow-hidden">
+              <span className="text-xs font-black text-white block truncate leading-none mb-1">{session.fullName}</span>
+              <span className="text-[8px] font-black uppercase bg-[#F9A620]/20 text-[#FFD449] px-1.5 py-0.5 rounded border border-[#F9A620]/10">{session.role}</span>
+            </div>
+          </div>
+          <form action={logoutAction} className="shrink-0">
+            <button
+              type="submit"
+              className="p-2 rounded-lg bg-red-950/20 hover:bg-red-700/20 border border-red-500/20 text-red-300 transition-all cursor-pointer"
+              title="Keluar"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          </form>
+        </div>
+      </aside>
 
-            <div className="h-8 w-[1px] bg-stone-750 hidden sm:block" />
-
-            <div className="flex items-center gap-2.5">
-              <span className="text-xs px-3 py-1 rounded-full bg-[#F9A620] text-white font-bold uppercase tracking-wider border border-white/10 shadow-sm">
-                {session.role}
-              </span>
-              
-              <form action={logoutAction}>
-                <button
-                  type="submit"
-                  className="p-2.5 rounded-xl bg-red-950/20 hover:bg-red-700/20 border border-red-500/20 hover:border-red-500/40 text-red-300 transition-all cursor-pointer shadow-sm"
-                  title="Keluar Akun"
+      {/* 2. MOBILE MENU DRAWER */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden flex">
+          {/* Backdrop */}
+          <div 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-stone-900/60 transition-opacity duration-300"
+          />
+          {/* Sidebar Drawer */}
+          <aside className="relative flex flex-col w-64 max-w-xs h-full bg-[#104911] text-[#f4f3ef] border-r border-[#F9A620]/25 z-50 p-4 justify-between animate-slide-in-left">
+            <div className="flex flex-col flex-1 overflow-y-auto">
+              <div className="pb-4 mb-4 border-b border-[#F9A620]/20 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-[#F9A620] text-white rounded-xl flex items-center justify-center">
+                    <Landmark className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="font-black text-sm uppercase text-white block">AmanDes</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1.5 rounded-lg bg-white/10 text-white"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <nav className="flex-1">
+                {renderNavLinks()}
+              </nav>
+            </div>
+            
+            <div className="pt-4 border-t border-[#F9A620]/20 bg-[#0c360c] -mx-4 -mb-4 p-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                <div className="w-8 h-8 rounded-xl bg-[#F9A620] text-white flex items-center justify-center font-black text-xs shrink-0">
+                  {session.fullName.substring(0, 2).toUpperCase()}
+                </div>
+                <div className="overflow-hidden">
+                  <span className="text-xs font-black text-white block truncate leading-none mb-1">{session.fullName}</span>
+                  <span className="text-[8px] font-black uppercase bg-[#F9A620]/20 text-[#FFD449] px-1.5 py-0.5 rounded">{session.role}</span>
+                </div>
+              </div>
+              <form action={logoutAction}>
+                <button type="submit" className="p-2 rounded-lg bg-red-950/20 text-red-300">
+                  <LogOut className="w-3.5 h-3.5" />
                 </button>
               </form>
             </div>
-          </div>
+          </aside>
         </div>
-      </header>
+      )}
 
-      {/* Main Grid Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col md:flex-row gap-8">
+      {/* 3. MAIN DASHBOARD CONTENT AREA */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
         
-        {/* Navigation Sidebar */}
-        <aside className="w-full md:w-64 shrink-0 flex flex-col gap-2">
-          <button
-            onClick={() => handleTabChange('overview')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'overview'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <Activity className="w-4 h-4 text-[#F9A620]" />
-              Ringkasan Utama
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          {['pengurus', 'ketua'].includes(session.role) && (
-            <button
-              onClick={() => handleTabChange('transactions')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-                activeTab === 'transactions'
-                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                  : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-              }`}
+        {/* Sticky Topbar */}
+        <header className="h-16 border-b border-stone-200 dark:border-stone-850 bg-white dark:bg-[#1c1a17] flex items-center justify-between px-6 shrink-0 z-20 shadow-sm">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="lg:hidden p-2 rounded-xl border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-50"
             >
-              <span className="flex items-center gap-2.5">
-                <FileText className="w-4 h-4 text-[#F9A620]" />
-                Buku Kas (Ledger)
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+              <Menu className="w-4 h-4" />
             </button>
-          )}
-
-          {['pengurus', 'ketua'].includes(session.role) && (
-            <button
-              onClick={() => handleTabChange('approvals')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-                activeTab === 'approvals'
-                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                  : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-              }`}
-            >
-              <span className="flex items-center gap-2.5">
-                <FileCheck className="w-4 h-4 text-[#F9A620]" />
-                Kotak Otorisasi
+            <div>
+              <h1 className="text-xs font-black text-[#104911] dark:text-white uppercase tracking-wider">
+                {activeTab === 'overview' && 'Ringkasan Utama'}
+                {activeTab === 'transactions' && 'Buku Kas (Ledger)'}
+                {activeTab === 'approvals' && 'Kotak Otorisasi'}
+                {activeTab === 'compliance' && 'Pusat Kepatuhan PMK'}
+                {activeTab === 'financials' && 'Laporan Keuangan'}
+                {activeTab === 'e_rat' && 'Rapat Anggota (e-RAT)'}
+                {activeTab === 'aspirations' && 'Musrenbang Warga'}
+                {activeTab === 'learning' && 'Kelas Literasi'}
+                {activeTab === 'rewards' && 'Katalog Hadiah'}
+                {activeTab === 'ai_assistant' && 'Asisten AI Kopdes'}
+                {activeTab === 'microsite' && 'Microsite Publik'}
+                {activeTab === 'proposals' && 'Kemitraan & Pembiayaan'}
+              </h1>
+              <p className="text-[9px] text-stone-400 leading-none mt-0.5">
+                {koperasi?.nama || 'Koperasi Desa Merah Putih'} &bull; {session.koperasiRef}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] font-black uppercase bg-[#548C2F]/10 text-[#548C2F] dark:text-emerald-400 px-2.5 py-1 rounded-full border border-[#548C2F]/20">
+                Skor Kesehatan: {healthMetrics?.kesehatan_koperasi ?? 100}%
               </span>
-              {myApprovals.filter(a => a.status === 'menunggu').length > 0 ? (
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-red-650 text-white animate-pulse">
-                  {myApprovals.filter(a => a.status === 'menunggu').length}
-                </span>
-              ) : (
-                <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-              )}
-            </button>
-          )}
+            </div>
+          </div>
+        </header>
 
-          {['pengurus', 'ketua', 'pendamping'].includes(session.role) && (
-            <button
-              onClick={() => handleTabChange('compliance')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-                activeTab === 'compliance'
-                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                  : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-              }`}
-            >
-              <span className="flex items-center gap-2.5">
-                <ShieldAlert className="w-4 h-4 text-[#F9A620]" />
-                Kepatuhan PMK
-              </span>
-              {riskLogs.length > 0 ? (
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-[#F9A620] text-white">
-                  {riskLogs.length}
-                </span>
-              ) : (
-                <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-              )}
-            </button>
-          )}
-
-          <button
-            onClick={() => handleTabChange('financials')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'financials'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <BarChart3 className="w-4 h-4 text-[#F9A620]" />
-              Laporan Keuangan
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('e_rat')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'e_rat'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <Vote className="w-4 h-4 text-[#F9A620]" />
-              E-RAT (Rapat Anggota)
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('aspirations')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'aspirations'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <MessageSquare className="w-4 h-4 text-[#F9A620]" />
-              Musrenbang Warga
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('learning')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'learning'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <BookOpen className="w-4 h-4 text-[#F9A620]" />
-              Kelas Literasi
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('rewards')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'rewards'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <Tag className="w-4 h-4 text-[#F9A620]" />
-              Hadiah Belanja
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('ai_assistant')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'ai_assistant'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-[#F9A620]" />
-              Asisten AI Kopdes
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          <button
-            onClick={() => handleTabChange('microsite')}
-            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-              activeTab === 'microsite'
-                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-            }`}
-          >
-            <span className="flex items-center gap-2.5">
-              <Globe className="w-4 h-4 text-[#F9A620]" />
-              Microsite Publik Kopdes
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-          </button>
-
-          {['pengurus', 'ketua'].includes(session.role) && (
-            <button
-              onClick={() => handleTabChange('proposals')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
-                activeTab === 'proposals'
-                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
-                  : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
-              }`}
-            >
-              <span className="flex items-center gap-2.5">
-                <Briefcase className="w-4 h-4 text-[#F9A620]" />
-                Kemitraan & Pembiayaan
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-            </button>
-          )}
-        </aside>
-
-        {/* Tab Content Panel */}
-        <section className="flex-1 flex flex-col gap-6">
+        {/* Scrollable Viewport */}
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#FBF8F1] dark:bg-[#12110e] scrollbar-thin">
+          <div className="max-w-7xl mx-auto space-y-6">
 
           {/* ======================================= */}
           {/* TAB 1: OVERVIEW                         */}
@@ -2965,9 +3060,9 @@ export default function DashboardClient({
             </div>
           )}
 
-        </section>
-
-      </main>
+          </div>
+        </main>
+      </div>
 
       {/* Lesson Content & Quiz Modal */}
       {activeLesson && (
