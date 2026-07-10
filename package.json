@@ -1,0 +1,36 @@
+{
+  "name": "temp-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "migrate": "npx tsc scripts/run-migrations.ts --module commonjs --target es2022 --moduleResolution node --esModuleInterop && node scripts/run-migrations.js && rm -f scripts/run-migrations.js",
+    "seed": "npx tsc scripts/seed-demo-data.ts --module commonjs --target es2022 --moduleResolution node --esModuleInterop && node scripts/seed-demo-data.js && rm -f scripts/seed-demo-data.js",
+    "check-db": "npx tsc scripts/check-table-privileges.ts --module commonjs --target es2022 --moduleResolution node --esModuleInterop && node scripts/check-table-privileges.js && rm -f scripts/check-table-privileges.js",
+    "test": "npx tsc scripts/run-tests.ts --module commonjs --target es2022 --moduleResolution node --esModuleInterop --skipLibCheck && node scripts/run-tests.js && rm -f scripts/run-tests.js",
+    "simulate-violation": "npx tsc scripts/create-violation.ts --module commonjs --target es2022 --moduleResolution node --esModuleInterop --skipLibCheck && node scripts/create-violation.js && rm -f scripts/create-violation.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.2",
+    "jose": "^6.2.3",
+    "lucide-react": "^1.24.0",
+    "next": "16.2.10",
+    "pg": "^8.22.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "^8.20.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

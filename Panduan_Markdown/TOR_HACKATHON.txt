@@ -1,0 +1,525 @@
+Term Of
+References
+Hackaton Digital Cooperatives Expo
+
+Term Of
+References
+Hackaton Digital Cooperatives Expo
+
+A. LATAR BELAKANG
+Kementerian Koperasi Republik Indonesia terus mendorong transformasi
+digital sebagai upaya memperkuat ekosistem koperasi nasional. Melalui
+berbagai platform digital, termasuk SIMKOPDES, Kementerian Koperasi
+berupaya meningkatkan tata kelola, produktivitas, dan pelayanan koperasi
+agar lebih adaptif terhadap perkembangan teknologi dan kebutuhan
+masyarakat.
+Di sisi lain, koperasi masih menghadapi berbagai tantangan, seperti
+peningkatan volume usaha, optimalisasi potensi ekonomi desa, peningkatan
+partisipasi masyarakat, serta rendahnya literasi generasi muda terhadap
+koperasi. Tantangan tersebut memerlukan solusi inovatif yang
+memanfaatkan teknologi, data, dan kreativitas talenta digital Indonesia.
+Melalui Hackathon Kementerian Koperasi 2026, peserta diajak untuk
+menghasilkan solusi digital yang inovatif, implementatif, dan berdampak
+dalam mendukung transformasi koperasi Indonesia.
+B. TUJUAN HACKATHON
+1.Menghasilkan solusi digital yang mampu menjawab permasalahan
+nyata koperasi.
+2.Mendorong pemanfaatan data dan teknologi untuk meningkatkan
+kinerja koperasi.
+3.Meningkatkan partisipasi generasi muda dalam pengembangan
+ekosistem koperasi.
+4.Mendukung percepatan transformasi digital koperasi yang
+berkelanjutan.
+5.Menghasilkan inovasi yang berpotensi diimplementasikan dalam
+ekosistem Kementerian Koperasi.
+C. TEMA DAN PROBLEM STATEMENT
+Peserta dapat memilih salah satu dari empat tema utama berikut:
+1.Peningkatan Volume Usaha Koperasi
+2.Keterlibatan Masyarakat dalam Berkoperasi
+3.Pemanfaatan Potensi Ekonomi Desa
+4.Literasi Gen-Z & Gen-Alpha dalam Berkoperasi
+
+1
+
+TEMA 1
+“PENINGKATAN USAHA KOPERASI MELALUI TEKNOLOGI DIGITAL”
+A. LATAR BELAKANG
+Koperasi memiliki peran strategis dalam mendorong pertumbuhan ekonomi
+masyarakat. Namun demikian, terdapat perbedaan tingkat perkembangan
+antar koperasi, baik dari sisi volume usaha, produktivitas, jumlah anggota
+aktif, maupun keberlanjutan bisnis.
+Pemanfaatan teknologi dan analisis data diharapkan dapat membantu
+koperasi meningkatkan performa usaha secara lebih efektif dan terukur.
+B. PROBLEM STATEMENT
+Bagaimana teknologi dapat membantu koperasi meningkatkan volume
+usaha, efisiensi operasional, produktivitas bisnis, dan keberlanjutan usaha
+koperasi?
+C. DATA YANG DAPAT DIGUNAKAN
+Jumlah koperasi aktif dan tidak aktif.
+Volume usaha koperasi.
+Sebaran jenis usaha koperasi.
+Data transaksi koperasi.
+Data anggota aktif.
+Data wilayah koperasi.
+Data performa koperasi berdasarkan sektor usaha.
+D. CHALLENGE QUESTIONS
+Potensi ekonomi apa yang belum dimanfaatkan secara optimal?
+Bagaimana mencocokkan potensi desa dengan kebutuhan pasar?
+Bagaimana mempertemukan koperasi dengan buyer atau offtaker yang
+tepat?
+Bagaimana meningkatkan nilai tambah produk desa?
+
+2
+
+TEMA 1
+“PENINGKATAN USAHA KOPERASI MELALUI TEKNOLOGI DIGITAL”
+E. CONTOH SOLUSI
+Business Intelligence Dashboard.
+AI Business Recommendation.
+Sistem Monitoring Kesehatan Koperasi.
+Predictive Analytics Koperasi.
+Digitalisasi Operasional Koperasi.
+Smart Decision Support System.
+F. DAMPAK YANG DIHARAPKAN
+Meningkatkan produktivitas, efisiensi, dan volume usaha koperasi secara
+berkelanjutan.
+
+3
+
+TEMA 2
+“OPTIMALISASI POTENSI DESA MELALUI KOPERASI”
+A. LATAR BELAKANG
+Indonesia memiliki potensi ekonomi desa yang sangat besar, mulai dari sektor
+pertanian, peternakan, perikanan, perkebunan, industri kreatif, hingga
+pariwisata desa. Namun masih banyak potensi desa yang belum
+teridentifikasi, belum terintegrasi dengan koperasi, atau belum memperoleh
+akses pasar yang optimal.
+Teknologi dapat berperan dalam memetakan, menghubungkan, dan
+mengembangkan potensi ekonomi desa melalui koperasi.
+B. PROBLEM STATEMENT
+Bagaimana teknologi dapat membantu mengidentifikasi, mengembangkan,
+dan mengoptimalkan potensi ekonomi desa melalui koperasi?
+C. DATA YANG DAPAT DIGUNAKAN
+Data potensi unggulan desa.
+Data komoditas desa.
+Data aktivitas usaha koperasi.
+Data rantai pasok komoditas.
+Data wilayah dan karakteristik desa.
+Data produksi dan distribusi produk desa.
+D. CHALLENGE QUESTIONS
+Potensi ekonomi apa yang belum dimanfaatkan secara optimal?
+Bagaimana mencocokkan potensi desa dengan kebutuhan pasar?
+Bagaimana mempertemukan koperasi dengan buyer atau offtaker yang
+tepat?
+Bagaimana meningkatkan nilai tambah produk desa?
+
+4
+
+TEMA 2
+“OPTIMALISASI POTENSI DESA MELALUI KOPERASI”
+E. CONTOH SOLUSI
+Village Potential Mapping Platform.
+Marketplace Produk Desa.
+Business Matching Platform.
+Supply Chain Monitoring System.
+Smart Village Analytics.
+AI-Based Commodity Recommendation.
+F. DAMPAK YANG DIHARAPKAN
+Meningkatkan pemanfaatan potensi desa, memperluas akses pasar, dan
+memperkuat peran koperasi sebagai penggerak ekonomi lokal.
+
+5
+
+TEMA 3
+“PENINGKATAN KETERLIBATAN MASYARAKAT DALAM
+BERKOPERASI”
+A. LATAR BELAKANG
+Keberhasilan koperasi sangat ditentukan oleh tingkat partisipasi anggotanya.
+Namun masih terdapat tantangan dalam meningkatkan keterlibatan
+masyarakat untuk menjadi anggota, bertransaksi, mengikuti kegiatan
+koperasi, dan berkontribusi dalam pengambilan keputusan.
+Diperlukan pendekatan digital yang mampu menciptakan pengalaman
+berkoperasi yang lebih mudah, transparan, dan menarik.
+B. PROBLEM STATEMENT
+Bagaimana teknologi dapat meningkatkan partisipasi dan keterlibatan
+masyarakat dalam ekosistem koperasi?
+C. DATA YANG DAPAT DIGUNAKAN
+Data jumlah anggota koperasi.
+Data klasifikasi usia anggota.
+Data aktivitas anggota.
+Data transaksi anggota.
+Data demografi masyarakat.
+Data persebaran anggota koperasi.
+D. CHALLENGE QUESTIONS
+Mengapa masyarakat belum tertarik menjadi anggota koperasi?
+Kelompok usia mana yang memiliki tingkat partisipasi paling rendah?
+Bagaimana meningkatkan engagement anggota secara berkelanjutan?
+Bagaimana meningkatkan transparansi dan kemudahan layanan
+koperasi?
+
+6
+
+TEMA 3
+“PENINGKATAN KETERLIBATAN MASYARAKAT DALAM
+BERKOPERASI”
+E. CONTOH SOLUSI
+Super App Anggota Koperasi.
+Loyalty dan Reward System.
+Digital Voting dan e-RAT.
+Gamifikasi Aktivitas Anggota.
+Community Engagement Platform.
+AI Member Assistant.
+F. DAMPAK YANG DIHARAPKAN
+Meningkatnya jumlah anggota aktif dan partisipasi masyarakat dalam
+kegiatan koperasi.
+
+7
+
+TEMA 4
+“PENINGKATAN LITERASI DAN MINAT GENERASI Z DAN
+GENERASI ALPHA TERHADAP KOPERASI”
+A. LATAR BELAKANG
+Generasi muda merupakan penggerak ekonomi masa depan. Namun tingkat
+pemahaman dan minat terhadap koperasi masih relatif rendah dibandingkan
+dengan perkembangan teknologi dan ekonomi digital saat ini.
+Diperlukan pendekatan baru yang lebih relevan dengan karakteristik generasi
+digital agar koperasi menjadi lebih menarik, modern, dan mudah dipahami.
+B. PROBLEM STATEMENT
+Bagaimana teknologi dapat meningkatkan literasi, pemahaman, dan minat
+Generasi Z serta Generasi Alpha terhadap koperasi?
+C. DATA YANG DAPAT DIGUNAKAN
+Data usia anggota koperasi.
+Data partisipasi generasi muda dalam koperasi.
+Data populasi Generasi Z dan Generasi Alpha.
+Data perilaku digital generasi muda.
+Data penggunaan platform digital.
+D. CHALLENGE QUESTIONS
+Mengapa generasi muda kurang tertarik terhadap koperasi?
+Bagaimana menjadikan koperasi lebih relevan bagi generasi digital?
+Bagaimana memanfaatkan AI, gamifikasi, dan media sosial untuk
+edukasi koperasi?
+Bagaimana meningkatkan jumlah anggota muda dalam koperasi?
+
+8
+
+TEMA 4
+“PENINGKATAN LITERASI DAN MINAT GENERASI Z DAN
+GENERASI ALPHA TERHADAP KOPERASI”
+E. CONTOH SOLUSI
+Gamified Cooperative Learning Platform.
+AI Learning Assistant.
+Interactive Cooperative Simulation.
+Digital Cooperative Academy.
+Social Engagement Platform.
+Cooperative Metaverse Experience.
+F. DAMPAK YANG DIHARAPKAN
+Meningkatnya literasi, pemahaman, dan keterlibatan Generasi Z dan
+Generasi Alpha dalam ekosistem koperasi.
+
+9
+
+D. TIMELINE*
+Tanggal
+
+Agenda
+
+Peserta
+
+Kegiatan
+
+12 - 29 Juni
+
+Registrasi & Open Call
+Publik
+
+100 - 300 Kelompok
+
+22-29 Juni
+
+Kurasi Teknis &
+Administrasi
+
+Dari 300 ke 180
+Kelompok
+
+Penyaringan validasi kelayakan
+administrasi mandatori.
+
+30 Juni - 1 Juli
+
+Kurasi Subtansi
+
+Dari 180 ke 120 kelompok
+
+Penyaringan validasi kelayakan
+substansi
+
+3 - 5 Juli
+
+Online Mentorship
+
+Semua Kelompok
+
+Mengundang semua peserta
+pada bootcamp mentorship
+
+6 -7 Juli
+
+Undangan Pitching Day
+
+100 Kelompok Lolos
+
+Diundang mengikuti rangkaian
+Pitching Day di Jakarta
+
+10 - 11 Juli
+
+Pitching Day
+
+10 Kelompok Lolos
+
+Penyaringan langsung oleh juri
+
+12 Juli
+
+Awarding Day
+
+3 Kelompok Pemenang
+
+Koleksi database pendaftar
+nasional via platform digital.
+
+Pengumuman 3 pemenang
+
+*Timeline bersifat tentatif dan dapat berubah.
+
+E. MEKANISME PELAKSANAAN
+Pelaksanaan kompetisi berjalan secara bertahap melalui 4 (empat) fase utama
+berikut:
+1. Tahap Pendaftaran & Ide (Open Call Phase):
+Peserta mendaftarkan kelompoknya (minimal 3 orang) secara daring.
+Mengunggah berkas identitas mandatori (KTP Ketua & Anggota).
+Memilih salah satu dari 4 pilar fokus inovasi kementerian.
+Mengirimkan draf deskripsi analisis masalah dan konsep solusi teknis awal
+(MVP).
+2. Tahap Penyaringan (Curation Phase):
+Kurasi portofolio teknis dan proposal ide oleh tim kurator untuk menyaring Top
+100 tim terbaik.
+Penandatanganan Consent Form oleh ketua tim terkait pakta integritas,
+kesediaan hadir luring di Jakarta, serta persetujuan pengalihan HAKI ke
+Kemenkop RI jika lolos ke jajaran 10 besar.
+
+10
+
+3. Tahap Pembekalan Intensif (Mentorship Bootcamp):
+Mengikuti rangkaian kelas penguatan materi secara daring bersama jajaran
+mentor ahli.
+Fokus bimbingan meliputi: kebijakan publik, makro ekonomi, pemodelan bisnis
+startup, manajemen produk (investor readiness), transformasi AI, dan
+keamanan siber.
+4. Tahap Hari Puncak (Offline Hackathon & Pitching Day):
+Akselerasi pemrograman dan perakitan MVP concept secara tatap muka di
+Jakarta lewat sprint hacking 24–36 jam.
+Presentasi (pitching) dan demonstrasi produk secara langsung di hadapan
+panel Dewan Juri untuk penentuan pemenang utama.
+
+F. PANDUAN PENGUMPULAN HASIL
+Setiap tim wajib mengumpulkan seluruh hasil karya digital (deliverables) yang telah
+dikembangkan secara daring melalui portal resmi SIMKOPDES sebelum batas
+waktu sprint hacking berakhir. Komponen hasil yang wajib dikumpulkan terdiri dari
+3 (tiga) unsur utama berikut:
+1. Tautan Repositori Kode (Source Code Repository)
+Link Repositori: Menyerahkan URL publik dari GitHub, GitLab, atau Bitbucket
+resmi milik tim.
+Isi Repositori: Memuat seluruh kode program utama (source code) dari
+purwarupa produk (MVP) yang dibangun.
+Dokumentasi Konten: Wajib menyertakan file README.md pada direktori
+utama yang berisi panduan singkat cara menjalankan aplikasi (installation
+guide) serta penjelasan arsitektur teknologi yang digunakan.
+2. Dokumen Presentasi (Pitch Deck)
+Format Berkas: Wajib diunggah dalam format PDF.
+Konten Slide: Maksimal 10–12 slide yang merangkum poin-poin krusial,
+meliputi:
+Problem Statement (Analisis masalah koperasi desa).
+Solution & Architecture (Penjelasan fitur utama aplikasi).
+Business & Impact Model (Skalabilitas bisnis dan metrik dampak sosial).
+Team Profile (Struktur peran anggota tim).
+
+11
+
+3. Tautan Demonstrasi Produk (MVP Demo & Kredensial)
+Link Demo Aplikasi: Menyertakan tautan produk yang sudah berjalan/aktif (URL
+situs web/PWA) atau tautan unduh berkas contoh aplikasi (seperti format APK
+untuk Android).
+Kredensial Akses Juri: Jika aplikasi memerlukan proses masuk akun (login), peserta
+wajib menyertakan akun uji coba khusus (kombinasi Username & Password uji
+coba) pada kolom deskripsi pengumpulan.
+Video Demo (Opsional): Menyertakan tautan video rekaman layar (screenrecording) simulasi penggunaan fitur utama aplikasi dengan durasi maksimal 3
+menit (diunggah ke YouTube dengan status unlisted atau Google Drive).
+PERATURAN TEGAS KEPATUHAN:
+Keterlambatan Pengumpulan: Pengumpulan yang melewati batas waktu
+toleransi sistem (meski terlambat 1 detik) akan otomatis menggugurkan hak tim
+untuk maju ke tahap presentasi di hadapan dewan juri (Pitching Day).
+
+G. BENTUK SOLUSI YANG DIPERBOLEHKAN
+Aplikasi Mobile (Android/iOS)
+Website/Web Application
+Dashboard Analytics
+Artificial Intelligence (AI)
+Machine Learning
+Data Analytics
+Internet of Things (IoT)
+UI/UX Prototype
+Gamifikasi
+Sistem Informasi
+Integrasi API
+Teknologi Digital Inovatif lainnya
+
+12
+
+H. KRITERIA UMUM SOLUSI
+Relevan dengan tema yang dipilih.
+Berbasis kebutuhan nyata koperasi dan masyarakat.
+Inovatif dan memiliki nilai tambah.
+Layak untuk diimplementasikan.
+Memiliki potensi skalabilitas nasional.
+Memberikan dampak ekonomi dan sosial yang terukur.
+Memanfaatkan teknologi secara efektif dan bertanggung jawab.
+I. KRITERIA PENILAIAN
+Proses penilaian produk teknologi purwarupa oleh Dewan Juri didasarkan
+pada platform kalkulasi skor digital yang mengacu pada 8 metrik bobot
+persentase berikut:
+Kriteria Penilaian
+
+Deskripsi Operasional Parameter Parameter Penilaian
+
+Bobot (%)
+
+Relevansi dengan
+Permasalahan/Tantangan
+
+Mengukur seberapa jelas, mendasar, dan pentingnya
+
+25%
+
+masalah riil ekonomi desa/koperasi yang diangkat oleh
+peserta untuk dipecahkan.
+
+Inovasi dan Kreativitas
+
+Mengukur tingkat kebaruan ide (novelty), diferensiasi
+
+20%
+
+solusi, serta nilai keunikan produk dibanding sistem
+eksisting yang ada.
+Dampak dan Manfaat
+
+Mengukur Potensi berkembang dan diperluas
+
+20%
+
+untuk sosial
+
+Kemudahan Implementasi
+
+Mengukur Kemudahan solusi untuk
+
+15%
+
+diimplementasikan
+
+Kualitas Teknologi dan Solusi
+
+Mengukur Kualitas prototype / teknologi yang
+
+15%
+
+dibangun
+
+Presentasi dan Pitch
+
+Mengukur tim menyampaikan dan menjelaskan ide
+
+5%
+
+dengan rapi, sistematis dan tertuju pada solusi kepada
+juri
+TOTAL BOBOT PERSENTASE AKUMULATIF
+
+100%
+
+13
+
+J. ATURAN PENGGUNAAN AI/IP
+Bagian ini merupakan bagian yang tidak terpisahkan dari Syarat & Ketentuan
+kompetisi. Dengan mengikuti kompetisi, setiap peserta dianggap telah
+membaca, memahami, dan menyetujui seluruh ketentuan di bawah ini.
+1. Prinsip Orisinalitas
+Kompetisi ini menjunjung tinggi orisinalitas gagasan. Ide, konsep, dan solusi
+inti yang diajukan harus merupakan hasil pemikiran asli peserta atau tim, dan
+bukan gagasan yang dihasilkan secara langsung oleh perangkat kecerdasan
+buatan generatif (seperti ChatGPT, Claude, Gemini, dan perangkat sejenis
+lainnya). Tujuan ketentuan ini adalah mendorong lahirnya gagasan yang
+beragam, otentik, dan mencerminkan pemikiran serta konteks masingmasing peserta.
+2. Batasan Penggunaan AI
+Peserta diperbolehkan menggunakan AI generatif sebagai alat bantu teknis,
+antara lain untuk:
+Membantu penulisan atau perbaikan kode (coding assistance) dan proses
+debugging;
+Melakukan riset pendukung, pencarian referensi, atau perapian tata
+bahasa;
+Membuat aset pelengkap seperti ilustrasi, prototipe visual, atau
+dokumentasi teknis.
+Peserta tidak diperbolehkan menggunakan AI generatif untuk:
+Menghasilkan gagasan, konsep, atau tema utama solusi secara langsung
+dari AI;
+Menyalin keluaran AI sebagai substansi inti karya tanpa pengembangan
+pemikiran sendiri;
+Menggantikan proses ideasi, analisis masalah, dan pengambilan keputusan
+yang seharusnya dilakukan oleh peserta.
+3. Kewajiban Keterbukaan (Disclosure)
+Peserta wajib mencantumkan penggunaan AI generatif dalam karyanya,
+termasuk perangkat yang digunakan serta bagian mana dari karya yang
+dibantu oleh AI. Keterbukaan ini tidak akan mengurangi penilaian selama
+gagasan inti tetap orisinal. Sebaliknya, penyembunyian atau pemalsuan
+informasi mengenai penggunaan AI dapat berujung pada diskualifikasi.
+
+14
+
+4. Penilaian Orisinalitas
+Dewan juri berhak menilai tingkat orisinalitas dan kontribusi pemikiran peserta,
+termasuk melalui sesi presentasi, tanya jawab, atau pembelaan gagasan (live
+defense). Karya yang teridentifikasi sebagai gagasan yang seluruhnya atau
+sebagian besar dihasilkan oleh AI dapat dikenakan pengurangan nilai atau tidak
+diloloskan ke tahap berikutnya.
+5. Sanksi Pelanggaran
+Panitia berhak melakukan verifikasi terhadap orisinalitas karya. Pelanggaran atas
+ketentuan ini termasuk pemalsuan keterbukaan penggunaan AI dapat
+mengakibatkan diskualifikasi, pembatalan penghargaan, dan/atau penarikan
+hadiah, tanpa memerlukan persetujuan lebih lanjut dari peserta.
+6. Tanggung Jawab Hukum
+Peserta bertanggung jawab penuh untuk memastikan bahwa karya yang diajukan
+tidak melanggar hak kekayaan intelektual pihak lain, termasuk yang timbul dari
+penggunaan keluaran AI generatif. Panitia dan penyelenggara dibebaskan dari
+segala tuntutan hukum yang timbul akibat pelanggaran tersebut oleh peserta.
+
+K. REFERENSI LINK DATABASE
+https://simkopdes.go.id/pers/dashboard
+https://simkopdes.go.id/pers/rat
+https://simkopdes.go.id/pers/transaksi/bisnis
+https://simkopdes.go.id/pers/ews/kesehatan-keuangan
+https://simkopdes.go.id/pers/kelembagaan
+https://s.simkopdes.go.id/database-hackaton
+
+15
+
+Hackaton Digital
+Cooperatives Expo
+Hack The Cooperatives
+
+Hackaton Digital
+Cooperatives Expo
+Hack The Cooperatives
+
+
