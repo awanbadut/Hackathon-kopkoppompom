@@ -278,31 +278,82 @@ export async function evaluateTransactionRisk(txId: string): Promise<{
   return { triggeredRules, finalRiskLevel };
 }
 
-export async function calculateKoperasiHealthScore(koperasiRef: string): Promise<number> {
-  const { rows } = await db.query(
-    `SELECT r.risk_level, r.resolved 
+export async function getDetailedHealthMetrics(koperasiRef: string): Promise<{
+  kesehatan_kas: number;
+  kepatuhan: number;
+  kesehatan_koperasi: number;
+  partisipasi_anggota: number;
+}> {
+  // 1. Calculate Kepatuhan (Compliance Score)
+  const { rows: riskRows } = await db.query(
+    `SELECT r.risk_level, r.rule_code, r.resolved 
      FROM ${p('risk_logs')} r 
      JOIN ${p('transaksi_keuangan')} t ON r.transaction_id = t.id 
-     WHERE t.koperasi_ref = $1`,
+     WHERE t.koperasi_ref = $1 AND r.resolved = false`,
     [koperasiRef]
   );
+  
+  let kepatuhan = 100;
+  let hasOverBudget = false;
+  let noEvidenceCount = 0;
+  let roundNumberCount = 0;
 
-  let score = 100;
-  for (const r of rows) {
-    if (!r.resolved) {
-      if (r.risk_level === 'berisiko_tinggi') {
-        score -= 10;
-      } else if (r.risk_level === 'perlu_perhatian') {
-        score -= 3;
-      }
+  for (const r of riskRows) {
+    if (r.risk_level === 'berisiko_tinggi') {
+      kepatuhan -= 15;
+    } else {
+      kepatuhan -= 5;
     }
+    if (r.rule_code === 'R03_OVER_BUDGET') hasOverBudget = true;
+    if (r.rule_code === 'R01_NO_EVIDENCE') noEvidenceCount++;
+    if (r.rule_code === 'R07_ROUND_NUMBER_PATTERN') roundNumberCount++;
   }
-  score = Math.max(0, score);
+  kepatuhan = Math.max(0, kepatuhan);
 
-  await db.query(
-    `INSERT INTO ${p('koperasi_health_score')} (koperasi_ref, score) VALUES ($1, $2)`,
-    [koperasiRef, score]
+  // 2. Calculate Kesehatan Kas (Cash Health)
+  // Deduct based on cash violations: over-budget is catastrophic, missing evidence and round number patterns indicate poor bookkeeping
+  let kesehatan_kas = 100;
+  if (hasOverBudget) kesehatan_kas -= 40;
+  kesehatan_kas -= (noEvidenceCount * 15);
+  kesehatan_kas -= (roundNumberCount * 10);
+  kesehatan_kas = Math.max(0, kesehatan_kas);
+
+  // 3. Calculate Partisipasi Anggota (Member Participation)
+  // Ratio of active members who have earned points
+  const { rows: memberStats } = await db.query(
+    `SELECT 
+       COUNT(*)::int as total_members,
+       COUNT(CASE WHEN p.total_points > 0 THEN 1 END)::int as active_members
+     FROM ${p('app_users')} u
+     LEFT JOIN ${p('user_points')} p ON u.id = p.user_id
+     WHERE u.koperasi_ref = $1 AND u.role = 'anggota' AND u.status = 'active'`,
+    [koperasiRef]
+  );
+  const totalMembers = memberStats[0]?.total_members || 0;
+  const activeMembers = memberStats[0]?.active_members || 0;
+  const partisipasi_anggota = totalMembers > 0 ? Math.round((activeMembers / totalMembers) * 100) : 0;
+
+  // 4. Calculate Kesehatan Koperasi (Cooperative Health - Composite)
+  // 40% Kas Health + 40% Compliance + 20% Member Participation
+  const kesehatan_koperasi = Math.round(
+    (0.4 * kesehatan_kas) + (0.4 * kepatuhan) + (0.2 * partisipasi_anggota)
   );
 
-  return score;
+  return {
+    kesehatan_kas,
+    kepatuhan,
+    kesehatan_koperasi,
+    partisipasi_anggota
+  };
+}
+
+export async function calculateKoperasiHealthScore(koperasiRef: string): Promise<number> {
+  const metrics = await getDetailedHealthMetrics(koperasiRef);
+  
+  await db.query(
+    `INSERT INTO ${p('koperasi_health_score')} (koperasi_ref, score) VALUES ($1, $2)`,
+    [koperasiRef, metrics.kesehatan_koperasi]
+  );
+
+  return metrics.kesehatan_koperasi;
 }

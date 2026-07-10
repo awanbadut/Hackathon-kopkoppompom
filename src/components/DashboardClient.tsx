@@ -18,6 +18,7 @@ interface DashboardClientProps {
   koperasi: any;
   kasSummary: any;
   complianceSummary: any;
+  healthMetrics: any;
   userPoints: any;
   totalKoperasiPoints: number;
   transactions: any[];
@@ -46,6 +47,7 @@ export default function DashboardClient({
   koperasi,
   kasSummary,
   complianceSummary,
+  healthMetrics,
   userPoints,
   totalKoperasiPoints,
   transactions,
@@ -1144,7 +1146,7 @@ export default function DashboardClient({
               </div>
 
               {/* Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Kas Riil Koperasi</span>
@@ -1162,31 +1164,47 @@ export default function DashboardClient({
 
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Indeks Kepatuhan PMK</span>
-                    <div className="p-2 bg-stone-50 dark:bg-stone-900 rounded-xl text-[#ca8a04]">
-                      <Shield className="w-4 h-4" />
+                    <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Kesehatan Kas</span>
+                    <div className="p-2 bg-red-50 dark:bg-red-950/20 rounded-xl text-red-700">
+                      <Scale className="w-4 h-4" />
                     </div>
                   </div>
-                  <h2 className={`text-2xl font-black font-mono ${getHealthScoreColor(complianceSummary?.health_score || 100)}`}>
-                    {complianceSummary?.health_score || 100}%
+                  <h2 className={`text-2xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_kas)}`}>
+                    {healthMetrics.kesehatan_kas}%
                   </h2>
                   <p className="text-[9px] text-stone-400 leading-snug">
-                    Peringkat kesehatan kepatuhan organisasi.
+                    Kesehatan likuiditas dan pencatatan nota kas.
                   </p>
                 </div>
 
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Pemungutan e-RAT</span>
-                    <div className="p-2 bg-blue-50 dark:bg-blue-950/20 rounded-xl text-blue-700">
-                      <Vote className="w-4 h-4" />
+                    <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Kepatuhan PMK</span>
+                    <div className="p-2 bg-stone-50 dark:bg-stone-900 rounded-xl text-[#ca8a04]">
+                      <Shield className="w-4 h-4" />
                     </div>
                   </div>
-                  <h2 className="text-2xl font-black text-blue-800 dark:text-blue-400 font-mono">
-                    {ratVotingAgendas.filter(a => a.status === 'aktif').length} Aktif
+                  <h2 className={`text-2xl font-black font-mono ${getHealthScoreColor(healthMetrics.kepatuhan)}`}>
+                    {healthMetrics.kepatuhan}%
                   </h2>
                   <p className="text-[9px] text-stone-400 leading-snug">
-                    Agenda rapat anggota yang terbuka.
+                    Kepatuhan batas pagu, tenor & alokasi PMK.
+                  </p>
+                </div>
+
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4 ring-2 ring-[#ca8a04]/40 relative overflow-hidden">
+                  <div className="absolute right-0 top-0 w-12 h-12 bg-[#ca8a04]/10 rounded-bl-full pointer-events-none" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase tracking-wider font-black text-[#ca8a04]">Kesehatan Koperasi</span>
+                    <div className="p-2 bg-amber-50 dark:bg-amber-950/20 rounded-xl text-[#ca8a04]">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <h2 className={`text-2xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_koperasi)}`}>
+                    {healthMetrics.kesehatan_koperasi}%
+                  </h2>
+                  <p className="text-[9px] text-stone-400 leading-snug">
+                    Indeks komposit kesehatan KDMP keseluruhan.
                   </p>
                 </div>
               </div>
@@ -1619,18 +1637,81 @@ export default function DashboardClient({
           {activeTab === 'compliance' && ['pengurus', 'ketua', 'pendamping'].includes(session.role) && (
             <div className="space-y-6">
               
-              <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
-                  Score Kesehatan Kepatuhan Koperasi
-                </h3>
-                
-                <div className="py-4">
-                  <div className={`text-5xl font-black ${getHealthScoreColor(complianceSummary?.health_score || 100)}`}>
-                    {complianceSummary?.health_score || 100}%
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* 1. Kesehatan Kas Card */}
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4">
+                  <h3 className="text-xs font-black text-stone-500 uppercase tracking-wider">
+                    I. Kesehatan Kas
+                  </h3>
+                  <div className="py-2">
+                    <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_kas)}`}>
+                      {healthMetrics.kesehatan_kas}%
+                    </div>
+                    <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+                      Mengukur kesehatan likuiditas, ketiadaan kas defisit, kelengkapan bukti nota belanja, & wajaran transaksi.
+                    </div>
                   </div>
-                  <div className="mt-2.5 text-xs font-black text-stone-500 uppercase tracking-wider">
-                    {complianceSummary?.health_score >= 80 ? 'Kategori A: SEHAT (PATUH REGULASI)' :
-                     complianceSummary?.health_score >= 50 ? 'Kategori B: DALAM PENGAWASAN KEMENKOP' : 'Kategori C: RAWAN / NON-AKTIF'}
+                  {/* Progress Bar */}
+                  <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        healthMetrics.kesehatan_kas >= 80 ? 'bg-green-600' :
+                        healthMetrics.kesehatan_kas >= 50 ? 'bg-amber-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${healthMetrics.kesehatan_kas}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* 2. Kepatuhan Hukum Card */}
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4">
+                  <h3 className="text-xs font-black text-stone-500 uppercase tracking-wider">
+                    II. Kepatuhan Regulasi
+                  </h3>
+                  <div className="py-2">
+                    <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kepatuhan)}`}>
+                      {healthMetrics.kepatuhan}%
+                    </div>
+                    <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+                      Kepatuhan batas pagu, tenor pinjaman, peruntukan Dana Desa, verifikator ganda, & Rapat Anggota Tahunan (RAT).
+                    </div>
+                  </div>
+                  {/* Progress Bar */}
+                  <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        healthMetrics.kepatuhan >= 80 ? 'bg-green-600' :
+                        healthMetrics.kepatuhan >= 50 ? 'bg-amber-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${healthMetrics.kepatuhan}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* 3. Kesehatan Koperasi Card */}
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4 ring-2 ring-[#ca8a04]/40 relative overflow-hidden">
+                  <div className="absolute right-0 top-0 w-16 h-16 bg-[#ca8a04]/10 rounded-bl-full pointer-events-none" />
+                  <h3 className="text-xs font-black text-[#ca8a04] uppercase tracking-wider flex items-center justify-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    III. Kesehatan Koperasi
+                  </h3>
+                  <div className="py-2">
+                    <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_koperasi)}`}>
+                      {healthMetrics.kesehatan_koperasi}%
+                    </div>
+                    <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+                      Indeks Komposit: 40% Kesehatan Kas + 40% Kepatuhan + 20% Partisipasi & Keaktifan Warga ({healthMetrics.partisipasi_anggota}%).
+                    </div>
+                  </div>
+                  {/* Progress Bar */}
+                  <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        healthMetrics.kesehatan_koperasi >= 80 ? 'bg-green-600' :
+                        healthMetrics.kesehatan_koperasi >= 50 ? 'bg-amber-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${healthMetrics.kesehatan_koperasi}%` }}
+                    />
                   </div>
                 </div>
               </div>

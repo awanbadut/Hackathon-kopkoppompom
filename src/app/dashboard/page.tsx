@@ -2,6 +2,7 @@ import { getSession } from '@/lib/auth';
 import { db, p } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import DashboardClient from '@/components/DashboardClient';
+import { getDetailedHealthMetrics } from '@/lib/risk-scanner';
 
 // Helper to recursively serialize JavaScript Date objects into ISO strings for Next.js Client Component compatibility
 function serializeDates(obj: any): any {
@@ -63,12 +64,14 @@ export default async function DashboardPage(props: {
 
   // 3. Load Compliance Summary
   let complianceSummary = null;
+  let healthMetrics = { kesehatan_kas: 100, kepatuhan: 100, kesehatan_koperasi: 100, partisipasi_anggota: 100 };
   if (session.koperasiRef) {
     const { rows } = await db.query(
       `SELECT * FROM ${p('v_compliance_summary')} WHERE koperasi_ref = $1`,
       [session.koperasiRef]
     );
     complianceSummary = rows[0] || null;
+    healthMetrics = await getDetailedHealthMetrics(session.koperasiRef);
   }
 
   // 4. Load User Points
@@ -410,6 +413,7 @@ export default async function DashboardPage(props: {
     koperasi,
     kasSummary,
     complianceSummary,
+    healthMetrics,
     userPoints,
     totalKoperasiPoints,
     transactions,
