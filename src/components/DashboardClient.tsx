@@ -813,7 +813,7 @@ export default function DashboardClient({
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-black text-lg tracking-tight uppercase text-white">AmanDes</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ca8a04] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Potensi Ekonomi Desa</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ca8a04] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Keterlibatan Masyarakat</span>
               </div>
               <p className="text-[10px] text-stone-300 leading-none mt-1">
                 Koperasi Desa Kopkoppompom &bull; Pembukuan Aman & Transparan
@@ -1067,10 +1067,10 @@ export default function DashboardClient({
                 <div>
                   <h3 className="text-lg font-black tracking-tight text-[#14532d] dark:text-white flex items-center gap-2">
                     <Landmark className="w-5 h-5 text-[#ca8a04]" />
-                    Portal Potensi Ekonomi &amp; Kemitraan Desa (AmanDes &bull; Tema 3)
+                    Portal Partisipasi &amp; Keterlibatan Anggota (AmanDes &bull; Tema 3)
                   </h3>
                   <p className="mt-1 text-xs text-stone-500 leading-normal max-w-xl">
-                    Halo, <span className="font-bold">{session.fullName}</span>! Platform ini memfasilitasi optimasi potensi ekonomi desa melalui pemetaan komoditas, pengajuan kemitraan strategis Kemenkop, transparansi laporan neraca &amp; SHU, serta partisipasi aktif warga.
+                    Halo, <span className="font-bold">{session.fullName}</span>! Platform ini memfasilitasi keterlibatan aktif warga melalui e-RAT demokratis, transparansi laporan keuangan neraca &amp; SHU, serta gamifikasi belajar berhadiah insentif belanja.
                   </p>
                 </div>
                 
@@ -2478,9 +2478,9 @@ export default function DashboardClient({
                       <span className="badge badge-gold">SIMKOPDES PORTAL</span>
                       <span className="badge badge-success">TERVERIFIKASI</span>
                     </div>
-                    <h2 className="text-2xl font-black tracking-tight">{koperasi?.nama_koperasi || 'Koperasi Desa Merah Putih'}</h2>
+                    <h2 className="text-2xl font-black tracking-tight">{koperasi?.nama_koperasi || 'Koperasi Desa Kopkoppompom'}</h2>
                     <p className="text-xs text-stone-300 max-w-xl font-medium">
-                      Wajah digital resmi Koperasi Desa/Kelurahan Merah Putih (KDKMP) berdasarkan basis data terintegrasi Kementerian Koperasi RI.
+                      Wajah digital resmi Koperasi Desa/Kelurahan Kopkoppompom (KDKMP) berdasarkan basis data terintegrasi Kementerian Koperasi RI.
                     </p>
                   </div>
                   <div className="flex flex-col items-end z-10">
