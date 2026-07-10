@@ -106,17 +106,17 @@ export default function LoginPage() {
       <div
         className="relative lg:w-[52%] flex flex-col justify-between overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #14532d 0%, #103e22 40%, #0a2715 100%)',
+          background: 'linear-gradient(160deg, #104911 0%, #205c21 50%, #548C2F 100%)',
         }}
       >
         {/* Decorative floating orbs */}
         <div
           className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-[0.07] animate-float"
-          style={{ background: 'radial-gradient(circle, #ca8a04 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, #F9A620 0%, transparent 70%)' }}
         />
         <div
           className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-[0.05] animate-float"
-          style={{ background: 'radial-gradient(circle, #22c55e 0%, transparent 70%)', animationDelay: '1.5s' }}
+          style={{ background: 'radial-gradient(circle, #548C2F 0%, transparent 70%)', animationDelay: '1.5s' }}
         />
         {/* Subtle grid overlay */}
         <div
@@ -134,7 +134,7 @@ export default function LoginPage() {
             <div className="flex items-center gap-3.5">
               <div
                 className="p-3 rounded-2xl shadow-lg border border-white/10"
-                style={{ background: 'linear-gradient(135deg, #ca8a04 0%, #d4a017 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #F9A620 0%, #FFD449 100%)' }}
               >
                 <Shield className="w-7 h-7 text-white" strokeWidth={2.5} />
               </div>
@@ -154,7 +154,7 @@ export default function LoginPage() {
 
             {/* Badge */}
             <div className="animate-slide-in-left stagger-2">
-              <span className="badge badge-gold" style={{ background: 'rgba(202,138,4,0.15)', color: '#fbbf24', borderColor: 'rgba(202,138,4,0.3)' }}>
+              <span className="badge badge-gold" style={{ background: 'rgba(249,166,32,0.15)', color: '#FFD449', borderColor: 'rgba(249,166,32,0.3)' }}>
                 <Sparkles className="w-3 h-3" />
                 Tema 3 — Digital Cooperatives Hackathon 2026
               </span>
@@ -163,7 +163,7 @@ export default function LoginPage() {
             {/* Hero Title */}
             <h1 className="animate-slide-in-left stagger-3 text-4xl md:text-[2.75rem] lg:text-5xl font-black tracking-tight leading-[1.1] text-white">
               Aman Kelola,{' '}
-              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #ca8a04)' }}>
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #FFD449, #F9A620)' }}>
                 Transparan
               </span>{' '}
               &amp; Patuh Hukum
@@ -188,7 +188,7 @@ export default function LoginPage() {
                   backdropFilter: 'blur(20px) saturate(180%)',
                 }}
               >
-                <h4 className="text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-2" style={{ color: '#ca8a04' }}>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-2" style={{ color: '#F9A620' }}>
                   <Scale className="w-4 h-4" />
                   Kalkulator Kepatuhan KTP/NIK (UU PDP)
                 </h4>
@@ -262,7 +262,7 @@ export default function LoginPage() {
           {/* Heading */}
           <div className="animate-fade-in-up stagger-1">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #ca8a04, #14532d)' }} />
+              <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #F9A620, #548C2F)' }} />
               <h2 className="text-2xl font-black tracking-tight" style={{ color: 'var(--primary)' }}>
                 Masuk Gerbang AmanDes
               </h2>
@@ -476,12 +476,12 @@ export default function LoginPage() {
                 className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg"
                 style={{
                   background: 'white',
-                  border: '2px dashed #ca8a04',
-                  boxShadow: '0 2px 8px rgba(202,138,4,0.1)',
+                  border: '2px dashed #F9A620',
+                  boxShadow: '0 2px 8px rgba(249,166,32,0.1)',
                 }}
               >
-                <KeyRound className="w-3.5 h-3.5" style={{ color: '#ca8a04' }} />
-                <span className="font-mono font-black text-lg tracking-[0.2em]" style={{ color: '#ca8a04' }}>
+                <KeyRound className="w-3.5 h-3.5" style={{ color: '#F9A620' }} />
+                <span className="font-mono font-black text-lg tracking-[0.2em]" style={{ color: '#F9A620' }}>
                   {simulatedOtpMsg.code}
                 </span>
               </div>

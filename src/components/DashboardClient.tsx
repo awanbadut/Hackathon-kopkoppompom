@@ -861,19 +861,19 @@ export default function DashboardClient({
   const paginatedAspirations = filteredAspirations.slice((aspPage - 1) * aspPerPage, aspPage * aspPerPage);
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#f7f6f0] dark:bg-[#12110e] text-[#1c1917] font-sans transition-colors duration-300">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FBF8F1] dark:bg-[#12110e] text-[#1c1917] font-sans transition-colors duration-300">
       
       {/* Koperasi Desa Header Banner */}
-      <header className="w-full bg-[#14532d] text-[#f4f3ef] border-b border-[#ca8a04]/30 shadow-md">
+      <header className="w-full bg-[#104911] text-[#f4f3ef] border-b border-[#F9A620]/30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#ca8a04] text-white rounded-xl shadow-inner flex items-center justify-center">
+            <div className="p-2 bg-[#F9A620] text-white rounded-xl shadow-inner flex items-center justify-center">
               <Landmark className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-black text-lg tracking-tight uppercase text-white">AmanDes</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ca8a04] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Keterlibatan Masyarakat</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#F9A620] text-white font-extrabold uppercase tracking-wide">Tema 3 &bull; Keterlibatan Masyarakat</span>
               </div>
               <p className="text-[10px] text-stone-300 leading-none mt-1">
                 Koperasi Desa Merah Putih &bull; Pembukuan Aman & Transparan
@@ -890,7 +890,7 @@ export default function DashboardClient({
             <div className="h-8 w-[1px] bg-stone-750 hidden sm:block" />
 
             <div className="flex items-center gap-2.5">
-              <span className="text-xs px-3 py-1 rounded-full bg-[#ca8a04] text-white font-bold uppercase tracking-wider border border-white/10 shadow-sm">
+              <span className="text-xs px-3 py-1 rounded-full bg-[#F9A620] text-white font-bold uppercase tracking-wider border border-white/10 shadow-sm">
                 {session.role}
               </span>
               
@@ -917,12 +917,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('overview')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'overview'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <Activity className="w-4 h-4 text-[#ca8a04]" />
+              <Activity className="w-4 h-4 text-[#F9A620]" />
               Ringkasan Utama
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -933,12 +933,12 @@ export default function DashboardClient({
               onClick={() => handleTabChange('transactions')}
               className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
                 activeTab === 'transactions'
-                  ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                   : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
               }`}
             >
               <span className="flex items-center gap-2.5">
-                <FileText className="w-4 h-4 text-[#ca8a04]" />
+                <FileText className="w-4 h-4 text-[#F9A620]" />
                 Buku Kas (Ledger)
               </span>
               <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -950,12 +950,12 @@ export default function DashboardClient({
               onClick={() => handleTabChange('approvals')}
               className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
                 activeTab === 'approvals'
-                  ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                   : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
               }`}
             >
               <span className="flex items-center gap-2.5">
-                <FileCheck className="w-4 h-4 text-[#ca8a04]" />
+                <FileCheck className="w-4 h-4 text-[#F9A620]" />
                 Kotak Otorisasi
               </span>
               {myApprovals.filter(a => a.status === 'menunggu').length > 0 ? (
@@ -973,16 +973,16 @@ export default function DashboardClient({
               onClick={() => handleTabChange('compliance')}
               className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
                 activeTab === 'compliance'
-                  ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                   : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
               }`}
             >
               <span className="flex items-center gap-2.5">
-                <ShieldAlert className="w-4 h-4 text-[#ca8a04]" />
+                <ShieldAlert className="w-4 h-4 text-[#F9A620]" />
                 Kepatuhan PMK
               </span>
               {riskLogs.length > 0 ? (
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-[#ca8a04] text-white">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-[#F9A620] text-white">
                   {riskLogs.length}
                 </span>
               ) : (
@@ -995,12 +995,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('financials')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'financials'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <BarChart3 className="w-4 h-4 text-[#ca8a04]" />
+              <BarChart3 className="w-4 h-4 text-[#F9A620]" />
               Laporan Keuangan
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1010,12 +1010,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('e_rat')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'e_rat'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <Vote className="w-4 h-4 text-[#ca8a04]" />
+              <Vote className="w-4 h-4 text-[#F9A620]" />
               E-RAT (Rapat Anggota)
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1025,12 +1025,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('aspirations')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'aspirations'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <MessageSquare className="w-4 h-4 text-[#ca8a04]" />
+              <MessageSquare className="w-4 h-4 text-[#F9A620]" />
               Musrenbang Warga
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1040,12 +1040,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('learning')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'learning'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <BookOpen className="w-4 h-4 text-[#ca8a04]" />
+              <BookOpen className="w-4 h-4 text-[#F9A620]" />
               Kelas Literasi
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1055,12 +1055,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('rewards')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'rewards'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <Tag className="w-4 h-4 text-[#ca8a04]" />
+              <Tag className="w-4 h-4 text-[#F9A620]" />
               Hadiah Belanja
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1070,12 +1070,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('ai_assistant')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'ai_assistant'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-[#ca8a04]" />
+              <Sparkles className="w-4 h-4 text-[#F9A620]" />
               Asisten AI Kopdes
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1085,12 +1085,12 @@ export default function DashboardClient({
             onClick={() => handleTabChange('microsite')}
             className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
               activeTab === 'microsite'
-                ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                 : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
             }`}
           >
             <span className="flex items-center gap-2.5">
-              <Globe className="w-4 h-4 text-[#ca8a04]" />
+              <Globe className="w-4 h-4 text-[#F9A620]" />
               Microsite Publik Kopdes
             </span>
             <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1101,12 +1101,12 @@ export default function DashboardClient({
               onClick={() => handleTabChange('proposals')}
               className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer border ${
                 activeTab === 'proposals'
-                  ? 'bg-[#14532d] text-white border-[#ca8a04] shadow-md'
+                  ? 'bg-[#548C2F] text-white border-[#F9A620] shadow-md'
                   : 'bg-white dark:bg-[#1c1a17] text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-[#23201b] border-stone-200 dark:border-stone-800'
               }`}
             >
               <span className="flex items-center gap-2.5">
-                <Briefcase className="w-4 h-4 text-[#ca8a04]" />
+                <Briefcase className="w-4 h-4 text-[#F9A620]" />
                 Kemitraan & Pembiayaan
               </span>
               <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -1125,8 +1125,8 @@ export default function DashboardClient({
               
               <div className="p-6 rounded-3xl bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-lg font-black tracking-tight text-[#14532d] dark:text-white flex items-center gap-2">
-                    <Landmark className="w-5 h-5 text-[#ca8a04]" />
+                  <h3 className="text-lg font-black tracking-tight text-[#548C2F] dark:text-white flex items-center gap-2">
+                    <Landmark className="w-5 h-5 text-[#F9A620]" />
                     Portal Partisipasi &amp; Keterlibatan Anggota (AmanDes &bull; Tema 3)
                   </h3>
                   <p className="mt-1 text-xs text-stone-500 leading-normal max-w-xl">
@@ -1136,10 +1136,10 @@ export default function DashboardClient({
                 
                 {userPoints && (
                   <div className="flex items-center gap-3 bg-stone-50 dark:bg-[#23201b] px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-800 shrink-0">
-                    <Award className="w-6 h-6 text-[#ca8a04]" />
+                    <Award className="w-6 h-6 text-[#F9A620]" />
                     <div>
                       <div className="text-[9px] uppercase font-black tracking-wider text-stone-400">Poin Belanja</div>
-                      <div className="text-base font-black text-[#14532d] dark:text-white font-mono">{pointsBalance} PTS</div>
+                      <div className="text-base font-black text-[#548C2F] dark:text-white font-mono">{pointsBalance} PTS</div>
                     </div>
                   </div>
                 )}
@@ -1154,7 +1154,7 @@ export default function DashboardClient({
                       <Coins className="w-4 h-4" />
                     </div>
                   </div>
-                  <h2 className="text-2xl font-black text-[#14532d] dark:text-white font-mono">
+                  <h2 className="text-2xl font-black text-[#548C2F] dark:text-white font-mono">
                     {session.role === 'pendamping' ? '🔒 TERBATAS' : fmt(kasSummary?.saldo_kas)}
                   </h2>
                   <p className="text-[9px] text-stone-400 leading-snug">
@@ -1180,7 +1180,7 @@ export default function DashboardClient({
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] uppercase tracking-wider font-black text-stone-400">Kepatuhan PMK</span>
-                    <div className="p-2 bg-stone-50 dark:bg-stone-900 rounded-xl text-[#ca8a04]">
+                    <div className="p-2 bg-stone-50 dark:bg-stone-900 rounded-xl text-[#F9A620]">
                       <Shield className="w-4 h-4" />
                     </div>
                   </div>
@@ -1192,11 +1192,11 @@ export default function DashboardClient({
                   </p>
                 </div>
 
-                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4 ring-2 ring-[#ca8a04]/40 relative overflow-hidden">
-                  <div className="absolute right-0 top-0 w-12 h-12 bg-[#ca8a04]/10 rounded-bl-full pointer-events-none" />
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4 ring-2 ring-[#F9A620]/40 relative overflow-hidden">
+                  <div className="absolute right-0 top-0 w-12 h-12 bg-[#F9A620]/10 rounded-bl-full pointer-events-none" />
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase tracking-wider font-black text-[#ca8a04]">Kesehatan Koperasi</span>
-                    <div className="p-2 bg-amber-50 dark:bg-amber-950/20 rounded-xl text-[#ca8a04]">
+                    <span className="text-[10px] uppercase tracking-wider font-black text-[#F9A620]">Kesehatan Koperasi</span>
+                    <div className="p-2 bg-amber-50 dark:bg-amber-950/20 rounded-xl text-[#F9A620]">
                       <Sparkles className="w-4 h-4" />
                     </div>
                   </div>
@@ -1211,11 +1211,11 @@ export default function DashboardClient({
 
               {/* Sirkulasi Ekonomi Desa Widget */}
               {villageEcoSummary && (
-                <div className="bg-gradient-to-br from-[#14532d]/10 via-[#14532d]/0 to-[#ca8a04]/10 border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-6">
+                <div className="bg-gradient-to-br from-[#548C2F]/10 via-[#548C2F]/0 to-[#F9A620]/10 border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-6">
                   <div className="flex items-center justify-between border-b border-stone-200/50 dark:border-stone-800/50 pb-4">
                     <div>
-                      <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
-                        <ArrowRightLeft className="w-4 h-4 text-[#ca8a04]" />
+                      <h3 className="text-sm font-black text-[#548C2F] dark:text-white flex items-center gap-2">
+                        <ArrowRightLeft className="w-4 h-4 text-[#F9A620]" />
                         Dasbor Ekonomi Sirkular Desa
                       </h3>
                       <p className="text-[10px] text-stone-500 mt-1">
@@ -1228,12 +1228,12 @@ export default function DashboardClient({
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center text-xs">
                     <div className="p-4 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm">
                       <span className="text-[9px] font-black text-stone-400 uppercase tracking-wider block">Partisipasi Warga</span>
-                      <span className="text-xl font-black text-[#14532d] dark:text-white block mt-2">{villageEcoSummary.member_count} Anggota</span>
+                      <span className="text-xl font-black text-[#548C2F] dark:text-white block mt-2">{villageEcoSummary.member_count} Anggota</span>
                       <span className="text-[9px] text-stone-400 block mt-1">Aktif berkontribusi</span>
                     </div>
                     <div className="p-4 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm">
                       <span className="text-[9px] font-black text-stone-400 uppercase tracking-wider block">Insentif Terklaim</span>
-                      <span className="text-xl font-black text-[#ca8a04] block mt-2">{villageEcoSummary.total_points} Poin</span>
+                      <span className="text-xl font-black text-[#F9A620] block mt-2">{villageEcoSummary.total_points} Poin</span>
                       <span className="text-[9px] text-stone-400 block mt-1">Dari hasil belajar kuis</span>
                     </div>
                     <div className="p-4 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm">
@@ -1254,7 +1254,7 @@ export default function DashboardClient({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               <div className="lg:col-span-1 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm self-start space-y-4">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
                   Catat Transaksi Buku Kas
                 </h3>
 
@@ -1401,7 +1401,7 @@ export default function DashboardClient({
                     <button
                       onClick={() => handleCreateTransaction(true)}
                       disabled={isPending}
-                      className="flex-1 py-2.5 px-3 bg-[#14532d] hover:bg-[#1e5d37] text-white rounded-xl font-bold shadow transition-all cursor-pointer text-center flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider border border-[#ca8a04]/30"
+                      className="flex-1 py-2.5 px-3 bg-[#548C2F] hover:bg-[#427223] text-white rounded-xl font-bold shadow transition-all cursor-pointer text-center flex items-center justify-center gap-1 text-[10px] uppercase tracking-wider border border-[#F9A620]/30"
                     >
                       <Send className="w-3.5 h-3.5" />
                       Ajukan
@@ -1412,7 +1412,7 @@ export default function DashboardClient({
 
               <div className="lg:col-span-2 space-y-6">
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                     Buku Kas Ledger Transaksi ({transactions.length})
                   </h3>
 
@@ -1434,7 +1434,7 @@ export default function DashboardClient({
                             <td className="py-3.5 font-mono text-stone-500">{t.transaction_date}</td>
                             <td>
                               <div className="font-bold capitalize">{t.type.replace('_', ' ')}</div>
-                              <div className="text-[9px] font-black text-[#ca8a04] uppercase mt-0.5">{t.sumber_dana.replace('_', ' ')} &bull; {t.kategori.replace('_', ' ')}</div>
+                              <div className="text-[9px] font-black text-[#F9A620] uppercase mt-0.5">{t.sumber_dana.replace('_', ' ')} &bull; {t.kategori.replace('_', ' ')}</div>
                             </td>
                             <td>
                               <div className="font-semibold text-stone-800 dark:text-stone-200">{t.description}</div>
@@ -1447,7 +1447,7 @@ export default function DashboardClient({
                                 )}
                               </div>
                             </td>
-                            <td className="font-mono font-black text-[#14532d] dark:text-white">{fmt(t.amount)}</td>
+                            <td className="font-mono font-black text-[#548C2F] dark:text-white">{fmt(t.amount)}</td>
                             <td>
                               <div className="flex flex-col gap-1.5">
                                 <span className={`inline-flex self-start px-2 py-0.5 rounded-full text-[9px] font-black uppercase border ${
@@ -1464,7 +1464,7 @@ export default function DashboardClient({
                               {t.status === 'draft' && (
                                 <button
                                   onClick={() => handleSubmitDraft(t.id)}
-                                  className="py-1 px-3 bg-[#14532d] hover:bg-[#1a5a33] text-white text-[9px] font-black rounded-lg uppercase border border-[#ca8a04]/20 transition-all cursor-pointer"
+                                  className="py-1 px-3 bg-[#548C2F] hover:bg-[#427223] text-white text-[9px] font-black rounded-lg uppercase border border-[#F9A620]/20 transition-all cursor-pointer"
                                 >
                                   Kirim
                                 </button>
@@ -1511,7 +1511,7 @@ export default function DashboardClient({
             <div className="space-y-6">
               
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                   Otorisasi Anggota Baru ({pendingMembers.length})
                 </h3>
 
@@ -1523,7 +1523,7 @@ export default function DashboardClient({
                         <div className="text-[11px] text-stone-400 mt-1 flex flex-wrap gap-x-3">
                           <span>NIK: {member.ktp_number || '-'}</span>
                           <span>No HP: {member.phone_number}</span>
-                          <span>Sebagai: <strong className="uppercase text-[#ca8a04]">{member.role}</strong></span>
+                          <span>Sebagai: <strong className="uppercase text-[#F9A620]">{member.role}</strong></span>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -1549,7 +1549,7 @@ export default function DashboardClient({
               </div>
 
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                   Otorisasi Transaksi Keuangan ({myApprovals.filter(a => a.status === 'menunggu').length})
                 </h3>
 
@@ -1568,7 +1568,7 @@ export default function DashboardClient({
                           </div>
                           <div className="text-right">
                             <span className="text-[9px] uppercase font-black text-stone-400 block tracking-wider">Nilai Dana</span>
-                            <span className="text-base font-extrabold text-[#14532d] dark:text-white font-mono">{fmt(tx.amount)}</span>
+                            <span className="text-base font-extrabold text-[#548C2F] dark:text-white font-mono">{fmt(tx.amount)}</span>
                           </div>
                         </div>
 
@@ -1689,9 +1689,9 @@ export default function DashboardClient({
                 </div>
 
                 {/* 3. Kesehatan Koperasi Card */}
-                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4 ring-2 ring-[#ca8a04]/40 relative overflow-hidden">
-                  <div className="absolute right-0 top-0 w-16 h-16 bg-[#ca8a04]/10 rounded-bl-full pointer-events-none" />
-                  <h3 className="text-xs font-black text-[#ca8a04] uppercase tracking-wider flex items-center justify-center gap-1">
+                <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4 ring-2 ring-[#F9A620]/40 relative overflow-hidden">
+                  <div className="absolute right-0 top-0 w-16 h-16 bg-[#F9A620]/10 rounded-bl-full pointer-events-none" />
+                  <h3 className="text-xs font-black text-[#F9A620] uppercase tracking-wider flex items-center justify-center gap-1">
                     <Sparkles className="w-3.5 h-3.5" />
                     III. Kesehatan Koperasi
                   </h3>
@@ -1717,7 +1717,7 @@ export default function DashboardClient({
               </div>
 
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                   Temuan Pelanggaran Regulasi Terdeteksi ({riskLogs.length})
                 </h3>
 
@@ -1761,7 +1761,7 @@ export default function DashboardClient({
                             <div className="flex justify-end">
                               <button
                                 onClick={() => handleResolveRisk(log.id)}
-                                className="py-2 px-5 bg-[#14532d] hover:bg-[#1e5a32] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/20 cursor-pointer"
+                                className="py-2 px-5 bg-[#548C2F] hover:bg-[#427223] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/20 cursor-pointer"
                               >
                                 Tandai Selesai ditindaklanjuti
                               </button>
@@ -1813,8 +1813,8 @@ export default function DashboardClient({
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
                 
                 <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3 mb-4">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
-                    <Scale className="w-5 h-5 text-[#ca8a04]" />
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white flex items-center gap-2">
+                    <Scale className="w-5 h-5 text-[#F9A620]" />
                     Laporan Posisi Keuangan (Neraca Saldo)
                   </h3>
                   {totalAset === totalPasiva ? (
@@ -1842,7 +1842,7 @@ export default function DashboardClient({
                         <span className="text-stone-600">Piutang Pembiayaan Anggota</span>
                         <span className="font-mono font-bold text-stone-900 dark:text-white">{fmt(piutangVal)}</span>
                       </div>
-                      <div className="pt-3 border-t border-dashed border-stone-250 dark:border-stone-750 flex justify-between font-black text-sm text-[#14532d] dark:text-white">
+                      <div className="pt-3 border-t border-dashed border-stone-250 dark:border-stone-750 flex justify-between font-black text-sm text-[#548C2F] dark:text-white">
                         <span>TOTAL AKTIVA</span>
                         <span className="font-mono">{fmt(totalAset)}</span>
                       </div>
@@ -1869,7 +1869,7 @@ export default function DashboardClient({
                         <span className="text-stone-600">Ekuitas Modal Awal</span>
                         <span className="font-mono font-bold text-stone-900 dark:text-white">{fmt(modalAwalVal)}</span>
                       </div>
-                      <div className="pt-3 border-t border-dashed border-stone-250 dark:border-stone-750 flex justify-between font-black text-sm text-[#14532d] dark:text-white">
+                      <div className="pt-3 border-t border-dashed border-stone-250 dark:border-stone-750 flex justify-between font-black text-sm text-[#548C2F] dark:text-white">
                         <span>TOTAL PASIVA</span>
                         <span className="font-mono">{fmt(totalPasiva)}</span>
                       </div>
@@ -1880,8 +1880,8 @@ export default function DashboardClient({
 
               {/* Laporan SHU */}
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 mb-4 flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-[#ca8a04]" />
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 mb-4 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-[#F9A620]" />
                   Laporan Hasil Usaha (SHU / Rugi Laba)
                 </h3>
 
@@ -1894,7 +1894,7 @@ export default function DashboardClient({
                     <span className="text-stone-600">Total Beban Operasional (Kas Keluar)</span>
                     <span className="font-mono font-extrabold text-red-750">-{fmt(totalBeban)}</span>
                   </div>
-                  <div className="pt-3 flex justify-between font-black text-sm text-[#14532d] dark:text-white pb-3 border-b border-stone-200 dark:border-stone-850">
+                  <div className="pt-3 flex justify-between font-black text-sm text-[#548C2F] dark:text-white pb-3 border-b border-stone-200 dark:border-stone-850">
                     <span>SISA HASIL USAHA (SHU) BERJALAN</span>
                     <span className={`font-mono ${sisaHasilUsaha >= 0 ? 'text-green-700' : 'text-red-750'}`}>
                       {fmt(sisaHasilUsaha)}
@@ -1904,7 +1904,7 @@ export default function DashboardClient({
                   {/* Estimasi SHU Anggota */}
                   <div className="mt-4 bg-stone-50 dark:bg-stone-900/40 p-4 rounded-2xl space-y-2 border border-stone-100 dark:border-stone-800">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-bold text-[#14532d] dark:text-[#ca8a04]">Estimasi Porsi SHU Warga</span>
+                      <span className="font-bold text-[#548C2F] dark:text-[#F9A620]">Estimasi Porsi SHU Warga</span>
                       <span className="font-mono font-black text-xs text-stone-800 dark:text-stone-200">
                         {totalKoperasiPoints > 0 ? ((pointsBalance / totalKoperasiPoints) * 100).toFixed(2) : '0.00'}%
                       </span>
@@ -1926,7 +1926,7 @@ export default function DashboardClient({
                       <button
                         onClick={handleDistributeShu}
                         disabled={isPending}
-                        className="py-2.5 px-6 bg-[#ca8a04] hover:bg-[#b07803] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-amber-600/20 transition-all cursor-pointer flex items-center gap-2"
+                        className="py-2.5 px-6 bg-[#F9A620] hover:bg-[#b07803] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-amber-600/20 transition-all cursor-pointer flex items-center gap-2"
                       >
                         <Coins className="w-4 h-4" />
                         Bagikan SHU Digital Berbasis Poin
@@ -1945,7 +1945,7 @@ export default function DashboardClient({
             <div className="space-y-6">
               
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                   Musyawarah Anggota e-RAT Digital
                 </h3>
 
@@ -1995,7 +1995,7 @@ export default function DashboardClient({
                                     </div>
                                     <div className="w-full bg-stone-100 dark:bg-stone-800 h-2 rounded-full overflow-hidden">
                                       <div 
-                                        className="bg-[#14532d] h-full rounded-full transition-all duration-500" 
+                                        className="bg-[#548C2F] h-full rounded-full transition-all duration-500" 
                                         style={{ width: `${percent}%` }}
                                       />
                                     </div>
@@ -2022,7 +2022,7 @@ export default function DashboardClient({
                                   key={opt}
                                   className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                                     selectedVotes[agenda.id] === opt
-                                      ? 'bg-[#14532d]/10 border-[#14532d] text-[#14532d] font-bold shadow-sm'
+                                      ? 'bg-[#548C2F]/10 border-[#548C2F] text-[#548C2F] font-bold shadow-sm'
                                       : 'bg-white dark:bg-[#1c1a17] border-stone-200 dark:border-stone-800'
                                   }`}
                                 >
@@ -2032,7 +2032,7 @@ export default function DashboardClient({
                                     value={opt}
                                     checked={selectedVotes[agenda.id] === opt}
                                     onChange={() => setSelectedVotes({ ...selectedVotes, [agenda.id]: opt })}
-                                    className="accent-[#14532d]"
+                                    className="accent-[#548C2F]"
                                   />
                                   {opt}
                                 </label>
@@ -2041,7 +2041,7 @@ export default function DashboardClient({
                             <div className="flex justify-end">
                               <button
                                 onClick={() => handleCastVote(agenda.id)}
-                                className="py-2 px-5 bg-[#14532d] hover:bg-[#1f5e3b] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/20 transition-all cursor-pointer"
+                                className="py-2 px-5 bg-[#548C2F] hover:bg-[#427223] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/20 transition-all cursor-pointer"
                               >
                                 Kirim Pilihan Suara
                               </button>
@@ -2064,8 +2064,8 @@ export default function DashboardClient({
               
               {session.role === 'anggota' && (
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 flex items-center gap-2">
-                    <Plus className="w-4 h-4 text-[#ca8a04]" /> Sampaikan Aspirasi &amp; Program Desa
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3 flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[#F9A620]" /> Sampaikan Aspirasi &amp; Program Desa
                   </h3>
 
                   <form onSubmit={handleCreateAspiration} className="space-y-4 text-xs">
@@ -2096,7 +2096,7 @@ export default function DashboardClient({
                       <button
                         type="submit"
                         disabled={isPending}
-                        className="py-2.5 px-6 bg-[#14532d] hover:bg-[#1d5c36] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/25 transition-all cursor-pointer"
+                        className="py-2.5 px-6 bg-[#548C2F] hover:bg-[#427223] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/25 transition-all cursor-pointer"
                       >
                         Kirim Usulan Warga
                       </button>
@@ -2109,7 +2109,7 @@ export default function DashboardClient({
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-6">
                 
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white">
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white">
                     Usulan & Aspirasi Pembangunan Desa ({filteredAspirations.length})
                   </h3>
 
@@ -2166,7 +2166,7 @@ export default function DashboardClient({
                             {['pengurus', 'ketua'].includes(session.role) && !asp.admin_response && (
                               <button
                                 onClick={() => handlePromoteAspiration(asp.id)}
-                                className="px-2.5 py-1.5 bg-[#ca8a04]/10 hover:bg-[#ca8a04] hover:text-white text-[#ca8a04] border border-[#ca8a04]/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5"
+                                className="px-2.5 py-1.5 bg-[#F9A620]/10 hover:bg-[#F9A620] hover:text-white text-[#F9A620] border border-[#F9A620]/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5"
                               >
                                 <Vote className="w-3.5 h-3.5" />
                                 Jadikan Agenda e-RAT
@@ -2193,8 +2193,8 @@ export default function DashboardClient({
                         </p>
 
                         {asp.admin_response ? (
-                          <div className="p-4 bg-[#14532d]/5 dark:bg-[#14532d]/15 border border-[#14532d]/15 rounded-xl space-y-2">
-                            <div className="flex items-center gap-1.5 text-xs text-[#14532d] dark:text-[#22c55e] font-black uppercase tracking-wide">
+                          <div className="p-4 bg-[#548C2F]/5 dark:bg-[#548C2F]/15 border border-[#548C2F]/15 rounded-xl space-y-2">
+                            <div className="flex items-center gap-1.5 text-xs text-[#548C2F] dark:text-[#22c55e] font-black uppercase tracking-wide">
                               <MessageCircle className="w-4 h-4" />
                               Tanggapan Resmi Koperasi Desa:
                             </div>
@@ -2214,7 +2214,7 @@ export default function DashboardClient({
                               <div className="flex justify-end">
                                 <button
                                   onClick={() => handleRespondAspiration(asp.id)}
-                                  className="py-1.5 px-4 bg-[#14532d] hover:bg-[#1b5631] text-white text-[11px] font-black uppercase tracking-wider border border-[#ca8a04]/20 rounded-xl transition-all cursor-pointer"
+                                  className="py-1.5 px-4 bg-[#548C2F] hover:bg-[#427223] text-white text-[11px] font-black uppercase tracking-wider border border-[#F9A620]/20 rounded-xl transition-all cursor-pointer"
                                 >
                                   Tanggapi Usulan
                                 </button>
@@ -2266,12 +2266,12 @@ export default function DashboardClient({
               
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-[#14532d]/10 rounded-2xl text-[#14532d]">
+                  <div className="p-3 bg-[#548C2F]/10 rounded-2xl text-[#548C2F]">
                     <Award className="w-8 h-8" />
                   </div>
                   <div>
-                    <h3 className="text-base font-black text-[#14532d] dark:text-white">
-                      Peringkat Anggota: <span className="text-[#ca8a04] uppercase">
+                    <h3 className="text-base font-black text-[#548C2F] dark:text-white">
+                      Peringkat Anggota: <span className="text-[#F9A620] uppercase">
                         {pointsBalance >= 150 ? 'Ahli Perkoperasian' : 
                          pointsBalance >= 50 ? 'Cakap Koperasi' : 'Pemula'}
                       </span>
@@ -2284,7 +2284,7 @@ export default function DashboardClient({
 
                 <div className="text-center sm:text-right bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-6 py-3.5 rounded-2xl min-w-[130px]">
                   <span className="text-[10px] font-black text-stone-450 block uppercase tracking-wider">Tabungan Poin</span>
-                  <span className="text-2xl font-black text-[#14532d] dark:text-white font-mono">{pointsBalance} PTS</span>
+                  <span className="text-2xl font-black text-[#548C2F] dark:text-white font-mono">{pointsBalance} PTS</span>
                 </div>
               </div>
 
@@ -2298,7 +2298,7 @@ export default function DashboardClient({
                     <div key={mod.id} className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm flex flex-col justify-between gap-4">
                       <div>
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[9px] uppercase font-black tracking-wider bg-[#14532d]/10 px-2.5 py-0.5 rounded-full text-[#14532d]">
+                          <span className="text-[9px] uppercase font-black tracking-wider bg-[#548C2F]/10 px-2.5 py-0.5 rounded-full text-[#548C2F]">
                             {mod.category.replace('_', ' ')}
                           </span>
                           <span className="text-xs font-mono font-black text-amber-600 bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded-full">
@@ -2323,7 +2323,7 @@ export default function DashboardClient({
                         
                         <button
                           onClick={() => handleStartLesson(mod)}
-                          className="py-1.5 px-4 bg-[#14532d] hover:bg-[#1b5832] text-white rounded-xl font-bold text-xs border border-[#ca8a04]/20 transition-all cursor-pointer"
+                          className="py-1.5 px-4 bg-[#548C2F] hover:bg-[#427223] text-white rounded-xl font-bold text-xs border border-[#F9A620]/20 transition-all cursor-pointer"
                         >
                           {isCompleted ? 'Pelajari Ulang' : isStarted ? 'Lanjutkan' : 'Mulai Belajar'}
                         </button>
@@ -2345,8 +2345,8 @@ export default function DashboardClient({
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-3">
                   <div>
-                    <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-[#ca8a04]" />
+                    <h3 className="text-sm font-black text-[#548C2F] dark:text-white flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[#F9A620]" />
                       Misi Mingguan Anggota Kopdes
                     </h3>
                     <p className="text-[10px] text-stone-500 mt-1 font-medium">
@@ -2355,11 +2355,11 @@ export default function DashboardClient({
                   </div>
                   <div className="flex flex-wrap items-center gap-3 shrink-0">
                     <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2">
-                      <Coins className="w-4 h-4 text-[#ca8a04]" />
+                      <Coins className="w-4 h-4 text-[#F9A620]" />
                       <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Poin Anda: {pointsBalance} PTS</span>
                     </div>
                     <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-2xl flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-[#14532d] dark:text-[#ca8a04]" />
+                      <TrendingUp className="w-4 h-4 text-[#548C2F] dark:text-[#F9A620]" />
                       <span className="text-xs font-black text-stone-800 dark:text-stone-200 font-mono">Estimasi SHU: {totalKoperasiPoints > 0 ? ((pointsBalance / totalKoperasiPoints) * 100).toFixed(2) : '0.00'}%</span>
                     </div>
                   </div>
@@ -2436,7 +2436,7 @@ export default function DashboardClient({
                           <button
                             onClick={() => handleClaimMission(misi.code, misi.points)}
                             disabled={missionClaimPending === misi.code}
-                            className="py-1.5 px-4 bg-[#14532d] hover:bg-[#1c5531] text-white text-[10px] font-black uppercase tracking-wider border border-[#ca8a04]/20 rounded-lg cursor-pointer transition-all shadow-sm"
+                            className="py-1.5 px-4 bg-[#548C2F] hover:bg-[#427223] text-white text-[10px] font-black uppercase tracking-wider border border-[#F9A620]/20 rounded-lg cursor-pointer transition-all shadow-sm"
                           >
                             {missionClaimPending === misi.code ? 'Klaim...' : 'Klaim Poin'}
                           </button>
@@ -2457,7 +2457,7 @@ export default function DashboardClient({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <div className="md:col-span-2 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
                     Katalog Hadiah Belanja Koperasi (Gerai Kopdes)
                   </h3>
 
@@ -2470,7 +2470,7 @@ export default function DashboardClient({
                         <div key={voucher.id} className="p-4 border border-stone-200 dark:border-stone-800 rounded-2xl flex flex-col justify-between gap-4 bg-stone-50 dark:bg-stone-900">
                           <div>
                             <div className="flex justify-between items-start">
-                              <span className="px-2.5 py-0.5 bg-[#ca8a04] text-white rounded font-mono font-black text-xs shadow-inner">
+                              <span className="px-2.5 py-0.5 bg-[#F9A620] text-white rounded font-mono font-black text-xs shadow-inner">
                                 {voucher.points_cost} PTS
                               </span>
                               <span className="text-[10px] text-stone-400 font-bold">Stok: {voucher.stock} Unit</span>
@@ -2488,7 +2488,7 @@ export default function DashboardClient({
                             disabled={!canRedeem || isPending}
                             className={`w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-center ${
                               canRedeem 
-                                ? 'bg-[#14532d] hover:bg-[#1f5f36] text-white border border-[#ca8a04]/20 shadow' 
+                                ? 'bg-[#548C2F] hover:bg-[#427223] text-white border border-[#F9A620]/20 shadow' 
                                 : 'bg-stone-200 text-stone-400 cursor-not-allowed border border-stone-300'
                             }`}
                           >
@@ -2501,16 +2501,16 @@ export default function DashboardClient({
                 </div>
 
                 <div className="md:col-span-1 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm space-y-4">
-                  <h3 className="text-sm font-black text-[#14532d] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
+                  <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
                     Koleksi Voucher Belanja Anda ({myRedeemedVouchers.length})
                   </h3>
 
                   <div className="space-y-3.5">
                     {myRedeemedVouchers.map((uv) => (
-                      <div key={uv.id} className="p-3 border border-dashed border-[#ca8a04]/50 rounded-2xl bg-white dark:bg-stone-900 shadow-sm space-y-3">
+                      <div key={uv.id} className="p-3 border border-dashed border-[#F9A620]/50 rounded-2xl bg-white dark:bg-stone-900 shadow-sm space-y-3">
                         <div className="text-[10px] font-black text-stone-450 uppercase">{uv.title}</div>
                         <div className="flex items-center justify-between">
-                          <span className="px-3 py-1 bg-stone-100 dark:bg-stone-850 border border-stone-200 rounded font-mono font-black text-[#ca8a04] text-xs">
+                          <span className="px-3 py-1 bg-stone-100 dark:bg-stone-850 border border-stone-200 rounded font-mono font-black text-[#F9A620] text-xs">
                             {uv.code}
                           </span>
                           <span className="text-[9px] uppercase font-bold text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">
@@ -2541,8 +2541,8 @@ export default function DashboardClient({
                   {/* Header */}
                   <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                     <div>
-                      <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-[#ca8a04]" />
+                      <h3 className="text-sm font-black text-[#548C2F] dark:text-white flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-[#F9A620]" />
                         Asisten AI Kepatuhan Kopdes
                       </h3>
                       <p className="text-[10px] text-stone-500 mt-1">
@@ -2562,13 +2562,13 @@ export default function DashboardClient({
                         <div
                           className={`max-w-xl p-3.5 rounded-2xl text-xs leading-relaxed ${
                             msg.sender === 'user'
-                              ? 'bg-[#14532d] text-white rounded-tr-none'
+                              ? 'bg-[#548C2F] text-white rounded-tr-none'
                               : 'bg-stone-50 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 rounded-tl-none font-medium'
                           }`}
                         >
                           {msg.text.split('\n').map((line, lIdx) => {
                             if (line.startsWith('### ')) {
-                              return <h4 key={lIdx} className="font-black text-[13px] my-2 text-[#14532d] dark:text-amber-500">{line.replace('### ', '')}</h4>;
+                              return <h4 key={lIdx} className="font-black text-[13px] my-2 text-[#548C2F] dark:text-amber-500">{line.replace('### ', '')}</h4>;
                             }
                             if (line.startsWith('- ') || line.startsWith('* ')) {
                               return <li key={lIdx} className="ml-4 list-disc my-1">{line.substring(2)}</li>;
@@ -2578,7 +2578,7 @@ export default function DashboardClient({
                               const parts = line.split('**');
                               return (
                                 <p key={lIdx} className="my-1">
-                                  {parts.map((part, pIdx) => pIdx % 2 === 1 ? <strong key={pIdx} className="font-extrabold text-[#ca8a04] dark:text-amber-400">{part}</strong> : part)}
+                                  {parts.map((part, pIdx) => pIdx % 2 === 1 ? <strong key={pIdx} className="font-extrabold text-[#F9A620] dark:text-amber-400">{part}</strong> : part)}
                                 </p>
                               );
                             }
@@ -2613,7 +2613,7 @@ export default function DashboardClient({
                           type="button"
                           onClick={() => handleSendAiMessage(s)}
                           disabled={aiPending}
-                          className="py-1 px-3 bg-stone-100 hover:bg-[#ca8a04] hover:text-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full text-[10px] font-bold text-stone-600 dark:text-stone-300 transition-all cursor-pointer disabled:opacity-40"
+                          className="py-1 px-3 bg-stone-100 hover:bg-[#F9A620] hover:text-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full text-[10px] font-bold text-stone-600 dark:text-stone-300 transition-all cursor-pointer disabled:opacity-40"
                         >
                           {s}
                         </button>
@@ -2640,7 +2640,7 @@ export default function DashboardClient({
                     <button
                       type="submit"
                       disabled={!aiInput.trim() || aiPending}
-                      className="py-2.5 px-5 bg-[#14532d] hover:bg-[#1e5a32] text-white rounded-xl text-xs font-black uppercase tracking-wider border border-[#ca8a04]/20 transition-all cursor-pointer disabled:opacity-40"
+                      className="py-2.5 px-5 bg-[#548C2F] hover:bg-[#427223] text-white rounded-xl text-xs font-black uppercase tracking-wider border border-[#F9A620]/20 transition-all cursor-pointer disabled:opacity-40"
                     >
                       Kirim
                     </button>
@@ -2651,8 +2651,8 @@ export default function DashboardClient({
                 <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm flex flex-col h-[600px] overflow-hidden">
                   <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
                     <div>
-                      <h3 className="text-sm font-black text-[#14532d] dark:text-white flex items-center gap-2">
-                        <FileCheck className="w-5 h-5 text-[#ca8a04]" />
+                      <h3 className="text-sm font-black text-[#548C2F] dark:text-white flex items-center gap-2">
+                        <FileCheck className="w-5 h-5 text-[#F9A620]" />
                         Pusat Audit Kepatuhan AI
                       </h3>
                       <p className="text-[10px] text-stone-500 mt-1">
@@ -2663,9 +2663,9 @@ export default function DashboardClient({
                       <button
                         onClick={handleRunAiAudit}
                         disabled={aiAuditPending}
-                        className="py-2 px-4 bg-[#14532d] hover:bg-[#1e5a32] text-white rounded-xl text-[10px] font-black uppercase tracking-wider border border-[#ca8a04]/20 transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
+                        className="py-2 px-4 bg-[#548C2F] hover:bg-[#427223] text-white rounded-xl text-[10px] font-black uppercase tracking-wider border border-[#F9A620]/20 transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#ca8a04]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#F9A620]" />
                         {aiAuditPending ? 'Mengaudit...' : 'Jalankan Audit'}
                       </button>
                     )}
@@ -2674,7 +2674,7 @@ export default function DashboardClient({
                   <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin">
                     {aiAuditPending ? (
                       <div className="flex flex-col items-center justify-center h-full space-y-3 py-10">
-                        <div className="w-10 h-10 border-4 border-stone-200 border-t-[#ca8a04] rounded-full animate-spin" />
+                        <div className="w-10 h-10 border-4 border-stone-200 border-t-[#F9A620] rounded-full animate-spin" />
                         <p className="text-xs text-stone-500 font-bold animate-pulse text-center">
                           Menganalisis keselarasan transaksi kas dengan PMK 7/2026, PMK 15/2026, SAK ETAP, dan UU Koperasi...
                         </p>
@@ -2683,10 +2683,10 @@ export default function DashboardClient({
                       <div className="bg-stone-50 dark:bg-stone-900/40 p-5 rounded-2xl border border-stone-100 dark:border-stone-800 text-xs leading-relaxed text-stone-800 dark:text-stone-300 font-medium">
                         {aiAuditReport.split('\n').map((line, rIdx) => {
                           if (line.startsWith('# ')) {
-                            return <h1 key={rIdx} className="text-base font-black text-[#14532d] dark:text-amber-500 border-b border-stone-200 dark:border-stone-800 pb-2 mb-4">{line.replace('# ', '')}</h1>;
+                            return <h1 key={rIdx} className="text-base font-black text-[#548C2F] dark:text-amber-500 border-b border-stone-200 dark:border-stone-800 pb-2 mb-4">{line.replace('# ', '')}</h1>;
                           }
                           if (line.startsWith('## ')) {
-                            return <h2 key={rIdx} className="text-sm font-black text-[#14532d] dark:text-amber-400 mt-4 mb-2">{line.replace('## ', '')}</h2>;
+                            return <h2 key={rIdx} className="text-sm font-black text-[#548C2F] dark:text-amber-400 mt-4 mb-2">{line.replace('## ', '')}</h2>;
                           }
                           if (line.startsWith('### ')) {
                             return <h3 key={rIdx} className="text-xs font-black text-stone-800 dark:text-stone-200 mt-3 mb-2">{line.replace('### ', '')}</h3>;
@@ -2698,7 +2698,7 @@ export default function DashboardClient({
                             const parts = line.split('**');
                             return (
                               <p key={rIdx} className="my-1.5">
-                                {parts.map((part, pIdx) => pIdx % 2 === 1 ? <strong key={pIdx} className="font-extrabold text-[#ca8a04] dark:text-amber-400">{part}</strong> : part)}
+                                {parts.map((part, pIdx) => pIdx % 2 === 1 ? <strong key={pIdx} className="font-extrabold text-[#F9A620] dark:text-amber-400">{part}</strong> : part)}
                               </p>
                             );
                           }
@@ -2727,8 +2727,8 @@ export default function DashboardClient({
             <div className="space-y-6 animate-scale-in">
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-8 rounded-3xl shadow-sm space-y-8">
                 {/* Hero Header */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#14532d] to-[#0d341c] p-8 text-white border border-[#ca8a04]/20 shadow-inner flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                  <div className="absolute right-0 top-0 w-64 h-64 bg-[#ca8a04]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#548C2F] to-[#0d341c] p-8 text-white border border-[#F9A620]/20 shadow-inner flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div className="absolute right-0 top-0 w-64 h-64 bg-[#F9A620]/10 rounded-full blur-3xl pointer-events-none" />
                   <div className="space-y-3 z-10">
                     <div className="flex items-center gap-3">
                       <span className="badge badge-gold">SIMKOPDES PORTAL</span>
@@ -2799,7 +2799,7 @@ export default function DashboardClient({
                       <div>
                         <dt className="text-stone-400 font-medium">Skor Kepatuhan Audit Kemenkop</dt>
                         <dd className="font-extrabold text-stone-800 dark:text-stone-200 mt-0.5 flex items-center gap-1.5">
-                          <Activity className="w-3.5 h-3.5 text-[#ca8a04]" />
+                          <Activity className="w-3.5 h-3.5 text-[#F9A620]" />
                           <span>{complianceSummary?.health_score || 100} / 100</span>
                         </dd>
                       </div>
@@ -2836,8 +2836,8 @@ export default function DashboardClient({
               
               {/* Form pengajuan */}
               <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-                <h3 className="text-sm font-black text-[#14532d] dark:text-white mb-4 flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-[#ca8a04]" />
+                <h3 className="text-sm font-black text-[#548C2F] dark:text-white mb-4 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[#F9A620]" />
                   Pengajuan Pembiayaan & Kemitraan Kopdes (SIMKOPDES Portal)
                 </h3>
                 <p className="text-[11px] text-stone-500 mb-6 font-medium">
@@ -2909,7 +2909,7 @@ export default function DashboardClient({
                     <button
                       type="submit"
                       disabled={proposalPending}
-                      className="w-full py-3.5 px-6 bg-[#14532d] hover:bg-[#1e5a32] text-white rounded-xl text-xs font-black uppercase tracking-wider border border-[#ca8a04]/20 transition-all cursor-pointer disabled:opacity-40"
+                      className="w-full py-3.5 px-6 bg-[#548C2F] hover:bg-[#427223] text-white rounded-xl text-xs font-black uppercase tracking-wider border border-[#F9A620]/20 transition-all cursor-pointer disabled:opacity-40"
                     >
                       {proposalPending ? 'Mengirim Proposal...' : 'Kirim Permohonan ke Kemenkop'}
                     </button>
@@ -2943,9 +2943,9 @@ export default function DashboardClient({
                       ) : (
                         proposalsList.map((prop) => (
                           <tr key={prop.pengajuan_pembiayaan_ref}>
-                            <td className="font-mono font-bold text-[#ca8a04]">{prop.pengajuan_pembiayaan_ref}</td>
+                            <td className="font-mono font-bold text-[#F9A620]">{prop.pengajuan_pembiayaan_ref}</td>
                             <td className="font-bold">{prop.penanggung_jawab}</td>
-                            <td className="font-bold text-[#14532d] dark:text-green-400">{fmt(prop.nominal_permohonan)}</td>
+                            <td className="font-bold text-[#548C2F] dark:text-green-400">{fmt(prop.nominal_permohonan)}</td>
                             <td className="font-medium">{prop.tenor} Bulan</td>
                             <td className="max-w-[200px] truncate text-stone-500 font-medium" title={prop.tujuan_permohonan}>
                               {prop.tujuan_permohonan}
@@ -2972,9 +2972,9 @@ export default function DashboardClient({
       {/* Lesson Content & Quiz Modal */}
       {activeLesson && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 flex items-center justify-center p-4">
-          <div className="bg-[#fcfbfa] dark:bg-[#1c1a17] max-w-2xl w-full rounded-3xl border border-[#ca8a04]/30 overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+          <div className="bg-[#fcfbfa] dark:bg-[#1c1a17] max-w-2xl w-full rounded-3xl border border-[#F9A620]/30 overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
             
-            <div className="p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-[#14532d] text-white">
+            <div className="p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-[#548C2F] text-white">
               <div>
                 <span className="text-[10px] uppercase font-black text-stone-300 tracking-wider">Modul Pembelajaran Koperasi</span>
                 <h3 className="text-sm font-black text-white">{activeLesson.title}</h3>
@@ -2991,7 +2991,7 @@ export default function DashboardClient({
               <div className="prose dark:prose-invert max-w-none text-stone-750 dark:text-stone-300">
                 {activeLesson.content.split('\n\n').map((para: string, idx: number) => {
                   if (para.startsWith('# ')) {
-                    return <h3 key={idx} className="text-lg font-black mt-4 mb-2 text-[#14532d] dark:text-white border-b border-[#ca8a04]/10 pb-1">{para.substring(2)}</h3>;
+                    return <h3 key={idx} className="text-lg font-black mt-4 mb-2 text-[#548C2F] dark:text-white border-b border-[#F9A620]/10 pb-1">{para.substring(2)}</h3>;
                   }
                   if (para.startsWith('## ')) {
                     return <h4 key={idx} className="text-base font-extrabold mt-3 mb-1.5 text-stone-800 dark:text-stone-250">{para.substring(3)}</h4>;
@@ -3011,8 +3011,8 @@ export default function DashboardClient({
 
               {activeLesson.quiz_json?.questions && (
                 <div className="border-t border-stone-200 dark:border-stone-800 pt-6 space-y-4">
-                  <h4 className="font-black text-stone-850 dark:text-stone-200 flex items-center gap-1.5 uppercase text-xs tracking-wider text-[#14532d]">
-                    <HelpCircle className="w-4 h-4 text-[#ca8a04]" />
+                  <h4 className="font-black text-stone-850 dark:text-stone-200 flex items-center gap-1.5 uppercase text-xs tracking-wider text-[#548C2F]">
+                    <HelpCircle className="w-4 h-4 text-[#F9A620]" />
                     Lembar Ujian Kompetensi
                   </h4>
 
@@ -3038,7 +3038,7 @@ export default function DashboardClient({
                               key={opt}
                               className={`flex items-center gap-3 p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                                 quizAnswers[qIdx] === opt
-                                  ? 'bg-[#14532d]/10 border-[#14532d] text-[#14532d] font-bold shadow-sm'
+                                  ? 'bg-[#548C2F]/10 border-[#548C2F] text-[#548C2F] font-bold shadow-sm'
                                   : 'bg-white dark:bg-[#1c1a17] border-stone-250 hover:bg-stone-50 dark:border-stone-800'
                               }`}
                             >
@@ -3048,7 +3048,7 @@ export default function DashboardClient({
                                 value={opt}
                                 checked={quizAnswers[qIdx] === opt}
                                 onChange={(e) => setQuizAnswers({ ...quizAnswers, [qIdx]: opt })}
-                                className="accent-[#14532d] cursor-pointer"
+                                className="accent-[#548C2F] cursor-pointer"
                                 required
                               />
                               {opt}
@@ -3062,7 +3062,7 @@ export default function DashboardClient({
                       <button
                         type="submit"
                         disabled={isPending}
-                        className="py-2.5 px-6 bg-[#14532d] hover:bg-[#1c5631] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#ca8a04]/20 transition-all cursor-pointer flex items-center gap-1.5"
+                        className="py-2.5 px-6 bg-[#548C2F] hover:bg-[#427223] text-white font-black text-xs uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/20 transition-all cursor-pointer flex items-center gap-1.5"
                       >
                         Kirim Lembar Jawaban
                         <ChevronRight className="w-4 h-4" />
@@ -3081,7 +3081,7 @@ export default function DashboardClient({
       {/* ======================================= */}
       {dialog.isOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 flex items-center justify-center p-4 transition-opacity duration-300">
-          <div className="bg-[#fcfbfa] dark:bg-[#1c1a17] max-w-sm w-full rounded-3xl border border-[#ca8a04]/30 overflow-hidden shadow-2xl p-6 space-y-4 text-center">
+          <div className="bg-[#fcfbfa] dark:bg-[#1c1a17] max-w-sm w-full rounded-3xl border border-[#F9A620]/30 overflow-hidden shadow-2xl p-6 space-y-4 text-center">
             
             <div className="flex items-center justify-center">
               {dialog.type === 'success' && (
@@ -3105,7 +3105,7 @@ export default function DashboardClient({
                 </div>
               )}
               {dialog.type === 'confirm' && (
-                <div className="p-3 bg-[#14532d]/10 text-[#14532d] border border-[#ca8a04]/30 rounded-full">
+                <div className="p-3 bg-[#548C2F]/10 text-[#548C2F] border border-[#F9A620]/30 rounded-full">
                   <Shield className="w-8 h-8" />
                 </div>
               )}
@@ -3130,7 +3130,7 @@ export default function DashboardClient({
                       closeDialog();
                       if (dialog.onConfirm) dialog.onConfirm();
                     }}
-                    className="flex-1 py-2.5 bg-[#14532d] hover:bg-[#1a5531] text-white border border-[#ca8a04]/30 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+                    className="flex-1 py-2.5 bg-[#548C2F] hover:bg-[#427223] text-white border border-[#F9A620]/30 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm"
                   >
                     {dialog.confirmText || 'Lanjutkan'}
                   </button>
@@ -3138,7 +3138,7 @@ export default function DashboardClient({
               ) : (
                 <button
                   onClick={closeDialog}
-                  className="w-full py-2.5 bg-[#14532d] hover:bg-[#1e5832] text-white border border-[#ca8a04]/30 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+                  className="w-full py-2.5 bg-[#548C2F] hover:bg-[#427223] text-white border border-[#F9A620]/30 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm"
                 >
                   Selesai
                 </button>
