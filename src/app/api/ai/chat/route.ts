@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     // 1. Fetch live database context
     const { rows: healthRows } = await db.query(
       `SELECT score FROM ${p('koperasi_health_score')} 
-       WHERE koperasi_ref = $1 ORDER BY checked_at DESC LIMIT 1`,
+       WHERE koperasi_ref = $1 ORDER BY last_calculated_at DESC LIMIT 1`,
       [session.koperasiRef]
     );
     const healthScore = healthRows[0]?.score ?? 100;
