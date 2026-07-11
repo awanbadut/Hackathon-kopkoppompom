@@ -142,8 +142,8 @@ export default function MicrositeTab({
               </div>
               <div>
                 <dt className="text-stone-400 font-medium">Sisa Hasil Usaha (SHU) Berjalan</dt>
-                <dd className="font-extrabold text-stone-800 mt-0.5 text-[#548C2F]">
-                  {fmt((financialSummary?.pemasukan_kas || 0) - (financialSummary?.pengeluaran_kas || 0))}
+                <dd className="font-extrabold text-[#F9A620] mt-1 text-[10px] uppercase">
+                  Menunggu RAT
                 </dd>
               </div>
               <div>

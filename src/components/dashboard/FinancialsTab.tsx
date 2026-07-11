@@ -132,8 +132,8 @@ export default function FinancialsTab({
           </div>
           <div className="pt-3 flex justify-between font-black text-sm text-[#548C2F] pb-3 border-b border-stone-200">
             <span>SISA HASIL USAHA (SHU) BERJALAN</span>
-            <span className={`font-mono ${sisaHasilUsaha >= 0 ? 'text-[#3F6B24]' : 'text-red-750'}`}>
-              {fmt(sisaHasilUsaha)}
+            <span className="badge badge-gold uppercase">
+              Menunggu Ketetapan RAT
             </span>
           </div>
 
@@ -149,9 +149,9 @@ export default function FinancialsTab({
               Porsi dihitung dari total partisipasi aktif Anda ({pointsBalance} PTS) dibagi total partisipasi seluruh anggota ({totalKoperasiPoints} PTS) dalam ekosistem Koperasi Desa Merah Putih.
             </p>
             <div className="flex justify-between items-center text-xs pt-1">
-              <span className="font-medium text-stone-600">Estimasi Nilai SHU Diterima:</span>
-              <span className="font-mono font-black text-xs text-[#3F6B24]">
-                {fmt(Math.max(0, totalKoperasiPoints > 0 ? (pointsBalance / totalKoperasiPoints) * sisaHasilUsaha : 0))}
+              <span className="font-medium text-stone-600">Estimasi Status SHU Diterima:</span>
+              <span className="font-sans font-black text-xs text-[#3F6B24] uppercase">
+                Menunggu Keputusan RAT
               </span>
             </div>
           </div>
