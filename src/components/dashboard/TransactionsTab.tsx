@@ -222,14 +222,59 @@ export default function TransactionsTab({
           </div>
 
           <div>
-            <label className="block font-bold text-stone-500 mb-1">Link Bukti Fisik (Evidence URL)</label>
+            <label className="block font-bold text-stone-500 mb-1">Bukti Fisik Transaksi (Foto Nota/Kuitansi)</label>
             <input
-              type="text"
-              placeholder="Link nota, kwitansi, atau invoice..."
-              value={txEvidence}
-              onChange={(e) => setTxEvidence(e.target.value)}
-              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              id="tx-camera-capture"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setTxEvidence(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
             />
+            
+            {!txEvidence ? (
+              <label
+                htmlFor="tx-camera-capture"
+                className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-stone-300 hover:border-[#548C2F] bg-stone-50 hover:bg-[#F1F7EA]/20 rounded-2xl cursor-pointer transition-all gap-2 text-center"
+              >
+                <span className="text-xl">📸</span>
+                <span className="text-[11px] font-black text-stone-700">Ambil Foto Nota Langsung</span>
+                <span className="text-[9px] font-bold text-stone-400 leading-tight max-w-[200px]">
+                  Kamera akan terbuka otomatis. Proteksi sistem: tidak diizinkan unggah foto dari galeri/folder untuk mencegah manipulasi data.
+                </span>
+              </label>
+            ) : (
+              <div className="p-3 bg-[#F1F7EA] border border-[#C7DDAE] rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black text-[#3F6B24] uppercase tracking-wider flex items-center gap-1">
+                    ✅ Foto Nota Berhasil Diambil (Live Camera)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setTxEvidence('')}
+                    className="text-[10px] text-red-650 font-extrabold hover:underline"
+                  >
+                    Hapus Foto
+                  </button>
+                </div>
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-stone-200 bg-stone-100 flex items-center justify-center">
+                  <img
+                    src={txEvidence}
+                    alt="Preview Bukti Nota"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div>

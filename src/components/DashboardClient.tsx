@@ -204,6 +204,9 @@ export default function DashboardClient({
   // Resolve Risk state
   const [riskNote, setRiskNote] = useState<{ [key: string]: string }>({});
 
+  // Evidence urls for PMK compliance corrections
+  const [evidenceUrls, setEvidenceUrls] = useState<{ [key: string]: string }>({});
+
   // Active Lesson state (for modal)
   const [activeLesson, setActiveLesson] = useState<any>(null);
   const [quizAnswers, setQuizAnswers] = useState<{ [key: string]: string }>({});
@@ -531,6 +534,72 @@ export default function DashboardClient({
               showDialog('error', 'Gagal Tindak Lanjut', data.error);
             } else {
               showDialog('success', 'Berhasil Diselesaikan', 'Temuan kepatuhan berhasil ditandai sebagai diselesaikan.');
+              router.refresh();
+            }
+          } catch (err) {
+            showDialog('error', 'Kesalahan', 'Gagal memproses data.');
+          }
+        });
+      }
+    );
+  };
+
+  // Update Evidence URL in Compliance Tab
+  const handleUpdateEvidence = async (txId: string, url: string) => {
+    if (!url.trim()) {
+      showDialog('warning', 'Link Diperlukan', 'Link/URL bukti fisik wajib diisi.');
+      return;
+    }
+
+    showConfirm(
+      'Perbarui Bukti Fisik',
+      'Apakah Anda yakin ingin menambahkan bukti fisik ini ke transaksi? Sistem akan secara otomatis mengevaluasi ulang kepatuhan PMK.',
+      async () => {
+        startTransition(async () => {
+          try {
+            const res = await fetch('/api/transactions/update-evidence', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                transaction_id: txId,
+                evidence_url: url
+              })
+            });
+            const data = await res.json();
+            if (data.error) {
+              showDialog('error', 'Gagal Memperbarui', data.error);
+            } else {
+              showDialog('success', 'Berhasil Diperbarui', 'Bukti fisik berhasil diperbarui dan audit ulang berhasil diselesaikan.');
+              router.refresh();
+            }
+          } catch (err) {
+            showDialog('error', 'Kesalahan', 'Gagal memproses data.');
+          }
+        });
+      }
+    );
+  };
+
+  // Delete Transaction in Compliance Tab
+  const handleDeleteTransaction = async (txId: string) => {
+    showConfirm(
+      'Batalkan & Hapus Transaksi',
+      'Apakah Anda yakin ingin membatalkan transaksi ini? Transaksi beserta temuan pelanggarannya akan dihapus secara permanen dari sistem.',
+      async () => {
+        startTransition(async () => {
+          try {
+            const res = await fetch('/api/transactions/delete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                transaction_id: txId
+              })
+            });
+            const data = await res.json();
+            if (data.error) {
+              showDialog('error', 'Gagal Menghapus', data.error);
+            } else {
+              showDialog('success', 'Transaksi Dibatalkan', 'Transaksi dan laporan pelanggaran terkait berhasil dihapus dari sistem.');
               router.refresh();
             }
           } catch (err) {
@@ -1060,6 +1129,10 @@ export default function DashboardClient({
                 riskNote={riskNote}
                 setRiskNote={setRiskNote}
                 handleResolveRisk={handleResolveRisk}
+                evidenceUrls={evidenceUrls}
+                setEvidenceUrls={setEvidenceUrls}
+                handleUpdateEvidence={handleUpdateEvidence}
+                handleDeleteTransaction={handleDeleteTransaction}
                 riskPage={riskPage}
                 setRiskPage={setRiskPage}
                 totalRiskPages={totalRiskPages}

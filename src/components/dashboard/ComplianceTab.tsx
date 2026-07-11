@@ -2,35 +2,43 @@ import React from 'react';
 import { Sparkles } from 'lucide-react';
 
 interface ComplianceTabProps {
- session: any;
- healthMetrics: any;
- riskLogs: any[];
- paginatedRiskLogs: any[];
- riskNote: Record<string, string>;
- setRiskNote: (val: Record<string, string>) => void;
- handleResolveRisk: (id: string) => void;
- riskPage: number;
- setRiskPage: (page: number | ((prev: number) => number)) => void;
- totalRiskPages: number;
- fmt: (val: any) => string;
- getHealthScoreColor: (score: number) => string;
- getRiskLevelBadge: (level: string) => React.ReactNode;
+  session: any;
+  healthMetrics: any;
+  riskLogs: any[];
+  paginatedRiskLogs: any[];
+  riskNote: Record<string, string>;
+  setRiskNote: (val: Record<string, string>) => void;
+  handleResolveRisk: (id: string) => void;
+  evidenceUrls: Record<string, string>;
+  setEvidenceUrls: (val: Record<string, string>) => void;
+  handleUpdateEvidence: (txId: string, url: string) => void;
+  handleDeleteTransaction: (txId: string) => void;
+  riskPage: number;
+  setRiskPage: (page: number | ((prev: number) => number)) => void;
+  totalRiskPages: number;
+  fmt: (val: any) => string;
+  getHealthScoreColor: (score: number) => string;
+  getRiskLevelBadge: (level: string) => React.ReactNode;
 }
 
 export default function ComplianceTab({
- session,
- healthMetrics,
- riskLogs,
- paginatedRiskLogs,
- riskNote,
- setRiskNote,
- handleResolveRisk,
- riskPage,
- setRiskPage,
- totalRiskPages,
- fmt,
- getHealthScoreColor,
- getRiskLevelBadge
+  session,
+  healthMetrics,
+  riskLogs,
+  paginatedRiskLogs,
+  riskNote,
+  setRiskNote,
+  handleResolveRisk,
+  evidenceUrls,
+  setEvidenceUrls,
+  handleUpdateEvidence,
+  handleDeleteTransaction,
+  riskPage,
+  setRiskPage,
+  totalRiskPages,
+  fmt,
+  getHealthScoreColor,
+  getRiskLevelBadge
 }: ComplianceTabProps) {
  return (
  <div className="space-y-6">
@@ -148,23 +156,107 @@ export default function ComplianceTab({
  </div>
 
  {['pengurus', 'ketua'].includes(session.role) && (
- <div className="pt-2 border-t border-dashed border-stone-200 space-y-3">
- <input
- type="text"
- placeholder="Masukkan catatan resolusi tindak lanjut..."
- value={riskNote[log.id] || ''}
- onChange={(e) => setRiskNote({ ...riskNote, [log.id]: e.target.value })}
- className="w-full p-2.5 bg-white border border-stone-200 rounded-xl text-xs focus:outline-none"
- />
- <div className="flex justify-end">
- <button
- onClick={() => handleResolveRisk(log.id)}
- className="py-2 px-5 bg-[#548C2F] hover:bg-[#427223] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/20 cursor-pointer"
- >
- Tandai Selesai ditindaklanjuti
- </button>
- </div>
- </div>
+    <div className="pt-3 border-t border-dashed border-stone-200 space-y-4">
+      {/* Opsi 1: Perbarui Bukti Nota Fisik (Jika pelanggaran bukti nota) */}
+      {log.rule_code === 'R01_NO_EVIDENCE' && (
+        <div className="p-3 bg-[#F1F7EA] border border-[#C7DDAE] rounded-xl space-y-2">
+          <span className="text-[10px] font-black text-[#3F6B24] uppercase tracking-wider block">
+            Opsi A: Ambil Foto Nota (Kamera Langsung - Proteksi Galeri)
+          </span>
+          
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            id={`compliance-camera-${tx.id}`}
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setEvidenceUrls({ ...evidenceUrls, [tx.id]: reader.result as string });
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+          />
+
+          {!evidenceUrls[tx.id] ? (
+            <label
+              htmlFor={`compliance-camera-${tx.id}`}
+              className="flex items-center justify-center gap-2 p-4 border border-dashed border-[#548C2F]/50 hover:border-[#548C2F] bg-white hover:bg-stone-50 rounded-xl cursor-pointer text-xs transition-all text-center"
+            >
+              <span>📸</span>
+              <span className="font-bold text-stone-750">Ambil Foto Nota Sekarang</span>
+            </label>
+          ) : (
+            <div className="space-y-2">
+              <div className="relative aspect-video max-w-xs overflow-hidden rounded-xl border border-stone-200 bg-stone-100 flex items-center justify-center mx-auto">
+                <img
+                  src={evidenceUrls[tx.id]}
+                  alt="Preview Nota"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEvidenceUrls({ ...evidenceUrls, [tx.id]: '' })}
+                  className="flex-1 py-2 px-3 bg-stone-100 hover:bg-stone-200 text-stone-750 text-[10px] font-black uppercase tracking-wider rounded-lg border border-stone-250 transition-all text-center"
+                >
+                  Ulangi Foto
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUpdateEvidence(tx.id, evidenceUrls[tx.id])}
+                  className="flex-1 py-2 px-3 bg-[#548C2F] hover:bg-[#427223] text-white text-[10px] font-black uppercase tracking-wider rounded-lg shadow border border-[#C7DDAE]/30 transition-all text-center"
+                >
+                  Kirim &amp; Re-Audit
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Opsi 2: Resolusi Catatan (Untuk pelanggaran umum) */}
+      <div className="p-3 bg-stone-100/50 border border-stone-200 rounded-xl space-y-2">
+        <span className="text-[10px] font-black text-stone-550 uppercase tracking-wider block">
+          Opsi {log.rule_code === 'R01_NO_EVIDENCE' ? 'B' : 'A'}: Selesaikan dengan Catatan Resolusi
+        </span>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Masukkan catatan tindakan penyelesaian regulasi..."
+            value={riskNote[log.id] || ''}
+            onChange={(e) => setRiskNote({ ...riskNote, [log.id]: e.target.value })}
+            className="flex-1 p-2 bg-white border border-stone-200 rounded-lg text-xs focus:outline-none font-medium"
+          />
+          <button
+            onClick={() => handleResolveRisk(log.id)}
+            className="py-2 px-4 bg-[#548C2F] hover:bg-[#427223] text-white text-[10px] font-black uppercase tracking-wider rounded-lg shadow border border-[#F9A620]/20 cursor-pointer whitespace-nowrap"
+          >
+            Tandai Selesai
+          </button>
+        </div>
+      </div>
+
+      {/* Opsi 3: Batalkan & Hapus Transaksi Pelanggar */}
+      {['draft', 'menunggu_approval', 'ditolak'].includes(tx.status) && (
+        <div className="flex justify-between items-center bg-red-50/50 border border-red-150 p-3 rounded-xl">
+          <div className="text-[10px] font-bold text-red-750">
+            Opsi {log.rule_code === 'R01_NO_EVIDENCE' ? 'C' : 'B'}: Batalkan transaksi untuk menghapus pelanggaran
+          </div>
+          <button
+            onClick={() => handleDeleteTransaction(tx.id)}
+            className="py-1.5 px-3 bg-red-100 hover:bg-red-200 text-red-700 text-[10px] font-black uppercase tracking-wider rounded-lg border border-red-200 cursor-pointer whitespace-nowrap"
+          >
+            Batalkan Transaksi
+          </button>
+        </div>
+      )}
+    </div>
  )}
  </div>
  );
