@@ -1,0 +1,206 @@
+import React from 'react';
+import { Sparkles } from 'lucide-react';
+
+interface ComplianceTabProps {
+  session: any;
+  healthMetrics: any;
+  riskLogs: any[];
+  paginatedRiskLogs: any[];
+  riskNote: Record<string, string>;
+  setRiskNote: (val: Record<string, string>) => void;
+  handleResolveRisk: (id: string) => void;
+  riskPage: number;
+  setRiskPage: (page: number | ((prev: number) => number)) => void;
+  totalRiskPages: number;
+  fmt: (val: any) => string;
+  getHealthScoreColor: (score: number) => string;
+  getRiskLevelBadge: (level: string) => React.ReactNode;
+}
+
+export default function ComplianceTab({
+  session,
+  healthMetrics,
+  riskLogs,
+  paginatedRiskLogs,
+  riskNote,
+  setRiskNote,
+  handleResolveRisk,
+  riskPage,
+  setRiskPage,
+  totalRiskPages,
+  fmt,
+  getHealthScoreColor,
+  getRiskLevelBadge
+}: ComplianceTabProps) {
+  return (
+    <div className="space-y-6">
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* 1. Kesehatan Kas Card */}
+        <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4">
+          <h3 className="text-xs font-black text-stone-500 uppercase tracking-wider">
+            I. Kesehatan Kas
+          </h3>
+          <div className="py-2">
+            <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_kas)}`}>
+              {healthMetrics.kesehatan_kas}%
+            </div>
+            <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+              Mengukur kesehatan likuiditas, ketiadaan kas defisit, kelengkapan bukti nota belanja, & wajaran transaksi.
+            </div>
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+            <div 
+              className={`h-full rounded-full transition-all duration-500 ${
+                healthMetrics.kesehatan_kas >= 80 ? 'bg-green-600' :
+                healthMetrics.kesehatan_kas >= 50 ? 'bg-amber-500' : 'bg-red-500'
+              }`}
+              style={{ width: `${healthMetrics.kesehatan_kas}%` }}
+            />
+          </div>
+        </div>
+
+        {/* 2. Kepatuhan Hukum Card */}
+        <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4">
+          <h3 className="text-xs font-black text-stone-500 uppercase tracking-wider">
+            II. Kepatuhan Regulasi
+          </h3>
+          <div className="py-2">
+            <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kepatuhan)}`}>
+              {healthMetrics.kepatuhan}%
+            </div>
+            <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+              Kepatuhan batas pagu, tenor pinjaman, peruntukan Dana Desa, verifikator ganda, & Rapat Anggota Tahunan (RAT).
+            </div>
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+            <div 
+              className={`h-full rounded-full transition-all duration-500 ${
+                healthMetrics.kepatuhan >= 80 ? 'bg-green-600' :
+                healthMetrics.kepatuhan >= 50 ? 'bg-amber-500' : 'bg-red-500'
+              }`}
+              style={{ width: `${healthMetrics.kepatuhan}%` }}
+            />
+          </div>
+        </div>
+
+        {/* 3. Kesehatan Koperasi Card */}
+        <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm text-center space-y-4 ring-2 ring-[#F9A620]/40 relative overflow-hidden">
+          <div className="absolute right-0 top-0 w-16 h-16 bg-[#F9A620]/10 rounded-bl-full pointer-events-none" />
+          <h3 className="text-xs font-black text-[#F9A620] uppercase tracking-wider flex items-center justify-center gap-1">
+            <Sparkles className="w-3.5 h-3.5" />
+            III. Kesehatan Koperasi
+          </h3>
+          <div className="py-2">
+            <div className={`text-4xl font-black font-mono ${getHealthScoreColor(healthMetrics.kesehatan_koperasi)}`}>
+              {healthMetrics.kesehatan_koperasi}%
+            </div>
+            <div className="mt-2 text-[10px] text-stone-500 leading-relaxed max-w-xs mx-auto">
+              Indeks Komposit: 40% Kesehatan Kas + 40% Kepatuhan + 20% Partisipasi & Keaktifan Warga ({healthMetrics.partisipasi_anggota}%).
+            </div>
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full bg-stone-100 dark:bg-stone-850 h-2 rounded-full overflow-hidden">
+            <div 
+              className={`h-full rounded-full transition-all duration-500 ${
+                healthMetrics.kesehatan_koperasi >= 80 ? 'bg-green-600' :
+                healthMetrics.kesehatan_koperasi >= 50 ? 'bg-amber-500' : 'bg-red-500'
+              }`}
+              style={{ width: `${healthMetrics.kesehatan_koperasi}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+        <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+          Temuan Pelanggaran Regulasi Terdeteksi ({riskLogs.length})
+        </h3>
+
+        <div className="space-y-6">
+          {paginatedRiskLogs.map((log) => {
+            const tx = log.transaksi_keuangan;
+            return (
+              <div key={log.id} className="p-4 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl space-y-3.5 animate-fade-in-up">
+                <div className="flex justify-between items-start flex-wrap gap-2">
+                  <div>
+                    <span className="font-mono text-[9px] font-black text-amber-700 bg-amber-50 dark:bg-amber-950/20 border border-amber-250 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      {log.rule_code}
+                    </span>
+                    <h4 className="mt-3 text-xs font-extrabold text-stone-800 dark:text-stone-200 leading-relaxed">
+                      {log.message}
+                    </h4>
+                  </div>
+                  {getRiskLevelBadge(log.risk_level)}
+                </div>
+
+                <div className="text-xs text-stone-500 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-4 rounded-xl space-y-1">
+                  <div>
+                    <strong>Transaksi:</strong> {tx.description}
+                  </div>
+                  {session.role !== 'pendamping' && (
+                    <div>
+                      <strong>Nominal & Tanggal:</strong> <span className="font-mono font-bold text-stone-900 dark:text-white">{fmt(tx.amount)}</span> &bull; {tx.transaction_date}
+                    </div>
+                  )}
+                </div>
+
+                {['pengurus', 'ketua'].includes(session.role) && (
+                  <div className="pt-2 border-t border-dashed border-stone-200 dark:border-stone-800 space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Masukkan catatan resolusi tindak lanjut..."
+                      value={riskNote[log.id] || ''}
+                      onChange={(e) => setRiskNote({ ...riskNote, [log.id]: e.target.value })}
+                      className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl text-xs focus:outline-none"
+                    />
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => handleResolveRisk(log.id)}
+                        className="py-2 px-5 bg-[#548C2F] hover:bg-[#427223] text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow border border-[#F9A620]/20 cursor-pointer"
+                      >
+                        Tandai Selesai ditindaklanjuti
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          
+          {totalRiskPages > 1 && (
+            <div className="flex items-center justify-between pt-4 border-t border-stone-100 dark:border-stone-900 mt-4 text-xs">
+              <span className="text-stone-400 font-semibold">
+                Halaman {riskPage} dari {totalRiskPages || 1}
+              </span>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setRiskPage(p => Math.max(1, p - 1))}
+                  disabled={riskPage === 1}
+                  className="py-1 px-3 rounded-lg border border-stone-200 dark:border-stone-850 hover:bg-stone-50 dark:hover:bg-stone-900 font-bold disabled:opacity-40"
+                >
+                  Sebelumnya
+                </button>
+                <button
+                  onClick={() => setRiskPage(p => Math.min(totalRiskPages, p + 1))}
+                  disabled={riskPage === totalRiskPages}
+                  className="py-1 px-3 rounded-lg border border-stone-200 dark:border-stone-850 hover:bg-stone-50 dark:hover:bg-stone-900 font-bold disabled:opacity-40"
+                >
+                  Selanjutnya
+                </button>
+              </div>
+            </div>
+          )}
+
+          {riskLogs.length === 0 && (
+            <div className="text-center py-8 text-stone-400 font-bold text-xs">
+              Selamat! Tidak ada pelanggaran regulasi/kepatuhan terdeteksi saat ini.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

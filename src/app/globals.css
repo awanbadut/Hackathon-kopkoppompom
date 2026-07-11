@@ -24,6 +24,13 @@
   --warning: #AAB03C;
   --danger: #dc2626;
   --text-muted: #5B6470;
+
+  --financial-positive: #15803d;
+  --financial-negative: #dc2626;
+  --financial-label: #57534e;
+  --financial-label-strong: #1c1917;
+  --financial-panel: #f7f3ea;
+
   --shadow-card: 0 1px 3px rgba(16, 73, 17, 0.04), 0 6px 24px rgba(16, 73, 17, 0.03);
   --shadow-elevated: 0 4px 16px rgba(16, 73, 17, 0.06), 0 12px 48px rgba(16, 73, 17, 0.04);
   --shadow-glow: 0 0 0 1px rgba(249, 166, 32, 0.1), 0 4px 24px rgba(249, 166, 32, 0.08);
@@ -45,15 +52,19 @@
     --warning: #AAB03C;
     --danger: #f87171;
     --text-muted: #a8a29e;
+
+    --financial-positive: #34d399;
+    --financial-negative: #f87171;
+    --financial-label: #d6d3d1;
+    --financial-label-strong: #fafaf9;
+    --financial-panel: #2b2723;
+
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 6px 24px rgba(0, 0, 0, 0.15);
     --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.3), 0 12px 48px rgba(0, 0, 0, 0.2);
     --shadow-glow: 0 0 0 1px rgba(249, 166, 32, 0.15), 0 4px 24px rgba(249, 166, 32, 0.08);
   }
 }
 
-/* =========================================
-   BASE STYLES
-   ========================================= */
 html {
   scroll-behavior: smooth;
 }
@@ -71,9 +82,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-plus-jakarta-sans), sans-serif;
 }
 
-/* =========================================
-   PREMIUM ANIMATIONS
-   ========================================= */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -178,58 +186,19 @@ h1, h2, h3, h4, h5, h6 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================
-   ANIMATION UTILITY CLASSES
-   ========================================= */
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s ease-out both;
-}
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out both; }
+.animate-fade-in { animation: fadeIn 0.4s ease-out both; }
+.animate-slide-in-right { animation: slideInRight 0.5s ease-out both; }
+.animate-slide-in-left { animation: slideInLeft 0.5s ease-out both; }
+.animate-scale-in { animation: scaleIn 0.4s ease-out both; }
+.animate-toast-in { animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-modal-overlay { animation: modalOverlayIn 0.25s ease-out both; }
+.animate-modal-content { animation: modalContentIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+.animate-float { animation: floatSlow 3s ease-in-out infinite; }
+.animate-progress-fill { animation: progressFill 1s ease-out both; }
+.animate-count-up { animation: countUp 0.6s ease-out both; }
 
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out both;
-}
-
-.animate-slide-in-right {
-  animation: slideInRight 0.5s ease-out both;
-}
-
-.animate-slide-in-left {
-  animation: slideInLeft 0.5s ease-out both;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.4s ease-out both;
-}
-
-.animate-toast-in {
-  animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-modal-overlay {
-  animation: modalOverlayIn 0.25s ease-out both;
-}
-
-.animate-modal-content {
-  animation: modalContentIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: floatSlow 3s ease-in-out infinite;
-}
-
-.animate-progress-fill {
-  animation: progressFill 1s ease-out both;
-}
-
-.animate-count-up {
-  animation: countUp 0.6s ease-out both;
-}
-
-/* Staggered animations */
 .stagger-1 { animation-delay: 0.05s; }
 .stagger-2 { animation-delay: 0.1s; }
 .stagger-3 { animation-delay: 0.15s; }
@@ -237,9 +206,6 @@ h1, h2, h3, h4, h5, h6 {
 .stagger-5 { animation-delay: 0.25s; }
 .stagger-6 { animation-delay: 0.3s; }
 
-/* =========================================
-   PREMIUM CARD SYSTEM
-   ========================================= */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -253,13 +219,8 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--accent);
 }
 
-.card-interactive:hover {
-  transform: translateY(-2px);
-}
-
-.card-glow {
-  box-shadow: var(--shadow-glow);
-}
+.card-interactive:hover { transform: translateY(-2px); }
+.card-glow { box-shadow: var(--shadow-glow); }
 
 .card-glass {
   background: rgba(255, 255, 255, 0.6);
@@ -275,9 +236,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* =========================================
-   PREMIUM BUTTONS
-   ========================================= */
 .btn-primary {
   background: linear-gradient(135deg, #14532d 0%, #166534 100%);
   color: white;
@@ -388,31 +346,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-1px);
 }
 
-/* =========================================
-   PREMIUM INPUTS
-   ========================================= */
-.input-field {
-  width: 100%;
-  padding: 0.65rem 0.875rem;
-  background: var(--card-bg);
-  border: 1.5px solid var(--border-color);
-  border-radius: 0.875rem;
-  font-size: 0.8125rem;
-  color: var(--foreground);
-  transition: all 0.25s ease;
-  outline: none;
-}
-
-.input-field:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
-.input-field::placeholder {
-  color: var(--text-muted);
-  opacity: 0.6;
-}
-
+.input-field,
 .select-field {
   width: 100%;
   padding: 0.65rem 0.875rem;
@@ -423,6 +357,17 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--foreground);
   transition: all 0.25s ease;
   outline: none;
+}
+
+.input-field:focus,
+.select-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.input-field::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+.select-field {
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2378716c' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
@@ -431,19 +376,11 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 2.5rem;
 }
 
-.select-field:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
 textarea.input-field {
   resize: none;
   min-height: 4rem;
 }
 
-/* =========================================
-   LABEL TYPOGRAPHY
-   ========================================= */
 .label {
   display: block;
   font-size: 0.625rem;
@@ -454,9 +391,6 @@ textarea.input-field {
   margin-bottom: 0.375rem;
 }
 
-/* =========================================
-   BADGE SYSTEM
-   ========================================= */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -470,67 +404,20 @@ textarea.input-field {
   border: 1px solid;
 }
 
-.badge-success {
-  background: #f0fdf4;
-  color: #15803d;
-  border-color: #bbf7d0;
-}
-
-.badge-danger {
-  background: #fef2f2;
-  color: #dc2626;
-  border-color: #fecaca;
-}
-
-.badge-warning {
-  background: #fffbeb;
-  color: #b45309;
-  border-color: #fde68a;
-}
-
-.badge-info {
-  background: #eff6ff;
-  color: #2563eb;
-  border-color: #bfdbfe;
-}
-
-.badge-gold {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  color: #92400e;
-  border-color: #fbbf24;
-}
+.badge-success { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+.badge-danger { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.badge-warning { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.badge-info { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.badge-gold { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; border-color: #fbbf24; }
 
 @media (prefers-color-scheme: dark) {
-  .badge-success {
-    background: rgba(34, 197, 94, 0.1);
-    color: #4ade80;
-    border-color: rgba(34, 197, 94, 0.2);
-  }
-  .badge-danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
-    border-color: rgba(239, 68, 68, 0.2);
-  }
-  .badge-warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: #fbbf24;
-    border-color: rgba(245, 158, 11, 0.2);
-  }
-  .badge-info {
-    background: rgba(37, 99, 235, 0.1);
-    color: #60a5fa;
-    border-color: rgba(37, 99, 235, 0.2);
-  }
-  .badge-gold {
-    background: rgba(202, 138, 4, 0.1);
-    color: #fbbf24;
-    border-color: rgba(202, 138, 4, 0.2);
-  }
+  .badge-success { background: rgba(34, 197, 94, 0.1); color: #4ade80; border-color: rgba(34, 197, 94, 0.2); }
+  .badge-danger { background: rgba(239, 68, 68, 0.1); color: #f87171; border-color: rgba(239, 68, 68, 0.2); }
+  .badge-warning { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border-color: rgba(245, 158, 11, 0.2); }
+  .badge-info { background: rgba(37, 99, 235, 0.1); color: #60a5fa; border-color: rgba(37, 99, 235, 0.2); }
+  .badge-gold { background: rgba(202, 138, 4, 0.1); color: #fbbf24; border-color: rgba(202, 138, 4, 0.2); }
 }
 
-/* =========================================
-   METRIC / STAT CARDS
-   ========================================= */
 .metric-card {
   position: relative;
   overflow: hidden;
@@ -539,22 +426,15 @@ textarea.input-field {
 .metric-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.metric-card:hover::before {
-  opacity: 1;
-}
+.metric-card:hover::before { opacity: 1; }
 
-/* =========================================
-   PAGINATION COMPONENT
-   ========================================= */
 .pagination {
   display: flex;
   align-items: center;
@@ -596,9 +476,6 @@ textarea.input-field {
   cursor: not-allowed;
 }
 
-/* =========================================
-   TABLE STYLES
-   ========================================= */
 .premium-table {
   width: 100%;
   border-collapse: separate;
@@ -635,9 +512,6 @@ textarea.input-field {
   vertical-align: top;
 }
 
-/* =========================================
-   PROGRESS BAR
-   ========================================= */
 .progress-bar {
   width: 100%;
   height: 0.5rem;
@@ -653,9 +527,6 @@ textarea.input-field {
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =========================================
-   TOOLTIP
-   ========================================= */
 [data-tooltip] {
   position: relative;
 }
@@ -684,30 +555,15 @@ textarea.input-field {
   transform: translateX(-50%) scale(1);
 }
 
-/* =========================================
-   SCROLLBAR STYLING
-   ========================================= */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-
-/* =========================================
-   STEMPEL (Legacy Support)
-   ========================================= */
 .stempel {
   position: relative;
   display: inline-flex;
@@ -730,9 +586,6 @@ textarea.input-field {
 .stempel-ditolak { color: var(--danger); border-color: var(--danger); }
 .stempel-menunggu { color: var(--warning); border-color: var(--warning); }
 
-/* =========================================
-   GLASSMORPHISM NAVIGATION
-   ========================================= */
 .glass-nav {
   background-color: rgba(247, 246, 240, 0.85);
   backdrop-filter: blur(16px) saturate(180%);
@@ -747,9 +600,6 @@ textarea.input-field {
   }
 }
 
-/* =========================================
-   SKELETON LOADING
-   ========================================= */
 .skeleton {
   background: linear-gradient(90deg, var(--border-color) 25%, var(--border-color-subtle) 37%, var(--border-color) 63%);
   background-size: 400% 100%;
@@ -757,9 +607,6 @@ textarea.input-field {
   border-radius: 0.5rem;
 }
 
-/* =========================================
-   RESPONSIVE SIDEBAR NAV
-   ========================================= */
 .sidebar-link {
   display: flex;
   align-items: center;
@@ -798,9 +645,6 @@ textarea.input-field {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* =========================================
-   NOTIFICATION DOT
-   ========================================= */
 .notification-dot {
   width: 1.25rem;
   height: 1.25rem;
@@ -816,9 +660,6 @@ textarea.input-field {
   animation: pulseGlow 2s ease-in-out infinite;
 }
 
-/* =========================================
-   SECTION HEADING
-   ========================================= */
 .section-heading {
   font-size: 0.875rem;
   font-weight: 900;
@@ -840,9 +681,6 @@ textarea.input-field {
   margin: 0;
 }
 
-/* =========================================
-   EMPTY STATE
-   ========================================= */
 .empty-state {
   padding: 2rem 1rem;
   text-align: center;
