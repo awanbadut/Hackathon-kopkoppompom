@@ -29,9 +29,14 @@ export default function LoginPage() {
     code: string;
   } | null>(null);
 
-  // NIK Validation Tool state
-  const [nikInput, setNikInput] = useState('');
-  const [nikResult, setNikResult] = useState<ParsedNIK | null>(null);
+  // Rule-Based Compliance Simulator state
+  const [simTxType, setSimTxType] = useState('simpanan_wajib');
+  const [simNominal, setSimNominal] = useState('10000000');
+  const [simResult, setSimResult] = useState<{
+    status: 'blocked' | 'warning' | 'allowed';
+    pasal: string;
+    message: string;
+  } | null>(null);
 
   const demoAccounts = [
     { role: 'Ketua Koperasi', phone: '081200000001', icon: Shield, badge: 'ADMIN' },
@@ -91,13 +96,54 @@ export default function LoginPage() {
     });
   };
 
-  const handleNikCheck = (val: string) => {
-    setNikInput(val);
-    if (val.trim().length >= 6) {
-      const parsed = parseNIK(val);
-      setNikResult(parsed);
-    } else {
-      setNikResult(null);
+  const handleSimulateCompliance = () => {
+    const nominal = Number(simNominal) || 0;
+    if (simTxType === 'simpanan_wajib') {
+      setSimResult({
+        status: 'blocked',
+        pasal: 'Pasal 41 UU Koperasi No. 25/1992',
+        message: 'Pencairan Simpanan Wajib DITOLAK. Simpanan pokok & wajib bersifat permanen dan hanya dapat dicairkan apabila anggota keluar dari keanggotaan koperasi.'
+      });
+    } else if (simTxType === 'pinjaman') {
+      if (nominal > 50000000) {
+        setSimResult({
+          status: 'blocked',
+          pasal: 'Regulasi PMK 15/PMK.07/2026',
+          message: `Pemberian Kredit sebesar Rp ${nominal.toLocaleString('id-ID')} DIBLOKIR. Aturan PMK membatasi pinjaman modal usaha perorangan maksimal Rp50.000.000 untuk menekan risiko kredit macet.`
+        });
+      } else {
+        setSimResult({
+          status: 'allowed',
+          pasal: 'Regulasi PMK 15/PMK.07/2026',
+          message: `Pemberian Kredit sebesar Rp ${nominal.toLocaleString('id-ID')} DISETUJUI. Nominal berada di bawah batas maksimum kementerian dan memenuhi rasio likuiditas.`
+        });
+      }
+    } else if (simTxType === 'pengeluaran_no_evidence') {
+      if (nominal > 50000000) {
+        setSimResult({
+          status: 'blocked',
+          pasal: 'Pasal 34 UU Koperasi & PMK 7/2026',
+          message: `Transaksi Pengeluaran kas sebesar Rp ${nominal.toLocaleString('id-ID')} DIBLOKIR keras karena nominal melebihi Rp5.000.000 dan tidak melampirkan invoice/nota fisik.`
+        });
+      } else if (nominal > 5000000) {
+        setSimResult({
+          status: 'warning',
+          pasal: 'Pasal 34 UU Koperasi & AD Koperasi',
+          message: `PENGASIH RISIKO TINGGI (BENDERA MERAH). Transaksi pengeluaran kas sebesar Rp ${nominal.toLocaleString('id-ID')} ditahan sementara menunggu otorisasi khusus dari Ketua Koperasi karena tidak disertai bukti fisik.`
+        });
+      } else {
+        setSimResult({
+          status: 'allowed',
+          pasal: 'Pasal 34 UU Koperasi & AD Koperasi',
+          message: `Transaksi Pengeluaran kas sebesar Rp ${nominal.toLocaleString('id-ID')} DISETUJUI. Pengeluaran kecil di bawah Rp5.000.000 diperbolehkan dengan pelaporan standar.`
+        });
+      }
+    } else if (simTxType === 'simpanan_sukarela') {
+      setSimResult({
+        status: 'allowed',
+        pasal: 'Pasal 41 UU Koperasi No. 25/1992',
+        message: `Setoran Simpanan Sukarela sebesar Rp ${nominal.toLocaleString('id-ID')} DISETUJUI. Tabungan sukarela bersifat likuid, tidak dikunci, dan dapat ditarik kembali oleh anggota kapan saja.`
+      });
     }
   };
 
@@ -122,7 +168,7 @@ export default function LoginPage() {
           <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-stone-500">
             <a href="#fitur" className="hover:text-[#548C2F] transition-all">Fitur Unggulan</a>
             <a href="#regulasi" className="hover:text-[#548C2F] transition-all">Dasar Hukum</a>
-            <a href="#kalkulator" className="hover:text-[#548C2F] transition-all">Uji NIK/KTP</a>
+            <a href="#kalkulator" className="hover:text-[#548C2F] transition-all">Uji Kepatuhan</a>
             <a href="#statistik" className="hover:text-[#548C2F] transition-all">Statistik Desa</a>
           </nav>
 
@@ -175,7 +221,7 @@ export default function LoginPage() {
                 href="#kalkulator"
                 className="py-3.5 px-8 bg-white hover:bg-stone-50 text-stone-700 text-xs font-black uppercase tracking-wider rounded-xl shadow-sm border border-stone-250 transition-all text-center"
               >
-                Coba Kalkulator NIK
+                Simulasi Kepatuhan
               </a>
             </div>
 
@@ -259,6 +305,128 @@ export default function LoginPage() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          CASE STUDY SECTION: PAK BUDI & RULE-BASED ENGINE
+          ═══════════════════════════════════════════════ */}
+      <section className="py-20 bg-stone-50 border-b border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+          
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="badge badge-danger" style={{ background: 'rgba(239,68,68,0.1)', color: '#dc2626', borderColor: 'rgba(239,68,68,0.2)' }}>
+              ⚠️ ANALISIS PERSONA & STUDI KASUS HUKUM
+            </span>
+            <h2 className="text-3xl font-black text-[#104911] tracking-tight leading-snug">
+              Niat Baik Saja Tidak Cukup: Kisah Pelanggaran Hukum Pak Budi
+            </h2>
+            <p className="text-stone-500 text-xs font-medium leading-relaxed">
+              Ketidaktahuan pengurus terhadap aturan regulasi yang rumit sering kali menjadi penyebab utama pelanggaran hukum administrasi hingga risiko tindak pidana korupsi.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            {/* Left: The Problem (Pak Budi's Persona) */}
+            <div className="lg:col-span-5 bg-white border border-red-200 p-8 rounded-3xl shadow-sm flex flex-col justify-between space-y-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-xl pointer-events-none" />
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-700 text-sm">
+                    PB
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black text-stone-850">Pak Budi (52 Tahun)</h4>
+                    <span className="text-[9px] uppercase tracking-wider font-extrabold text-red-650">Bendahara Koperasi Desa Sukamakmur</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3.5 text-[11px] leading-relaxed text-stone-600 font-medium">
+                  <div className="p-3 bg-red-50/40 rounded-xl border border-red-100">
+                    <span className="font-extrabold text-red-800 block mb-1">💼 Tindakan Yang Dilakukan:</span>
+                    1. Menyetujui pencairan <strong>Simpanan Wajib</strong> anggota sebesar Rp10.000.000 untuk membantu biaya darurat medis warga.
+                    <br className="mt-1" />
+                    2. Menyalurkan kredit usaha sebesar <strong>Rp65.000.000</strong> kepada pedagang lokal menggunakan permodalan sisa Dana Desa.
+                  </div>
+
+                  <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
+                    <span className="font-extrabold text-stone-800 block mb-1">⚖️ Pelanggaran Hukum (Unintentional):</span>
+                    &bull; <strong>Pasal 41 UU Koperasi No. 25/1992:</strong> Simpanan pokok &amp; wajib dilarang keras dicairkan selama masih aktif menjadi anggota.
+                    <br />
+                    &bull; <strong>PMK 15/PMK.07/2026:</strong> Batas kredit maksimal dari Dana Desa dibatasi Rp50.000.000 per anggota.
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-red-50 border border-red-200 rounded-2xl">
+                <span className="text-[10px] font-black text-red-800 uppercase tracking-wider block mb-1">🚨 Konsekuensi Hukum:</span>
+                <p className="text-[10px] text-red-750 font-bold leading-normal">
+                  Saat audit Kemenkop, Koperasi dinyatakan tidak patuh regulasi. Bantuan permodalan dibekukan, dan Pak Budi dituduh melakukan maladministrasi anggaran Dana Desa (Risiko Tindak Pidana Tipikor).
+                </p>
+              </div>
+            </div>
+
+            {/* Middle Indicator */}
+            <div className="lg:col-span-2 flex lg:flex-col items-center justify-center gap-3">
+              <div className="h-0.5 w-8 lg:h-12 lg:w-0.5 bg-stone-300" />
+              <span className="text-[9px] font-black text-[#F9A620] uppercase bg-[#FFFBEA] px-2.5 py-1 rounded-full border border-[#FFE79A] tracking-wider text-center">
+                Solusi AmanDes
+              </span>
+              <div className="h-0.5 w-8 lg:h-12 lg:w-0.5 bg-stone-300" />
+            </div>
+
+            {/* Right: The Solution (AmanDes Rule-Based Engine) */}
+            <div className="lg:col-span-5 bg-white border border-[#C7DDAE] p-8 rounded-3xl shadow-sm flex flex-col justify-between space-y-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#548C2F]/5 rounded-full blur-xl pointer-events-none" />
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-[#548C2F]/10 flex items-center justify-center border border-[#548C2F]/20 text-[#548C2F]">
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black text-stone-850">AmanDes Rule-Based Engine</h4>
+                    <span className="text-[9px] uppercase tracking-wider font-extrabold text-[#3F6B24]">Pengawal Hukum Terotomasi</span>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-stone-550 leading-relaxed font-medium">
+                  AmanDes menanamkan langsung regulasi UU dan PMK ke dalam sistem pembukuan transaksi secara real-time. Mesin aturan (Rule Engine) kami secara otomatis menganalisis draft sebelum transaksi disetujui.
+                </p>
+
+                <div className="space-y-3 pt-2 text-[10px] font-bold text-stone-750">
+                  <div className="flex items-start gap-2.5">
+                    <span className="w-4 h-4 rounded-full bg-[#548C2F] text-white flex items-center justify-center font-mono text-[9px] mt-0.5">1</span>
+                    <p className="flex-1">
+                      <strong>Deteksi Instan:</strong> Saat Pak Budi menginput pencairan simpanan wajib atau kredit Rp65 Juta, sistem membaca kode pos dan tipe transaksi.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="w-4 h-4 rounded-full bg-[#548C2F] text-white flex items-center justify-center font-mono text-[9px] mt-0.5">2</span>
+                    <p className="flex-1">
+                      <strong>Pemblokiran Otomatis:</strong> Transaksi berstatus draft langsung diberi bendera peringatan risiko tinggi (R03 &amp; R04) dan <strong>dikunci otomatis</strong> dari persetujuan.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="w-4 h-4 rounded-full bg-[#548C2F] text-white flex items-center justify-center font-mono text-[9px] mt-0.5">3</span>
+                    <p className="flex-1">
+                      <strong>Rekomendasi Tindakan:</strong> Sistem memberikan solusi alternatif patuh hukum (misal: memandu anggota melakukan penarikan sukarela saja).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-[#F1F7EA] border border-[#C7DDAE] rounded-2xl flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-[#3F6B24] shrink-0" />
+                <span className="text-[9px] text-[#3F6B24] font-black uppercase tracking-wider">
+                  Hasil Akhir: Koperasi Bebas Pelanggaran &amp; Pengurus Terlindungi
+                </span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -425,77 +593,79 @@ export default function LoginPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          NIK INTERACTIVE PARSER WIDGET SECTION
+          RULE-BASED COMPLIANCE SIMULATOR
           ═══════════════════════════════════════════════ */}
       <section id="kalkulator" className="py-20 bg-white border-b border-stone-200">
-        <div className="max-w-xl mx-auto px-6 space-y-8">
+        <div className="max-w-2xl mx-auto px-6 space-y-8">
           
           <div className="text-center space-y-3">
             <div className="w-12 h-12 rounded-2xl bg-[#548C2F]/10 text-[#548C2F] flex items-center justify-center border border-[#548C2F]/20 mx-auto">
               <Scale className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-black text-[#104911] tracking-tight">Kalkulator Kepatuhan & Uji NIK KTP</h3>
-            <p className="text-[11px] text-stone-500 max-w-sm mx-auto font-medium">
-              Koperasi wajib melakukan KYC dan mematuhi UU PDP. Uji 16 digit NIK Anda untuk mem-parse wilayah, jenis kelamin, dan tanggal lahir Anda secara instan.
+            <h3 className="text-xl font-black text-[#104911] tracking-tight">Kalkulator Kepatuhan &amp; Simulasi Transaksi (Rule-Based)</h3>
+            <p className="text-[11px] text-stone-555 max-w-md mx-auto font-medium">
+              Uji coba sistem pengawasan otomatis AmanDes. Simulasikan transaksi pencairan kas, pinjaman modal, atau penarikan wajib untuk melihat aturan hukum yang langsung memblokirnya jika terdeteksi melanggar.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl border border-stone-200 bg-stone-50/50 space-y-4">
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search className="w-4 h-4 text-stone-400" />
-              </span>
-              <input
-                type="text"
-                maxLength={16}
-                placeholder="Ketik 16 digit NIK KTP Anda..."
-                value={nikInput}
-                onChange={(e) => handleNikCheck(e.target.value)}
-                className="input-field pl-10 font-mono font-bold text-xs"
-              />
+          <div className="p-6 rounded-3xl border border-stone-200 bg-stone-50/50 space-y-4 text-xs font-semibold">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-stone-600">
+              <div>
+                <label className="block text-stone-500 mb-1.5 font-bold">Pilih Simulasi Transaksi</label>
+                <select
+                  value={simTxType}
+                  onChange={(e) => {
+                    setSimTxType(e.target.value);
+                    setSimResult(null);
+                  }}
+                  className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
+                >
+                  <option value="simpanan_wajib">Pencairan Simpanan Wajib Anggota (Pasal 41)</option>
+                  <option value="pinjaman">Pemberian Pinjaman Modal Usaha (PMK 15/2026)</option>
+                  <option value="pengeluaran_no_evidence">Pengeluaran Operasional Tanpa Bukti Nota (Pasal 34)</option>
+                  <option value="simpanan_sukarela">Setoran Simpanan Sukarela Anggota (Pasal 41)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-stone-500 mb-1.5 font-bold">Nominal Transaksi (Rp)</label>
+                <input
+                  type="number"
+                  placeholder="Masukkan nominal dalam Rupiah..."
+                  value={simNominal}
+                  onChange={(e) => {
+                    setSimNominal(e.target.value);
+                    setSimResult(null);
+                  }}
+                  className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none font-mono font-bold text-xs"
+                />
+              </div>
             </div>
 
-            {nikResult && (
+            <button
+              onClick={handleSimulateCompliance}
+              className="w-full py-3 bg-[#548C2F] hover:bg-[#427223] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md border border-[#F9A620]/20 transition-all cursor-pointer text-center block"
+            >
+              Jalankan Analisis Kepatuhan Hukum
+            </button>
+
+            {simResult && (
               <div className="animate-fade-in-up rounded-2xl p-4 bg-white border border-stone-200 space-y-2 text-xs">
-                {nikResult.isValid ? (
-                  <>
-                    <div className="flex items-center gap-1.5 text-[#3F6B24] font-black">
-                      <CheckCircle className="w-4 h-4" />
-                      NIK KTP Valid &amp; Lulus Verifikasi KYC
-                    </div>
-                    <dl className="grid grid-cols-2 gap-3 pt-2 text-[11px]">
-                      <div>
-                        <dt className="text-stone-400 font-medium">Provinsi</dt>
-                        <dd className="font-extrabold text-stone-800">{nikResult.provinsi}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-stone-400 font-medium">Kabupaten / Kota</dt>
-                        <dd className="font-extrabold text-stone-800">{nikResult.kabupaten}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-stone-400 font-medium">Kecamatan</dt>
-                        <dd className="font-extrabold text-stone-800">{nikResult.kecamatan}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-stone-400 font-medium">Jenis Kelamin</dt>
-                        <dd className="font-extrabold text-stone-800">{nikResult.jenisKelamin}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-stone-400 font-medium">Tanggal Lahir</dt>
-                        <dd className="font-extrabold text-[#104911] font-mono">{nikResult.tanggalLahir}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-stone-400 font-medium">Estimasi Umur</dt>
-                        <dd className="font-extrabold text-stone-850">{nikResult.umur} Tahun</dd>
-                      </div>
-                    </dl>
-                  </>
-                ) : (
-                  <div className="flex items-center gap-1.5 text-red-700 font-bold">
-                    <AlertCircle className="w-4 h-4" />
-                    {nikResult.error}
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase border ${
+                    simResult.status === 'blocked'
+                      ? 'bg-red-50 text-red-700 border-red-200'
+                      : simResult.status === 'warning'
+                        ? 'bg-[#FFFBEA] text-[#B36F0C] border-[#FFE79A]'
+                        : 'bg-[#F1F7EA] text-[#3F6B24] border-[#C7DDAE]'
+                  }`}>
+                    {simResult.status === 'blocked' ? '❌ DIBLOKIR OTOMATIS' : simResult.status === 'warning' ? '⚠️ TERTUNDA (RE-ROUTE)' : '✅ DIPERBOLEHKAN (AMAN)'}
+                  </span>
+                  <span className="font-extrabold text-[#F9A620]">{simResult.pasal}</span>
+                </div>
+                <p className="text-[11px] text-stone-550 leading-relaxed font-semibold pt-1">
+                  {simResult.message}
+                </p>
               </div>
             )}
           </div>
@@ -526,7 +696,7 @@ export default function LoginPage() {
             <div className="flex flex-col gap-2 font-bold text-stone-300">
               <a href="#fitur" className="hover:text-white transition-colors">Fitur Utama</a>
               <a href="#regulasi" className="hover:text-white transition-colors">Undang-Undang</a>
-              <a href="#kalkulator" className="hover:text-white transition-colors"> KYC NIK</a>
+              <a href="#kalkulator" className="hover:text-white transition-colors">Uji Kepatuhan</a>
             </div>
           </div>
 
