@@ -151,7 +151,7 @@ export default async function DashboardPage(props: {
   let riskLogs: any[] = [];
   if (session.koperasiRef) {
     const { rows } = await db.query(
-      `SELECT r.*, t.description, t.amount, t.transaction_date, t.koperasi_ref 
+      `SELECT r.*, t.description, t.amount, t.transaction_date, t.koperasi_ref, t.status 
        FROM ${p('risk_logs')} r 
        JOIN ${p('transaksi_keuangan')} t ON r.transaction_id = t.id 
        WHERE t.koperasi_ref = $1 AND r.resolved = false`,
@@ -160,9 +160,11 @@ export default async function DashboardPage(props: {
     riskLogs = rows.map(r => ({
       ...r,
       transaksi_keuangan: {
+        id: r.transaction_id,
         koperasi_ref: r.koperasi_ref,
         description: r.description,
         amount: r.amount,
+        status: r.status,
         transaction_date: r.transaction_date
       }
     }));
