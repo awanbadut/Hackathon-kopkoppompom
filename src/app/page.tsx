@@ -6,501 +6,768 @@ import { loginAction, requestOtpAction } from './actions';
 import { parseNIK } from '@/lib/nik-parser';
 import type { ParsedNIK } from '@/lib/nik-parser';
 import {
- Shield, KeyRound, Phone, ArrowRight, Lock, Users, Sparkles,
- MessageSquare, CheckCircle, AlertCircle, RefreshCw, Scale, Search, X, Landmark
+  Shield, KeyRound, Phone, ArrowRight, Lock, Users, Sparkles,
+  MessageSquare, CheckCircle, AlertCircle, RefreshCw, Scale, Search, X, Landmark,
+  TrendingUp, BookOpen, Vote, FileCheck, CheckCircle2, ChevronRight, HelpCircle
 } from 'lucide-react';
 
 export default function LoginPage() {
- const router = useRouter();
- const [phoneNumber, setPhoneNumber] = useState('');
- const [otp, setOtp] = useState('');
- const [error, setError] = useState<string | null>(null);
- const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
- // Dynamic OTP state
- const [otpSuccess, setOtpSuccess] = useState<string | null>(null);
- const [simulatedOtpMsg, setSimulatedOtpMsg] = useState<{
- visible: boolean;
- name: string;
- code: string;
- } | null>(null);
+  // Dialog State
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
- // NIK Validation Tool state
- const [nikInput, setNikInput] = useState('');
- const [nikResult, setNikResult] = useState<ParsedNIK | null>(null);
+  // Dynamic OTP state
+  const [otpSuccess, setOtpSuccess] = useState<string | null>(null);
+  const [simulatedOtpMsg, setSimulatedOtpMsg] = useState<{
+    visible: boolean;
+    name: string;
+    code: string;
+  } | null>(null);
 
- const demoAccounts = [
- { role: 'Ketua Koperasi', phone: '081200000001', icon: Shield, badge: 'ADMIN' },
- { role: 'Bendahara (Pengurus)', phone: '081200000002', icon: Landmark, badge: 'PENGURUS' },
- { role: 'Anggota Koperasi', phone: '081200000003', icon: Users, badge: 'ANGGOTA' },
- { role: 'Pendamping Kemenkop', phone: '081200000099', icon: Scale, badge: 'AUDITOR' },
- ];
+  // NIK Validation Tool state
+  const [nikInput, setNikInput] = useState('');
+  const [nikResult, setNikResult] = useState<ParsedNIK | null>(null);
 
- const handleDemoFill = (phone: string) => {
- setPhoneNumber(phone);
- setOtp('123456');
- setError(null);
- setOtpSuccess(null);
- setSimulatedOtpMsg(null);
- };
+  const demoAccounts = [
+    { role: 'Ketua Koperasi', phone: '081200000001', icon: Shield, badge: 'ADMIN' },
+    { role: 'Bendahara (Pengurus)', phone: '081200000002', icon: Landmark, badge: 'PENGURUS' },
+    { role: 'Anggota Koperasi', phone: '081200000003', icon: Users, badge: 'ANGGOTA' },
+    { role: 'Pendamping Kemenkop', phone: '081200000099', icon: Scale, badge: 'AUDITOR' },
+  ];
 
- const handleRequestOtp = async () => {
- setError(null);
- setOtpSuccess(null);
- setSimulatedOtpMsg(null);
+  const handleDemoFill = (phone: string) => {
+    setPhoneNumber(phone);
+    setOtp('123456');
+    setError(null);
+    setOtpSuccess(null);
+    setSimulatedOtpMsg(null);
+  };
 
- if (!phoneNumber || !phoneNumber.trim()) {
- setError('Masukkan nomor HP terlebih dahulu untuk meminta OTP.');
- return;
- }
+  const handleRequestOtp = async () => {
+    setError(null);
+    setOtpSuccess(null);
+    setSimulatedOtpMsg(null);
 
- startTransition(async () => {
- const res = await requestOtpAction(phoneNumber);
- if (res.error) {
- setError(res.error);
- } else if (res.success && res.otp) {
- setOtpSuccess('OTP berhasil dikirim via WhatsApp!');
- setSimulatedOtpMsg({
- visible: true,
- name: res.fullName || 'Anggota Koperasi',
- code: res.otp,
- });
- }
- });
- };
+    if (!phoneNumber || !phoneNumber.trim()) {
+      setError('Masukkan nomor HP terlebih dahulu untuk meminta OTP.');
+      return;
+    }
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
- e.preventDefault();
- setError(null);
+    startTransition(async () => {
+      const res = await requestOtpAction(phoneNumber);
+      if (res.error) {
+        setError(res.error);
+      } else if (res.success && res.otp) {
+        setOtpSuccess('OTP berhasil dikirim via WhatsApp!');
+        setSimulatedOtpMsg({
+          visible: true,
+          name: res.fullName || 'Anggota Koperasi',
+          code: res.otp,
+        });
+      }
+    });
+  };
 
- startTransition(async () => {
- const formData = new FormData();
- formData.append('phone_number', phoneNumber);
- formData.append('otp', otp);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
 
- const result = await loginAction(null, formData);
- if (result && result.error) {
- setError(result.error);
- } else if (result && result.success && result.redirectPath) {
- router.push(result.redirectPath);
- }
- });
- };
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append('phone_number', phoneNumber);
+      formData.append('otp', otp);
 
- const handleNikCheck = (val: string) => {
- setNikInput(val);
- if (val.trim().length >= 6) {
- const parsed = parseNIK(val);
- setNikResult(parsed);
- } else {
- setNikResult(null);
- }
- };
+      const result = await loginAction(null, formData);
+      if (result && result.error) {
+        setError(result.error);
+      } else if (result && result.success && result.redirectPath) {
+        router.push(result.redirectPath);
+      }
+    });
+  };
 
- return (
- <div className="flex flex-col lg:flex-row min-h-screen">
+  const handleNikCheck = (val: string) => {
+    setNikInput(val);
+    if (val.trim().length >= 6) {
+      const parsed = parseNIK(val);
+      setNikResult(parsed);
+    } else {
+      setNikResult(null);
+    }
+  };
 
- {/* ═══════════════════════════════════════════════
- LEFT COLUMN — Forest Green & Gold Branding
- ═══════════════════════════════════════════════ */}
- <div
- className="relative lg:w-[52%] flex flex-col justify-between overflow-hidden"
- style={{
- background: 'linear-gradient(160deg, #104911 0%, #205c21 50%, #548C2F 100%)',
- }}
- >
- {/* Decorative floating orbs */}
- <div
- className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-[0.07] animate-float"
- style={{ background: 'radial-gradient(circle, #F9A620 0%, transparent 70%)' }}
- />
- <div
- className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-[0.05] animate-float"
- style={{ background: 'radial-gradient(circle, #548C2F 0%, transparent 70%)', animationDelay: '1.5s' }}
- />
- {/* Subtle grid overlay */}
- <div
- className="absolute inset-0 opacity-[0.03]"
- style={{
- backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
- backgroundSize: '48px 48px',
- }}
- />
+  return (
+    <div className="min-h-screen bg-[#f4f3ef] text-[#1c1917] flex flex-col font-sans relative overflow-x-hidden selection:bg-[#548C2F]/20 selection:text-[#104911]">
+      
+      {/* ═══════════════════════════════════════════════
+          STICKY HEADER
+          ═══════════════════════════════════════════════ */}
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-[#F9A620] to-[#FFD449] shadow-md flex items-center justify-center text-white">
+              <Shield className="w-5 h-5" strokeWidth={2.5} />
+            </div>
+            <div>
+              <span className="text-lg font-black tracking-tight text-[#104911] block leading-none">AmanDes</span>
+              <span className="text-[8px] uppercase tracking-[0.18em] font-extrabold text-stone-400 mt-0.5 block">Audit Koperasi Desa</span>
+            </div>
+          </div>
 
- <div className="relative z-10 flex flex-col justify-between h-full p-8 md:p-12 lg:p-16">
+          <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-stone-500">
+            <a href="#fitur" className="hover:text-[#548C2F] transition-all">Fitur Unggulan</a>
+            <a href="#regulasi" className="hover:text-[#548C2F] transition-all">Dasar Hukum</a>
+            <a href="#kalkulator" className="hover:text-[#548C2F] transition-all">Uji NIK/KTP</a>
+            <a href="#statistik" className="hover:text-[#548C2F] transition-all">Statistik Desa</a>
+          </nav>
 
- {/* Logo */}
- <div className="animate-slide-in-left stagger-1">
- <div className="flex items-center gap-3.5">
- <div
- className="p-3 rounded-2xl shadow-lg border border-white/10"
- style={{ background: 'linear-gradient(135deg, #F9A620 0%, #FFD449 100%)' }}
- >
- <Shield className="w-7 h-7 text-white" strokeWidth={2.5} />
- </div>
- <div>
- <span className="text-2xl font-black tracking-tight text-white block leading-none">
- AmanDes
- </span>
- <span className="text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#A9CC85]/70 mt-0.5 block">
- Sistem Pengawasan Keuangan Desa
- </span>
- </div>
- </div>
- </div>
+          <button
+            onClick={() => setIsLoginOpen(true)}
+            className="py-2.5 px-6 bg-[#548C2F] hover:bg-[#427223] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md border border-[#F9A620]/20 transition-all hover:scale-[1.03] cursor-pointer flex items-center gap-2"
+          >
+            Masuk Portal
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </header>
 
- {/* Hero Content */}
- <div className="max-w-lg my-12 lg:my-0 space-y-7">
+      {/* ═══════════════════════════════════════════════
+          HERO SECTION
+          ═══════════════════════════════════════════════ */}
+      <section className="relative py-16 lg:py-24 overflow-hidden border-b border-stone-200">
+        <div className="absolute top-0 right-0 w-[50%] h-full bg-[#104911]/[0.02] -skew-x-12 origin-top-right pointer-events-none" />
+        
+        {/* Floating gradient orbs */}
+        <div className="absolute top-1/4 left-10 w-96 h-96 rounded-full bg-[#F9A620]/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-20 w-80 h-80 rounded-full bg-[#548C2F]/5 blur-3xl pointer-events-none" />
 
- {/* Badge */}
- <div className="animate-slide-in-left stagger-2">
- <span className="badge badge-gold" style={{ background: 'rgba(249,166,32,0.15)', color: '#FFD449', borderColor: 'rgba(249,166,32,0.3)' }}>
- <Sparkles className="w-3 h-3" />
- Tema 3 — Digital Cooperatives Hackathon 2026
- </span>
- </div>
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+          
+          {/* Left Column: Copywriting */}
+          <div className="lg:col-span-7 space-y-6 text-left animate-slide-in-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#548C2F]/10 border border-[#548C2F]/20 text-[#3F6B24] text-[10px] font-black uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-[#F9A620]" />
+              Platform Pengawasan Keuangan Desa Terpadu
+            </div>
 
- {/* Hero Title */}
- <h1 className="animate-slide-in-left stagger-3 text-4xl md:text-[2.75rem] lg:text-5xl font-black tracking-tight leading-[1.1] text-white">
- Aman Kelola,{' '}
- <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #FFD449, #F9A620)' }}>
- Transparan
- </span>{' '}
- &amp; Patuh Hukum
- </h1>
+            <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-black tracking-tight leading-[1.05] text-[#104911]">
+              Aman Kelola, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F9A620] to-[#E08E10]">Transparan</span> &amp; Patuh Hukum
+            </h1>
 
- {/* Subtitle */}
- <p className="animate-slide-in-left stagger-4 text-[#C7DDAE]/70 text-sm md:text-base leading-relaxed max-w-md">
- Menegakkan tata kelola Koperasi Desa secara real-time berdasarkan{' '}
- <strong className="text-[#E4EFD6]">UU Koperasi No. 25/1992</strong>,{' '}
- <strong className="text-[#E4EFD6]">UU Desa No. 6/2014</strong>, serta regulasi{' '}
- <strong className="text-[#E4EFD6]">PMK 7/2026</strong> &amp;{' '}
- <strong className="text-[#E4EFD6]">PMK 15/2026</strong>.
- </p>
+            <p className="text-stone-550 text-sm md:text-base leading-relaxed max-w-xl font-medium">
+              Menegakkan tata kelola permodalan dan pengeluaran Koperasi Desa secara real-time berdasarkan <strong className="text-[#104911]">UU Koperasi No. 25/1992</strong>, <strong className="text-[#104911]">UU Desa No. 6/2014</strong>, serta kepatuhan penuh terhadap regulasi <strong className="text-[#104911]">PMK 7/2026</strong> &amp; <strong className="text-[#104911]">PMK 15/2026</strong>.
+            </p>
 
- {/* NIK KTP Parser Widget */}
- <div className="animate-slide-in-left stagger-5">
- <div
- className="card-glass p-5 rounded-2xl space-y-4"
- style={{
- background: 'rgba(255,255,255,0.06)',
- border: '1px solid rgba(255,255,255,0.1)',
- backdropFilter: 'blur(20px) saturate(180%)',
- }}
- >
- <h4 className="text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-2" style={{ color: '#F9A620' }}>
- <Scale className="w-4 h-4" />
- Kalkulator Kepatuhan KTP/NIK (UU PDP)
- </h4>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <button
+                onClick={() => setIsLoginOpen(true)}
+                className="py-3.5 px-8 bg-[#548C2F] hover:bg-[#427223] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-lg border border-[#F9A620]/30 transition-all hover:scale-[1.02] cursor-pointer text-center"
+              >
+                Jelajahi Dashboard Demo
+              </button>
+              <a
+                href="#kalkulator"
+                className="py-3.5 px-8 bg-white hover:bg-stone-50 text-stone-700 text-xs font-black uppercase tracking-wider rounded-xl shadow-sm border border-stone-250 transition-all text-center"
+              >
+                Coba Kalkulator NIK
+              </a>
+            </div>
 
- <div className="relative">
- <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
- <Search className="w-3.5 h-3.5 text-stone-400" />
- </span>
- <input
- type="text"
- maxLength={16}
- placeholder="Ketik 16 digit NIK KTP Anda..."
- value={nikInput}
- onChange={(e) => handleNikCheck(e.target.value)}
- className="input-field pl-9 font-mono text-xs"
- style={{
- background: 'rgba(255,255,255,0.95)',
- color: '#1c1917',
- borderColor: 'rgba(255,255,255,0.2)',
- }}
- />
- </div>
+            {/* Micro Stats Banner */}
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-stone-200/80 max-w-lg">
+              <div>
+                <span className="text-2xl font-black text-[#548C2F] block">100+</span>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Anggota Ter-seed</span>
+              </div>
+              <div>
+                <span className="text-2xl font-black text-[#F9A620] block">95 / 100</span>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Skor Kepatuhan AI</span>
+              </div>
+              <div>
+                <span className="text-2xl font-black text-[#104911] block">Real-Time</span>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Laporan Neraca/SHU</span>
+              </div>
+            </div>
+          </div>
 
- {nikResult && (
- <div
- className="animate-fade-in-up rounded-xl p-3.5 space-y-2"
- style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.05)' }}
- >
- {nikResult.isValid ? (
- <>
- <div className="flex items-center gap-1.5 text-[11px] font-black text-[#8CBB5E]">
- <CheckCircle className="w-3.5 h-3.5" />
- NIK Valid &amp; Terverifikasi
- </div>
- <div className="text-[10px] text-[#C7DDAE]/80 space-y-1">
- <div>
- <span className="font-bold text-[#E4EFD6]">Wilayah:</span>{' '}
- {nikResult.provinsi}, {nikResult.kabupaten}, {nikResult.kecamatan}
- </div>
- <div>
- <span className="font-bold text-[#E4EFD6]">Info Personal:</span>{' '}
- {nikResult.jenisKelamin} &bull; Lahir: {nikResult.tanggalLahir} ({nikResult.umur} tahun)
- </div>
- </div>
- </>
- ) : (
- <div className="flex items-center gap-1.5 text-[11px] font-bold text-red-400">
- <AlertCircle className="w-3.5 h-3.5" />
- {nikResult.error}
- </div>
- )}
- </div>
- )}
- </div>
- </div>
- </div>
+          {/* Right Column: Interactive Mockup Card */}
+          <div className="lg:col-span-5 animate-fade-in-up">
+            <div className="relative">
+              {/* Decorative back border */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#104911] to-[#548C2F] rounded-3xl rotate-3 scale-[1.02] opacity-10 pointer-events-none" />
+              
+              {/* Main Card */}
+              <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-xl space-y-6 relative z-10">
+                <div className="flex items-center justify-between border-b border-stone-150 pb-4">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-3.5 h-3.5 rounded-full bg-[#548C2F] animate-ping" />
+                    <span className="text-xs font-black uppercase tracking-wider text-stone-800">Buku Kas Real-Time</span>
+                  </div>
+                  <span className="badge badge-gold">KOP-539EF09CDAAD</span>
+                </div>
 
- {/* Footer */}
- <div className="animate-slide-in-left stagger-6 text-[10px] text-[#A9CC85]/40 font-semibold tracking-wide">
- AmanDes &copy; 2026 &bull; Tim Inspeksi Kos &bull; Kementerian Koperasi RI
- </div>
- </div>
- </div>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[9px] font-black text-stone-450 uppercase tracking-wider block">Total Saldo Kas Tersedia</span>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className="text-3xl font-black text-[#104911]">Rp 5.250.000</span>
+                      <span className="text-xs text-[#3F6B24] font-extrabold flex items-center gap-0.5">
+                        <TrendingUp className="w-3.5 h-3.5" /> +15.5%
+                      </span>
+                    </div>
+                  </div>
 
- {/* ═══════════════════════════════════════════════
- RIGHT COLUMN — Login Form
- ═══════════════════════════════════════════════ */}
- <div className="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-16 bg-[var(--background)]">
- <div className="w-full max-w-md space-y-8">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl">
+                      <span className="text-[8px] font-black text-stone-400 uppercase block">Dana Desa</span>
+                      <span className="text-xs font-bold text-[#104911] mt-1 block">Rp 250.000.000</span>
+                    </div>
+                    <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl">
+                      <span className="text-[8px] font-black text-stone-400 uppercase block">Simpanan Sukarela</span>
+                      <span className="text-xs font-bold text-emerald-700 mt-1 block">Rp 2.450.000</span>
+                    </div>
+                  </div>
 
- {/* Heading */}
- <div className="animate-fade-in-up stagger-1">
- <div className="flex items-center gap-2 mb-2">
- <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #F9A620, #548C2F)' }} />
- <h2 className="text-2xl font-black tracking-tight" style={{ color: 'var(--primary)' }}>
- Masuk Gerbang AmanDes
- </h2>
- </div>
- <p className="text-xs font-semibold ml-3" style={{ color: 'var(--text-muted)' }}>
- Gunakan Nomor HP demo Anda untuk masuk ke sistem pengawasan Koperasi Desa.
- </p>
- </div>
+                  {/* Compliance Indicator */}
+                  <div className="p-3.5 rounded-xl bg-[#F1F7EA] border border-[#C7DDAE] flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <FileCheck className="w-5 h-5 text-[#3F6B24] shrink-0" />
+                      <div>
+                        <span className="text-[10px] font-black text-[#3F6B24] block leading-none">AUDIT KEPATUHAN AI</span>
+                        <span className="text-[9px] text-[#3F6B24]/70 block mt-0.5 font-semibold">Transaksi terverifikasi PMK 7</span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-black text-[#3F6B24] font-mono">100% PASS</span>
+                  </div>
+                </div>
 
- {/* Error Alert */}
- {error && (
- <div className="animate-fade-in-up card p-4 flex items-start gap-3" style={{ background: '#fef2f2', borderColor: '#fecaca' }}>
- <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
- <p className="text-xs font-bold text-red-700">{error}</p>
- </div>
- )}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setIsLoginOpen(true)}
+                    className="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-[#104911] text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center block border border-stone-200"
+                  >
+                    Simulasi Otomasi &rarr;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
- {/* Success Alert */}
- {otpSuccess && (
- <div className="animate-fade-in-up card p-4 flex items-start gap-3" style={{ background: '#f0fdf4', borderColor: '#bbf7d0' }}>
- <CheckCircle className="w-4 h-4 text-[#548C2F] shrink-0 mt-0.5" />
- <p className="text-xs font-bold text-[#2C561B]">{otpSuccess}</p>
- </div>
- )}
+        </div>
+      </section>
 
- {/* Login Form */}
- <form onSubmit={handleSubmit} className="space-y-5">
+      {/* ═══════════════════════════════════════════════
+          BENTO GRID: FEATURE HIGHLIGHTS
+          ═══════════════════════════════════════════════ */}
+      <section id="fitur" className="py-20 bg-white border-b border-stone-200 relative">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+          
+          <div className="text-center space-y-4 max-w-xl mx-auto">
+            <h2 className="text-xs font-black text-[#F9A620] uppercase tracking-[0.2em]">Pilar Sistem Pengawasan</h2>
+            <h3 className="text-2xl md:text-3xl font-black text-[#104911] tracking-tight leading-snug">
+              Dirancang khusus untuk menjaga integritas, transparansi, dan kemandirian ekonomi desa.
+            </h3>
+          </div>
 
- {/* Phone Number Field */}
- <div className="animate-fade-in-up stagger-2">
- <label className="label flex items-center gap-1.5">
- <Phone className="w-3 h-3" style={{ color: 'var(--accent)' }} />
- Nomor Handphone Terdaftar
- </label>
- <div className="relative">
- <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
- <Phone className="w-4 h-4" />
- </span>
- <input
- type="text"
- name="phone_number"
- placeholder="Contoh: 081200000001"
- value={phoneNumber}
- onChange={(e) => setPhoneNumber(e.target.value)}
- className="input-field pl-10 font-mono font-bold text-xs"
- required
- />
- </div>
- </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* 1. Buku Kas Ledger */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-[#548C2F]/10 text-[#548C2F] flex items-center justify-center border border-[#548C2F]/20">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">Buku Kas Ledger & Multi-Sumber</h4>
+                <p className="text-[11px] text-stone-500 font-medium leading-relaxed">
+                  Pencatatan akuntansi terpisah antara kas Dana Desa dan kas Non-Dana Desa secara otomatis. Dilengkapi upload bukti fisik invoice yang sah.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-[#548C2F] uppercase tracking-wider">Transparansi Keuangan &rarr;</span>
+            </div>
 
- {/* OTP Field + Request Button */}
- <div className="animate-fade-in-up stagger-3">
- <label className="label flex items-center gap-1.5">
- <Lock className="w-3 h-3" style={{ color: 'var(--accent)' }} />
- Kode Verifikasi OTP
- </label>
- <div className="flex gap-2">
- <div className="relative flex-1">
- <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
- <Lock className="w-4 h-4" />
- </span>
- <input
- type="text"
- name="otp"
- placeholder="Ketik 6-digit kode OTP..."
- value={otp}
- onChange={(e) => setOtp(e.target.value)}
- className="input-field pl-10 font-mono font-bold text-xs"
- required
- />
- </div>
- <button
- type="button"
- onClick={handleRequestOtp}
- disabled={isPending}
- className="btn-gold flex items-center gap-1.5 whitespace-nowrap disabled:opacity-50"
- >
- <RefreshCw className={`w-3.5 h-3.5 ${isPending ? 'animate-spin' : ''}`} />
- Minta OTP
- </button>
- </div>
- </div>
+            {/* 2. Audit Kepatuhan AI */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-[#F9A620]/10 text-[#F9A620] flex items-center justify-center border border-[#F9A620]/20">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">Asisten & Audit Kepatuhan AI</h4>
+                <p className="text-[11px] text-stone-500 font-medium leading-relaxed">
+                  Deteksi transaksi duplikat, verifikasi kepemilikan bukti nota fisik, serta peringatan batas kredit maks Rp50 juta per transaksi otomatis.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-[#F9A620] uppercase tracking-wider">Kecerdasan Buatan &rarr;</span>
+            </div>
 
- {/* Submit Button */}
- <div className="animate-fade-in-up stagger-4 pt-1">
- <button
- type="submit"
- disabled={isPending}
- className="btn-primary w-full py-3.5 flex items-center justify-center gap-2.5 text-sm disabled:opacity-50"
- >
- {isPending ? (
- <>
- <RefreshCw className="w-4 h-4 animate-spin" />
- Mengautentikasi...
- </>
- ) : (
- <>
- Masuk ke Dashboard
- <ArrowRight className="w-4 h-4" />
- </>
- )}
- </button>
- </div>
- </form>
+            {/* 3. e-RAT Rapat Anggota */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-[#3F6B24] flex items-center justify-center border border-emerald-200">
+                  <Vote className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">E-RAT (Rapat Anggota Tahunan)</h4>
+                <p className="text-[11px] text-stone-500 font-medium leading-relaxed">
+                  Pemungutan suara dan keputusan rapat digital yang aman dan terverifikasi NIK KTP. Setiap suara tercatat rapi untuk laporan kepatuhan.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-[#3F6B24] uppercase tracking-wider">Demokrasi Digital &rarr;</span>
+            </div>
 
- {/* ═══════════════════════════════════════════
- Demo Accounts Panel
- ═══════════════════════════════════════════ */}
- <div className="animate-fade-in-up stagger-5">
- <div className="pt-6" style={{ borderTop: '1px solid var(--border-color)' }}>
- <h3 className="label flex items-center gap-1.5 mb-4">
- <KeyRound className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
- Akun Demo Koperasi (Klik untuk Auto-Fill)
- </h3>
+            {/* 4. Buku Simpanan Anggota */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-[#E08E10] flex items-center justify-center border border-amber-200">
+                  <Users className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">Buku Simpanan Pokok, Wajib, Sukarela</h4>
+                <p className="text-[11px] text-stone-500 font-medium leading-relaxed">
+                  Pemisahan rekening saldo simpanan secara detail per anggota. Simpanan pokok & wajib dikunci sesuai aturan, simpanan sukarela cair kapan saja.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-[#E08E10] uppercase tracking-wider">Manajemen Saldo &rarr;</span>
+            </div>
 
- <div className="grid gap-2.5">
- {demoAccounts.map((acc, idx) => {
- const Icon = acc.icon;
- return (
- <button
- key={acc.phone}
- type="button"
- onClick={() => handleDemoFill(acc.phone)}
- className={`card card-interactive flex items-center gap-3.5 p-3.5 text-left w-full animate-fade-in-up stagger-${Math.min(idx + 1, 6) as 1 | 2 | 3 | 4 | 5 | 6}`}
- style={{ cursor: 'pointer' }}
- >
- <div
- className="p-2 rounded-xl shrink-0"
- style={{
- background: 'linear-gradient(135deg, rgba(20,83,45,0.08) 0%, rgba(202,138,4,0.06) 100%)',
- border: '1px solid var(--border-color)',
- }}
- >
- <Icon className="w-4 h-4" style={{ color: 'var(--primary)' }} />
- </div>
- <div className="flex-1 min-w-0">
- <div className="flex items-center gap-2">
- <span className="text-xs font-black truncate" style={{ color: 'var(--foreground)' }}>
- {acc.role}
- </span>
- <span className="badge badge-success text-[8px] py-0">
- {acc.badge}
- </span>
- </div>
- <span
- className="text-[10px] font-mono font-bold mt-0.5 block"
- style={{ color: 'var(--text-muted)' }}
- >
- {acc.phone} &middot; OTP: 123456
- </span>
- </div>
- <ArrowRight className="w-3.5 h-3.5 shrink-0 opacity-30" />
- </button>
- );
- })}
- </div>
- </div>
- </div>
+            {/* 5. Musrenbang Aspirasi */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center border border-blue-200">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">Musrenbang & Aspirasi Warga</h4>
+                <p className="text-[11px] text-stone-500 font-medium leading-relaxed">
+                  Forum usulan program pembangunan dari bawah ke atas. Mendukung upvoting warga serta eskalasi langsung usulan populer ke agenda e-RAT.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-blue-700 uppercase tracking-wider">Partisipasi Warga &rarr;</span>
+            </div>
 
- </div>
- </div>
+            {/* 6. Literasi Gamifikasi */}
+            <div className="card p-6 flex flex-col justify-between gap-6 hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-red-100 text-red-650 flex items-center justify-center border border-red-200">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-stone-800">Kelas Literasi & Poin Belanja</h4>
+                <p className="text-[11px] text-stone-550 font-medium leading-relaxed">
+                  Modul belajar regulasi koperasi terintegrasi kuis berhadiah poin. Tukarkan poin Anda dengan voucher sembako murah di Gerai Koperasi.
+                </p>
+              </div>
+              <span className="text-[9px] font-black text-red-650 uppercase tracking-wider">Kuis Edukasi &rarr;</span>
+            </div>
 
- {/* ═══════════════════════════════════════════════
- WHATSAPP OTP TOAST NOTIFICATION
- ═══════════════════════════════════════════════ */}
- {simulatedOtpMsg && simulatedOtpMsg.visible && (
- <div
- className="fixed bottom-6 right-6 z-50 max-w-sm w-full animate-toast-in"
- style={{
- background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
- border: '1px solid #6ee7b7',
- borderRadius: '1.25rem',
- boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(34,197,94,0.1)',
- }}
- >
- <div className="p-4 flex gap-3.5">
- {/* WhatsApp icon */}
- <div
- className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center animate-pulse-glow"
- style={{
- background: 'linear-gradient(135deg, #22c55e, #16a34a)',
- boxShadow: '0 4px 16px rgba(34,197,94,0.3)',
- }}
- >
- <MessageSquare className="w-5 h-5 text-white" />
- </div>
+          </div>
+        </div>
+      </section>
 
- {/* Content */}
- <div className="flex-1 min-w-0">
- <div className="flex items-center justify-between">
- <span className="text-xs font-black text-[#2C561B] flex items-center gap-1">
- 💬 WhatsApp AmanDes
- </span>
- <button
- type="button"
- onClick={() => setSimulatedOtpMsg(null)}
- className="p-1 rounded-lg text-[#548C2F] hover:text-[#1B3610] hover:bg-[#C7DDAE]/50 transition-colors"
- >
- <X className="w-3.5 h-3.5" />
- </button>
- </div>
+      {/* ═══════════════════════════════════════════════
+          REGULASI & DASAR HUKUM Timeline
+          ═══════════════════════════════════════════════ */}
+      <section id="regulasi" className="py-20 bg-stone-50 border-b border-stone-200">
+        <div className="max-w-4xl mx-auto px-6 space-y-12">
+          
+          <div className="text-center space-y-3">
+            <h2 className="text-xs font-black text-[#548C2F] uppercase tracking-[0.2em]">Pondasi Hukum Resmi</h2>
+            <h3 className="text-2xl md:text-3xl font-black text-[#104911] tracking-tight">Kepatuhan Berdasarkan Undang-Undang</h3>
+            <p className="text-stone-500 text-xs font-medium max-w-md mx-auto">
+              Sistem ini mematuhi standar hukum nasional perkoperasian RI dan tata kelola anggaran dana desa.
+            </p>
+          </div>
 
- <p className="mt-1.5 text-[11px] text-[#1B3610]/80 leading-relaxed font-semibold">
- Halo <strong className="text-[#1B3610]">{simulatedOtpMsg.name}</strong>,
- <br />
- Kode OTP login AmanDes Anda:
- </p>
+          <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-4 md:before:left-1/2 before:w-0.5 before:bg-stone-200">
+            
+            {/* Timeline item 1 */}
+            <div className="relative flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6">
+              <div className="absolute left-4 md:left-1/2 w-3.5 h-3.5 rounded-full bg-[#548C2F] border-4 border-white -translate-x-1.5 z-10" />
+              <div className="md:w-[45%] bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+                <span className="badge badge-success text-[8px]">UU NO. 25 TAHUN 1992</span>
+                <h4 className="text-xs font-black text-[#104911]">UU Perkoperasian Indonesia</h4>
+                <p className="text-[10px] text-stone-500 leading-relaxed font-medium">
+                  Mengatur struktur wajib permodalan, RAT sebagai keputusan tertinggi, pemisahan simpanan pokok/wajib dari sukarela, serta pertanggungjawaban hukum pengurus koperasi.
+                </p>
+              </div>
+              <div className="hidden md:block md:w-[45%]" />
+            </div>
 
- {/* OTP Code Display */}
- <div
- className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg"
- style={{
- background: 'white',
- border: '2px dashed #F9A620',
- boxShadow: '0 2px 8px rgba(249,166,32,0.1)',
- }}
- >
- <KeyRound className="w-3.5 h-3.5" style={{ color: '#F9A620' }} />
- <span className="font-mono font-black text-lg tracking-[0.2em]" style={{ color: '#F9A620' }}>
- {simulatedOtpMsg.code}
- </span>
- </div>
+            {/* Timeline item 2 */}
+            <div className="relative flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6">
+              <div className="absolute left-4 md:left-1/2 w-3.5 h-3.5 rounded-full bg-[#F9A620] border-4 border-white -translate-x-1.5 z-10" />
+              <div className="hidden md:block md:w-[45%]" />
+              <div className="md:w-[45%] bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+                <span className="badge badge-gold text-[8px]">UU NO. 6 TAHUN 2014</span>
+                <h4 className="text-xs font-black text-[#104911]">Pemberdayaan Ekonomi Desa</h4>
+                <p className="text-[10px] text-stone-500 leading-relaxed font-medium">
+                  Landasan hukum integrasi modal BUM Desa dengan Koperasi Desa untuk memajukan ritel pangan murah dan pembiayaan mikro usaha komoditas warga lokal.
+                </p>
+              </div>
+            </div>
 
- <span className="text-[9px] text-[#3F6B24]/50 block mt-2 font-semibold">
- Berlaku selama 5 menit &bull; Tim Audit Kemenkop
- </span>
- </div>
- </div>
+            {/* Timeline item 3 */}
+            <div className="relative flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6">
+              <div className="absolute left-4 md:left-1/2 w-3.5 h-3.5 rounded-full bg-red-600 border-4 border-white -translate-x-1.5 z-10" />
+              <div className="md:w-[45%] bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+                <span className="badge badge-danger text-[8px]">PMK NO. 7 &amp; 15 TAHUN 2026</span>
+                <h4 className="text-xs font-black text-[#104911]">Aturan Penyaluran &amp; Kredit Desa</h4>
+                <p className="text-[10px] text-stone-500 leading-relaxed font-medium">
+                  Membatasi pemberian pinjaman maksimal Rp50 juta per anggota untuk menekan kredit macet, serta mewajibkan penyertaan modal dana desa diaudit secara real-time dan terbuka.
+                </p>
+              </div>
+              <div className="hidden md:block md:w-[45%]" />
+            </div>
 
- {/* Bottom progress bar */}
- <div className="h-1 rounded-b-xl overflow-hidden" style={{ background: 'rgba(34,197,94,0.15)' }}>
- <div
- className="h-full rounded-full animate-progress-fill"
- style={{ width: '100%', background: 'linear-gradient(90deg, #22c55e, #16a34a)' }}
- />
- </div>
- </div>
- )}
- </div>
- );
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          NIK INTERACTIVE PARSER WIDGET SECTION
+          ═══════════════════════════════════════════════ */}
+      <section id="kalkulator" className="py-20 bg-white border-b border-stone-200">
+        <div className="max-w-xl mx-auto px-6 space-y-8">
+          
+          <div className="text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-[#548C2F]/10 text-[#548C2F] flex items-center justify-center border border-[#548C2F]/20 mx-auto">
+              <Scale className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-black text-[#104911] tracking-tight">Kalkulator Kepatuhan & Uji NIK KTP</h3>
+            <p className="text-[11px] text-stone-500 max-w-sm mx-auto font-medium">
+              Koperasi wajib melakukan KYC dan mematuhi UU PDP. Uji 16 digit NIK Anda untuk mem-parse wilayah, jenis kelamin, dan tanggal lahir Anda secara instan.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-3xl border border-stone-200 bg-stone-50/50 space-y-4">
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <Search className="w-4 h-4 text-stone-400" />
+              </span>
+              <input
+                type="text"
+                maxLength={16}
+                placeholder="Ketik 16 digit NIK KTP Anda..."
+                value={nikInput}
+                onChange={(e) => handleNikCheck(e.target.value)}
+                className="input-field pl-10 font-mono font-bold text-xs"
+              />
+            </div>
+
+            {nikResult && (
+              <div className="animate-fade-in-up rounded-2xl p-4 bg-white border border-stone-200 space-y-2 text-xs">
+                {nikResult.isValid ? (
+                  <>
+                    <div className="flex items-center gap-1.5 text-[#3F6B24] font-black">
+                      <CheckCircle className="w-4 h-4" />
+                      NIK KTP Valid &amp; Lulus Verifikasi KYC
+                    </div>
+                    <dl className="grid grid-cols-2 gap-3 pt-2 text-[11px]">
+                      <div>
+                        <dt className="text-stone-400 font-medium">Provinsi</dt>
+                        <dd className="font-extrabold text-stone-800">{nikResult.provinsi}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Kabupaten / Kota</dt>
+                        <dd className="font-extrabold text-stone-800">{nikResult.kabupaten}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Kecamatan</dt>
+                        <dd className="font-extrabold text-stone-800">{nikResult.kecamatan}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Jenis Kelamin</dt>
+                        <dd className="font-extrabold text-stone-800">{nikResult.jenisKelamin}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Tanggal Lahir</dt>
+                        <dd className="font-extrabold text-[#104911] font-mono">{nikResult.tanggalLahir}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-stone-400 font-medium">Estimasi Umur</dt>
+                        <dd className="font-extrabold text-stone-850">{nikResult.umur} Tahun</dd>
+                      </div>
+                    </dl>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-red-700 font-bold">
+                    <AlertCircle className="w-4 h-4" />
+                    {nikResult.error}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          FOOTER
+          ═══════════════════════════════════════════════ */}
+      <footer className="mt-auto bg-[#0a230b] text-white py-12 border-t border-[#F9A620]/20">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[#F9A620] text-white rounded-xl flex items-center justify-center">
+                <Shield className="w-5 h-5" />
+              </div>
+              <span className="text-base font-black uppercase tracking-tight">AmanDes</span>
+            </div>
+            <p className="text-[10px] text-stone-400 leading-relaxed font-medium max-w-xs">
+              Sistem informasi permodalan, buku kas ledger terotomasi, dan modul literasi kuis patuh regulasi Kementerian Koperasi RI.
+            </p>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            <h4 className="font-black text-[#F9A620] uppercase tracking-wider">Pranala Cepat</h4>
+            <div className="flex flex-col gap-2 font-bold text-stone-300">
+              <a href="#fitur" className="hover:text-white transition-colors">Fitur Utama</a>
+              <a href="#regulasi" className="hover:text-white transition-colors">Undang-Undang</a>
+              <a href="#kalkulator" className="hover:text-white transition-colors"> KYC NIK</a>
+            </div>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            <h4 className="font-black text-[#F9A620] uppercase tracking-wider">Mitra Resmi</h4>
+            <p className="text-[10px] text-stone-400 font-semibold leading-relaxed">
+              Tim Audit Pengawasan Keuangan Desa &amp; Kementerian Koperasi dan Usaha Kecil Menengah Republik Indonesia.
+            </p>
+            <div className="pt-2 text-[9px] text-[#A9CC85]/55 font-bold uppercase tracking-wider">
+              AMANDES &copy; 2026 &bull; TIM INSPEKSI KOS
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+      {/* ═══════════════════════════════════════════════
+          INTERACTIVE LOGIN DIALOG OVERLAY (Drawer/Modal)
+          ═══════════════════════════════════════════════ */}
+      {isLoginOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-modal-overlay">
+          <div className="bg-white border border-stone-200 w-full max-w-md p-6 rounded-3xl shadow-2xl relative animate-modal-content max-h-[90vh] overflow-y-auto scrollbar-thin">
+            
+            {/* Close Button */}
+            <button
+              onClick={() => {
+                setIsLoginOpen(false);
+                setError(null);
+                setOtpSuccess(null);
+                setSimulatedOtpMsg(null);
+              }}
+              className="absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-xl transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Title */}
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#F9A620] to-[#548C2F]" />
+              <h2 className="text-lg font-black tracking-tight text-[#104911]">
+                Masuk Gerbang AmanDes
+              </h2>
+            </div>
+            <p className="text-[10px] font-bold text-stone-500 mb-6">
+              Gunakan nomor HP terdaftar akun demo Anda di bawah ini untuk mengakses dashboard.
+            </p>
+
+            {/* Alerts */}
+            {error && (
+              <div className="mb-4 animate-fade-in-up p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-750 text-[10px] font-bold flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {otpSuccess && (
+              <div className="mb-4 animate-fade-in-up p-3.5 rounded-xl bg-[#F1F7EA] border border-[#C7DDAE] text-[#3F6B24] text-[10px] font-bold flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-[#548C2F] shrink-0 mt-0.5" />
+                <span>{otpSuccess}</span>
+              </div>
+            )}
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              
+              <div>
+                <label className="label flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-[#F9A620]" />
+                  Nomor HP Terdaftar
+                </label>
+                <input
+                  type="text"
+                  name="phone_number"
+                  placeholder="Contoh: 081200000001"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="input-field font-mono text-xs"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-1">
+                  <Lock className="w-3.5 h-3.5 text-[#F9A620]" />
+                  Masukkan Kode OTP
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    name="otp"
+                    placeholder="Masukkan 6 digit OTP..."
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="input-field font-mono text-xs flex-1"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRequestOtp}
+                    disabled={isPending}
+                    className="btn-gold text-[10px] uppercase font-black tracking-wider whitespace-nowrap disabled:opacity-50 flex items-center gap-1"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isPending ? 'animate-spin' : ''}`} />
+                    Minta OTP
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isPending}
+                className="w-full py-3 bg-[#548C2F] hover:bg-[#427223] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md border border-[#F9A620]/20 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isPending ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    Memproses...
+                  </>
+                ) : (
+                  <>
+                    Masuk ke Dashboard
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Demo Accounts Panel */}
+            <div className="mt-6 pt-6 border-t border-stone-200 space-y-3">
+              <h3 className="label flex items-center gap-1 text-stone-500">
+                <KeyRound className="w-3.5 h-3.5 text-[#F9A620]" />
+                Akun Demo Koperasi (Klik untuk Auto-Fill)
+              </h3>
+              <div className="grid gap-2">
+                {demoAccounts.map((acc, idx) => {
+                  const Icon = acc.icon;
+                  return (
+                    <button
+                      key={acc.phone}
+                      type="button"
+                      onClick={() => handleDemoFill(acc.phone)}
+                      className="card card-interactive p-3 flex items-center justify-between text-left w-full cursor-pointer hover:scale-[1.01]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-stone-100 border border-stone-200">
+                          <Icon className="w-3.5 h-3.5 text-[#104911]" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-black text-stone-800">{acc.role}</span>
+                            <span className="badge badge-success text-[8px] py-0 px-1">{acc.badge}</span>
+                          </div>
+                          <span className="text-[9px] font-mono text-stone-400 block mt-0.5">
+                            {acc.phone} &bull; OTP: 123455 (Auto)
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════
+          WHATSAPP OTP TOAST NOTIFICATION
+          ═══════════════════════════════════════════════ */}
+      {simulatedOtpMsg && simulatedOtpMsg.visible && (
+        <div
+          className="fixed bottom-6 right-6 z-50 max-w-sm w-full animate-toast-in"
+          style={{
+            background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+            border: '1px solid #6ee7b7',
+            borderRadius: '1.25rem',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(34,197,94,0.1)',
+          }}
+        >
+          <div className="p-4 flex gap-3.5">
+            <div
+              className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center animate-pulse-glow"
+              style={{
+                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                boxShadow: '0 4px 16px rgba(34,197,94,0.3)',
+              }}
+            >
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-[#2C561B] flex items-center gap-1">
+                  💬 WhatsApp AmanDes
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSimulatedOtpMsg(null)}
+                  className="p-1 rounded-lg text-[#548C2F] hover:text-[#1B3610] hover:bg-[#C7DDAE]/50 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <p className="mt-1.5 text-[11px] text-[#1B3610]/80 leading-relaxed font-semibold">
+                Halo <strong className="text-[#1B3610]">{simulatedOtpMsg.name}</strong>,
+                <br />
+                Kode OTP login AmanDes Anda:
+              </p>
+
+              <div
+                className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg"
+                style={{
+                  background: 'white',
+                  border: '2px dashed #F9A620',
+                  boxShadow: '0 2px 8px rgba(249,166,32,0.1)',
+                }}
+              >
+                <KeyRound className="w-3.5 h-3.5" style={{ color: '#F9A620' }} />
+                <span className="font-mono font-black text-lg tracking-[0.2em]" style={{ color: '#F9A620' }}>
+                  {simulatedOtpMsg.code}
+                </span>
+              </div>
+
+              <span className="text-[9px] text-[#3F6B24]/50 block mt-2 font-semibold">
+                Berlaku selama 5 menit &bull; Tim Audit Kemenkop
+              </span>
+            </div>
+          </div>
+
+          <div className="h-1 rounded-b-xl overflow-hidden" style={{ background: 'rgba(34,197,94,0.15)' }}>
+            <div
+              className="h-full rounded-full animate-progress-fill"
+              style={{ width: '100%', background: 'linear-gradient(90deg, #22c55e, #16a34a)' }}
+            />
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
 }
