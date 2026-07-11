@@ -31,15 +31,15 @@ export default function MemberSavingsTab({
   return (
     <div className="space-y-6">
       {/* Header Card */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="p-6 rounded-3xl bg-white border border-stone-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div>
-          <h3 className="text-lg font-black tracking-tight text-[#548C2F] dark:text-white flex items-center gap-2">
+          <h3 className="text-lg font-black tracking-tight text-[#548C2F] flex items-center gap-2">
             <Coins className="w-5 h-5 text-[#F9A620]" />
             {['pengurus', 'ketua'].includes(session.role) ? 'Buku Simpanan Warga Koperasi' : 'Buku Simpanan Anggota Anda'}
           </h3>
           <p className="mt-1 text-xs text-stone-500 leading-normal max-w-xl">
             {['pengurus', 'ketua'].includes(session.role) 
-              ? 'Kelola saldo simpanan pokok, wajib, dan sukarela per anggota secara terperinci. Gunakan fitur ini untuk melihat saldo masing-masing anggota dan melakukan penyetoran atau penarikan.'
+              ? 'Kelola saldo simpanan pokok, wajib, dan sukarela per anggota secara terperinci. Gunakan fitur ini untuk melihat saldo masing-masing anggota and melakukan penyetoran atau penarikan.'
               : 'Berikut adalah rincian saldo simpanan Anda di Koperasi Desa Merah Putih. Simpanan pokok & wajib bersifat permanen, sedangkan simpanan sukarela dapat ditarik sewaktu-waktu.'}
           </p>
         </div>
@@ -49,7 +49,7 @@ export default function MemberSavingsTab({
       {['pengurus', 'ketua'].includes(session.role) && (
         <div className="space-y-6">
           {/* Search and Quick Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-4 rounded-2xl shadow-sm">
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white border border-stone-200 p-4 rounded-2xl shadow-sm">
             <div className="relative w-full sm:max-w-xs">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <Search className="w-4 h-4 text-stone-400" />
@@ -68,7 +68,7 @@ export default function MemberSavingsTab({
           </div>
 
           {/* Members Savings Table */}
-          <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-3xl shadow-sm overflow-hidden">
+          <div className="bg-white border border-stone-200 rounded-3xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="premium-table">
                 <thead>
@@ -88,17 +88,17 @@ export default function MemberSavingsTab({
                     .map((member) => (
                       <tr key={member.anggota_ref}>
                         <td>
-                          <div className="font-extrabold text-stone-900 dark:text-white">{member.nama}</div>
+                          <div className="font-extrabold text-stone-900">{member.nama}</div>
                           <div className="text-[10px] text-stone-400 font-mono mt-0.5">{member.anggota_ref}</div>
                         </td>
                         <td className="text-xs font-semibold">
-                          <div className="font-mono text-stone-600 dark:text-stone-300">{member.nik}</div>
+                          <div className="font-mono text-stone-600">{member.nik}</div>
                           <div className="text-[10px] text-stone-450 mt-0.5">{member.phone_number}</div>
                         </td>
-                        <td className="font-bold text-stone-800 dark:text-stone-200">{fmt(member.simpanan_pokok)}</td>
-                        <td className="font-bold text-stone-800 dark:text-stone-200">{fmt(member.simpanan_wajib)}</td>
-                        <td className="font-bold text-emerald-700 dark:text-emerald-400">{fmt(member.simpanan_sukarela)}</td>
-                        <td className="font-extrabold text-[#104911] dark:text-green-400">{fmt(member.total_simpanan)}</td>
+                        <td className="font-bold text-stone-800">{fmt(member.simpanan_pokok)}</td>
+                        <td className="font-bold text-stone-800">{fmt(member.simpanan_wajib)}</td>
+                        <td className="font-bold text-emerald-700">{fmt(member.simpanan_sukarela)}</td>
+                        <td className="font-extrabold text-[#104911]">{fmt(member.total_simpanan)}</td>
                         <td className="text-right">
                           <div className="flex gap-2 justify-end">
                             <button
@@ -148,43 +148,43 @@ export default function MemberSavingsTab({
         <div className="space-y-6">
           {/* Personal Balances Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+            <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
               <span className="text-[10px] font-black text-stone-400 uppercase tracking-wider block">Simpanan Pokok</span>
-              <span className="text-2xl font-black text-stone-850 dark:text-stone-100 block mt-2">
+              <span className="text-2xl font-black text-stone-800 block mt-2">
                 {fmt(memberSavings[0]?.simpanan_pokok ?? 0)}
               </span>
               <span className="text-[10px] text-stone-450 block mt-1">Dibayar sekali saat awal pendaftaran</span>
             </div>
 
-            <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+            <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
               <span className="text-[10px] font-black text-stone-400 uppercase tracking-wider block">Simpanan Wajib</span>
-              <span className="text-2xl font-black text-stone-850 dark:text-stone-100 block mt-2">
+              <span className="text-2xl font-black text-stone-800 block mt-2">
                 {fmt(memberSavings[0]?.simpanan_wajib ?? 0)}
               </span>
               <span className="text-[10px] text-stone-450 block mt-1">Simpanan rutin berkala anggota</span>
             </div>
 
-            <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+            <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
               <span className="text-[10px] font-black text-stone-400 uppercase tracking-wider block">Simpanan Sukarela</span>
-              <span className="text-2xl font-black text-emerald-750 dark:text-emerald-450 block mt-2">
+              <span className="text-2xl font-black text-emerald-750 block mt-2">
                 {fmt(memberSavings[0]?.simpanan_sukarela ?? 0)}
               </span>
               <span className="text-[10px] text-stone-450 block mt-1">Dapat disetor & ditarik sewaktu-waktu</span>
             </div>
 
             <div className="bg-[#104911] text-white border border-[#F9A620]/30 p-6 rounded-3xl shadow-md">
-              <span className="text-[10px] font-black text-emerald-250 uppercase tracking-wider block">Total Saldo Simpanan</span>
+              <span className="text-[10px] font-black text-emerald-200 uppercase tracking-wider block">Total Saldo Simpanan</span>
               <span className="text-2xl font-black text-[#FFD449] block mt-2">
                 {fmt(memberSavings[0]?.total_simpanan ?? 0)}
               </span>
-              <span className="text-[10px] text-emerald-200/70 block mt-1">Total aset simpanan Anda di koperasi</span>
+              <span className="text-[10px] text-emerald-100/70 block mt-1">Total aset simpanan Anda di koperasi</span>
             </div>
           </div>
 
           {/* Personal recent transaction history */}
-          <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+          <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
             <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider mb-4">Riwayat Mutasi Simpanan Anda</h3>
-            <div className="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-800">
+            <div className="overflow-x-auto rounded-xl border border-stone-200">
               <table className="premium-table">
                 <thead>
                   <tr>
@@ -201,10 +201,10 @@ export default function MemberSavingsTab({
                     .map((t) => (
                       <tr key={t.id}>
                         <td className="text-stone-400 font-semibold">{new Date(t.created_at).toLocaleDateString('id-ID')}</td>
-                        <td className="font-bold uppercase text-[10px] tracking-wider text-stone-600 dark:text-stone-300">
+                        <td className="font-bold uppercase text-[10px] tracking-wider text-stone-600">
                           {t.type === 'pengeluaran' ? 'Penarikan Sukarela' : t.type.replace('simpanan_', 'Simpanan ')}
                         </td>
-                        <td className="font-semibold text-stone-700 dark:text-stone-200">{t.description}</td>
+                        <td className="font-semibold text-stone-700">{t.description}</td>
                         <td className={`font-bold ${t.type === 'pengeluaran' ? 'text-red-650' : 'text-emerald-700'}`}>
                           {t.type === 'pengeluaran' ? '-' : '+'}{fmt(t.amount)}
                         </td>

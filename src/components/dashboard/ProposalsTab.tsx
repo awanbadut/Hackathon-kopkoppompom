@@ -40,8 +40,8 @@ export default function ProposalsTab({
     <div className="space-y-6 animate-scale-in">
       
       {/* Form pengajuan */}
-      <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-        <h3 className="text-sm font-black text-[#548C2F] dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
+        <h3 className="text-sm font-black text-[#548C2F] mb-4 flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-[#F9A620]" />
           Pengajuan Pembiayaan & Kemitraan Kopdes (SIMKOPDES Portal)
         </h3>
@@ -123,9 +123,9 @@ export default function ProposalsTab({
       </div>
 
       {/* Tabel history pengajuan */}
-      <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
+      <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
         <h3 className="text-xs font-black uppercase text-stone-400 tracking-wider mb-4">Daftar Pengajuan Pembiayaan Kopdes</h3>
-        <div className="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-800">
+        <div className="overflow-x-auto rounded-xl border border-stone-200">
           <table className="premium-table">
             <thead>
               <tr>
@@ -150,7 +150,7 @@ export default function ProposalsTab({
                   <tr key={prop.pengajuan_pembiayaan_ref}>
                     <td className="font-mono font-bold text-[#F9A620]">{prop.pengajuan_pembiayaan_ref}</td>
                     <td className="font-bold">{prop.penanggung_jawab}</td>
-                    <td className="font-bold text-[#548C2F] dark:text-green-400">{fmt(prop.nominal_permohonan)}</td>
+                    <td className="font-bold text-[#548C2F]">{fmt(prop.nominal_permohonan)}</td>
                     <td className="font-medium">{prop.tenor} Bulan</td>
                     <td className="max-w-[200px] truncate text-stone-500 font-medium" title={prop.tujuan_permohonan}>
                       {prop.tujuan_permohonan}

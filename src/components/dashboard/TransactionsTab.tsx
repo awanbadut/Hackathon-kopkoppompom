@@ -75,13 +75,13 @@ export default function TransactionsTab({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <div className="lg:col-span-1 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm self-start space-y-4">
-        <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-3">
+      <div className="lg:col-span-1 bg-white border border-stone-200 p-6 rounded-3xl shadow-sm self-start space-y-4">
+        <h3 className="text-sm font-black text-[#548C2F] border-b border-stone-200 pb-3">
           Catat Transaksi Buku Kas
         </h3>
 
         {txFormError && (
-          <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 text-red-750 text-[11px] font-semibold">
+          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-750 text-[11px] font-semibold">
             {txFormError}
           </div>
         )}
@@ -92,7 +92,7 @@ export default function TransactionsTab({
             <select
               value={txType}
               onChange={(e) => setTxType(e.target.value as any)}
-              className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
             >
               <option value="pemasukan">Pemasukan Kas Umum</option>
               <option value="pengeluaran">Pengeluaran Kas Umum</option>
@@ -110,7 +110,7 @@ export default function TransactionsTab({
               <select
                 value={txSumber}
                 onChange={(e) => setTxSumber(e.target.value as any)}
-                className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+                className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
               >
                 <option value="non_dana_desa">Non Dana Desa</option>
                 <option value="dana_desa">Dana Desa</option>
@@ -122,7 +122,7 @@ export default function TransactionsTab({
               <select
                 value={txKategori}
                 onChange={(e) => setTxKategori(e.target.value as any)}
-                className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+                className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
               >
                 <option value="operasional">Operasional</option>
                 <option value="pembangunan_fisik">Pembangunan Fisik</option>
@@ -140,12 +140,12 @@ export default function TransactionsTab({
               placeholder="Contoh: 1500000"
               value={txAmount}
               onChange={(e) => setTxAmount(e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none font-mono"
+              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none font-mono"
             />
           </div>
 
           {txType === 'pinjaman' && (
-            <div className="grid grid-cols-2 gap-3 p-3 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl">
+            <div className="grid grid-cols-2 gap-3 p-3 bg-stone-50 border border-stone-200 rounded-xl">
               <div>
                 <label className="block font-bold text-stone-500 mb-1">Tenor (Bulan)</label>
                 <input
@@ -153,7 +153,7 @@ export default function TransactionsTab({
                   placeholder="Maks 72"
                   value={txTenor}
                   onChange={(e) => setTxTenor(e.target.value)}
-                  className="w-full p-2 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-lg focus:outline-none text-xs font-mono"
+                  className="w-full p-2 bg-white border border-stone-200 rounded-lg focus:outline-none text-xs font-mono"
                 />
               </div>
               <div>
@@ -162,13 +162,18 @@ export default function TransactionsTab({
                   type="text"
                   value={txBunga}
                   onChange={(e) => setTxBunga(e.target.value)}
-                  className="w-full p-2 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-lg focus:outline-none text-xs font-mono"
+                  className="w-full p-2 bg-white border border-stone-200 rounded-lg focus:outline-none text-xs font-mono"
                 />
               </div>
             </div>
           )}
 
-          {((['simpanan_pokok', 'simpanan_wajib', 'simpanan_sukarela', 'pinjaman'].includes(txType) || (txType === 'pengeluaran' && txKategori === 'simpanan_anggota'))) && (
+          {([
+            'simpanan_pokok',
+            'simpanan_wajib',
+            'simpanan_sukarela',
+            'pinjaman'
+          ].includes(txType) || (txType === 'pengeluaran' && txKategori === 'simpanan_anggota')) && (
             <div>
               <label className="block font-bold text-stone-500 mb-1">Referensi Anggota</label>
               <input
@@ -176,7 +181,7 @@ export default function TransactionsTab({
                 placeholder="Contoh: MBR-001"
                 value={txAnggotaRef}
                 onChange={(e) => setTxAnggotaRef(e.target.value)}
-                className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+                className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
               />
               {/* Real-time Voluntary Savings Balance Check */}
               {txType === 'pengeluaran' && txKategori === 'simpanan_anggota' && txAnggotaRef && (() => {
@@ -185,7 +190,7 @@ export default function TransactionsTab({
                   const isOver = txAmount && Number(txAmount) > Number(m.simpanan_sukarela);
                   return (
                     <div className="mt-1 text-[11px] font-bold">
-                      <span className="text-emerald-700 dark:text-emerald-450">
+                      <span className="text-[#3F6B24]">
                         Saldo Sukarela: Rp {Number(m.simpanan_sukarela).toLocaleString('id-ID')}
                       </span>
                       {isOver && (
@@ -212,7 +217,7 @@ export default function TransactionsTab({
               placeholder="Masukkan detail peruntukan dana belanja..."
               value={txDescription}
               onChange={(e) => setTxDescription(e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none h-16 resize-none"
+              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none h-16 resize-none"
             />
           </div>
 
@@ -223,7 +228,7 @@ export default function TransactionsTab({
               placeholder="Link nota, kwitansi, atau invoice..."
               value={txEvidence}
               onChange={(e) => setTxEvidence(e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
             />
           </div>
 
@@ -233,7 +238,7 @@ export default function TransactionsTab({
               type="date"
               value={txDate}
               onChange={(e) => setTxDate(e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 rounded-xl focus:outline-none"
+              className="w-full p-2.5 bg-white border border-stone-200 rounded-xl focus:outline-none"
             />
           </div>
 
@@ -241,7 +246,7 @@ export default function TransactionsTab({
             <button
               onClick={() => handleCreateTransaction(false)}
               disabled={isPending}
-              className="flex-1 py-2.5 px-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 rounded-xl text-stone-700 dark:text-stone-300 font-bold border border-stone-200 dark:border-stone-800 transition-all cursor-pointer text-center text-[10px] uppercase tracking-wider"
+              className="flex-1 py-2.5 px-3 bg-stone-100 hover:bg-stone-200 rounded-xl text-stone-700 font-bold border border-stone-200 transition-all cursor-pointer text-center text-[10px] uppercase tracking-wider"
             >
               Draft
             </button>
@@ -258,15 +263,15 @@ export default function TransactionsTab({
       </div>
 
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-white dark:bg-[#1c1a17] border border-stone-200 dark:border-stone-800 p-6 rounded-3xl shadow-sm">
-          <h3 className="text-sm font-black text-[#548C2F] dark:text-white border-b border-stone-200 dark:border-stone-800 pb-4 mb-4">
+        <div className="bg-white border border-stone-200 p-6 rounded-3xl shadow-sm">
+          <h3 className="text-sm font-black text-[#548C2F] border-b border-stone-200 pb-4 mb-4">
             Buku Kas Ledger Transaksi ({transactions.length})
           </h3>
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
               <thead>
-                <tr className="border-b border-stone-200 dark:border-stone-800 text-stone-400 uppercase tracking-wider font-extrabold text-[10px]">
+                <tr className="border-b border-stone-200 text-stone-400 uppercase tracking-wider font-extrabold text-[10px]">
                   <th className="py-2.5">Tanggal</th>
                   <th>Tipe / Kategori</th>
                   <th>Keterangan</th>
@@ -277,30 +282,40 @@ export default function TransactionsTab({
               </thead>
               <tbody>
                 {paginatedTransactions.map((t) => (
-                  <tr key={t.id} className="border-b border-stone-100 dark:border-stone-900 group">
+                  <tr key={t.id} className="border-b border-stone-100 group">
                     <td className="py-3.5 font-mono text-stone-500">{t.transaction_date}</td>
                     <td>
                       <div className="font-bold capitalize">{t.type.replace('_', ' ')}</div>
-                      <div className="text-[9px] font-black text-[#F9A620] uppercase mt-0.5">{t.sumber_dana.replace('_', ' ')} &bull; {t.kategori.replace('_', ' ')}</div>
+                      <div className="text-[9px] font-black text-[#F9A620] uppercase mt-0.5">
+                        {t.sumber_dana.replace('_', ' ')} &bull; {t.kategori.replace('_', ' ')}
+                      </div>
                     </td>
                     <td>
-                      <div className="font-semibold text-stone-800 dark:text-stone-200">{t.description}</div>
+                      <div className="font-semibold text-stone-800">{t.description}</div>
                       <div className="text-[10px] text-stone-400 mt-1 flex items-center gap-2">
                         <span>Oleh: {t.app_users?.full_name}</span>
                         {t.evidence_url && (
-                          <a href={t.evidence_url} target="_blank" className="text-blue-650 hover:underline font-bold">
+                          <a
+                            href={t.evidence_url}
+                            target="_blank"
+                            className="text-blue-650 hover:underline font-bold"
+                          >
                             [Bukti Nota]
                           </a>
                         )}
                       </div>
                     </td>
-                    <td className="font-mono font-black text-[#548C2F] dark:text-white">{fmt(t.amount)}</td>
+                    <td className="font-mono font-black text-[#548C2F]">{fmt(t.amount)}</td>
                     <td>
                       <div className="flex flex-col gap-1.5">
                         <span className={`inline-flex self-start px-2 py-0.5 rounded-full text-[9px] font-black uppercase border ${
-                          t.status === 'disetujui' ? 'bg-green-50 text-green-700 border-green-200' :
-                          t.status === 'ditolak' ? 'bg-red-50 text-red-700 border-red-200' :
-                          t.status === 'menunggu_approval' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-stone-50 text-stone-600 border-stone-200'
+                          t.status === 'disetujui'
+                            ? 'bg-[#F1F7EA] text-[#3F6B24] border-[#C7DDAE]'
+                            : t.status === 'ditolak'
+                            ? 'bg-red-50 text-red-700 border-red-200'
+                            : t.status === 'menunggu_approval'
+                            ? 'bg-[#FFFBEA] text-[#B36F0C] border-[#FFE79A]'
+                            : 'bg-stone-50 text-stone-600 border-stone-200'
                         }`}>
                           {t.status === 'menunggu_approval' ? 'Menunggu' : t.status}
                         </span>
@@ -324,7 +339,7 @@ export default function TransactionsTab({
           </div>
 
           {totalTxPages > 1 && (
-            <div className="flex items-center justify-between pt-4 border-t border-stone-100 dark:border-stone-900 mt-4 text-xs">
+            <div className="flex items-center justify-between pt-4 border-t border-stone-100 mt-4 text-xs">
               <span className="text-stone-400 font-semibold">
                 Halaman {txPage} dari {totalTxPages || 1}
               </span>
@@ -332,14 +347,14 @@ export default function TransactionsTab({
                 <button
                   onClick={() => setTxPage(p => Math.max(1, p - 1))}
                   disabled={txPage === 1}
-                  className="py-1 px-3 rounded-lg border border-stone-200 dark:border-stone-850 hover:bg-stone-50 dark:hover:bg-stone-900 font-bold disabled:opacity-40"
+                  className="py-1 px-3 rounded-lg border border-stone-200 hover:bg-stone-50 font-bold disabled:opacity-40"
                 >
                   Sebelumnya
                 </button>
                 <button
                   onClick={() => setTxPage(p => Math.min(totalTxPages, p + 1))}
-                  disabled={txPage === totalTxPages}
-                  className="py-1 px-3 rounded-lg border border-stone-200 dark:border-stone-850 hover:bg-stone-50 dark:hover:bg-stone-900 font-bold disabled:opacity-40"
+                  disabled={txPage >= totalTxPages}
+                  className="py-1 px-3 rounded-lg border border-stone-200 hover:bg-stone-50 font-bold disabled:opacity-40"
                 >
                   Berikutnya
                 </button>
@@ -348,6 +363,7 @@ export default function TransactionsTab({
           )}
         </div>
       </div>
+
     </div>
   );
 }

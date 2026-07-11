@@ -121,7 +121,7 @@ export default function Sidebar({
           >
             <span className="flex items-center gap-2.5">
               <FileCheck className="w-4 h-4 text-[#F9A620]" />
-              Kotak Otorisasi
+              approval center
             </span>
             {myApprovals.filter(a => a.status === 'menunggu').length > 0 ? (
               <span className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-black bg-red-650 text-white animate-pulse">
@@ -196,7 +196,7 @@ export default function Sidebar({
         >
           <span className="flex items-center gap-2.5">
             <MessageSquare className="w-4 h-4 text-[#F9A620]" />
-            Musrenbang Warga
+            Musrenbang Anggot
           </span>
           <ChevronRight className="w-3.5 h-3.5 opacity-50" />
         </button>
@@ -291,7 +291,7 @@ export default function Sidebar({
           </div>
           <div>
             <span className="font-black text-sm tracking-tight uppercase text-white block">AmanDes</span>
-            <span className="text-[9px] text-emerald-300/70 block">Koperasi Merah Putih</span>
+            <span className="text-[9px] text-[#A9CC85]/70 block">Koperasi Merah Putih</span>
           </div>
         </div>
         
