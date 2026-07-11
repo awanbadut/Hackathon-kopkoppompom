@@ -1,5 +1,5 @@
-import React from 'react';
-import { Menu } from 'lucide-react';
+import React from "react";
+import { Menu } from "lucide-react";
 
 interface HeaderProps {
   activeTab: string;
@@ -14,12 +14,12 @@ export default function Header({
   session,
   koperasi,
   healthMetrics,
-  setIsMobileMenuOpen
+  setIsMobileMenuOpen,
 }: HeaderProps) {
   return (
     <header className="h-16 border-b border-stone-200 bg-white flex items-center justify-between px-6 shrink-0 z-20 shadow-sm">
       <div className="flex items-center gap-3">
-        <button 
+        <button
           onClick={() => setIsMobileMenuOpen(true)}
           className="lg:hidden p-2 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50"
         >
@@ -27,26 +27,30 @@ export default function Header({
         </button>
         <div>
           <h1 className="text-xs font-black text-[#104911] uppercase tracking-wider">
-            {activeTab === 'overview' && 'Ringkasan Utama'}
-            {activeTab === 'transactions' && 'Buku Kas (Ledger)'}
-            {activeTab === 'approvals' && 'approval center'}
-            {activeTab === 'compliance' && 'Pusat Kepatuhan PMK'}
-            {activeTab === 'financials' && 'Laporan Keuangan'}
-            {activeTab === 'e_rat' && 'Rapat Anggota (e-RAT)'}
-            {activeTab === 'aspirations' && 'Musrenbang Anggot'}
-            {activeTab === 'learning' && 'Kelas Literasi'}
-            {activeTab === 'rewards' && 'Katalog Hadiah'}
-            {activeTab === 'ai_assistant' && 'Asisten AI Kopdes'}
-            {activeTab === 'microsite' && 'Microsite Publik'}
-            {activeTab === 'proposals' && 'Kemitraan & Pembiayaan'}
-            {activeTab === 'member_savings' && (['pengurus', 'ketua'].includes(session.role) ? 'Buku Simpanan Warga' : 'Simpanan Saya')}
+            {activeTab === "overview" && "Ringkasan Utama"}
+            {activeTab === "transactions" && "Buku Kas (Ledger)"}
+            {activeTab === "approvals" && "approval center"}
+            {activeTab === "compliance" && "Pusat Kepatuhan PMK"}
+            {activeTab === "financials" && "Laporan Keuangan"}
+            {activeTab === "e_rat" && "Rapat Anggota (e-RAT)"}
+            {activeTab === "aspirations" && "Aspirasi Anggota"}
+            {activeTab === "learning" && "Kelas Literasi"}
+            {activeTab === "rewards" && "Katalog Hadiah"}
+            {activeTab === "ai_assistant" && "Asisten AI Kopdes"}
+            {activeTab === "microsite" && "Microsite Publik"}
+            {activeTab === "proposals" && "Kemitraan & Pembiayaan"}
+            {activeTab === "member_savings" &&
+              (["pengurus", "ketua"].includes(session.role)
+                ? "Buku Simpanan Warga"
+                : "Simpanan Saya")}
           </h1>
           <p className="text-[9px] text-stone-400 leading-none mt-0.5">
-            {koperasi?.nama || 'Koperasi Desa Merah Putih'} &bull; {session.koperasiRef}
+            {koperasi?.nama || "Koperasi Desa Merah Putih"} &bull;{" "}
+            {session.koperasiRef}
           </p>
         </div>
       </div>
-      
+
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <span className="text-[9px] font-black uppercase bg-[#548C2F]/10 text-[#548C2F] px-2.5 py-1 rounded-full border border-[#548C2F]/20">

@@ -223,7 +223,7 @@ export default function Sidebar({
         >
           <span className="flex items-center gap-2.5">
             <MessageSquare className="w-4 h-4 text-[#F9A620]" />
-            Musrenbang Anggot
+            Aspirasi Anggota
           </span>
           <ChevronRight className="w-3.5 h-3.5 opacity-50" />
         </button>
