@@ -234,7 +234,31 @@ export default function TransactionsTab({
                 if (file) {
                   const reader = new FileReader();
                   reader.onloadend = () => {
-                    setTxEvidence(reader.result as string);
+                    const base64 = reader.result as string;
+                    const img = new Image();
+                    img.src = base64;
+                    img.onload = () => {
+                      const canvas = document.createElement('canvas');
+                      const maxDim = 800;
+                      let w = img.width;
+                      let h = img.height;
+                      if (w > h && w > maxDim) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                      } else if (h > maxDim) {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                      }
+                      canvas.width = w;
+                      canvas.height = h;
+                      const ctx = canvas.getContext('2d');
+                      if (ctx) {
+                        ctx.drawImage(img, 0, 0, w, h);
+                        setTxEvidence(canvas.toDataURL('image/jpeg', 0.7));
+                      } else {
+                        setTxEvidence(base64);
+                      }
+                    };
                   };
                   reader.readAsDataURL(file);
                 }
