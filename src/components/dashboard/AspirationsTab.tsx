@@ -5,8 +5,8 @@ interface AspirationsTabProps {
   session: any;
   filteredAspirations: any[];
   paginatedAspirations: any[];
-  aspFilter: string;
-  setAspFilter: (val: string) => void;
+  aspFilter: any;
+  setAspFilter: (val: any) => void;
   aspTitle: string;
   setAspTitle: (val: string) => void;
   aspDesc: string;
